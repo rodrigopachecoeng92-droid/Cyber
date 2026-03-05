@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYBER Telecom — Dashboard BI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --card: #111118;
+  --card2: #16161f;
+  --border: #2a2a38;
+  --border2: #1e1e2a;
+  --orange: #f97316;
+  --green: #22c55e;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --amber: #fbbf24;
+  --purple: #a855f7;
+  --text: #e8e8f0;
+  --muted: #6b6b80;
+  --muted2: #4a4a5a;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+.container { max-width: 1440px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+section { padding: 72px 0; }
+.ticker-bar {
+  background: #0d0d14;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 0;
+  overflow: hidden;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.ticker-inner {
+  display: flex;
+  gap: 0;
+  white-space: nowrap;
+  animation: ticker 40s linear infinite;
+}
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 40px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  border-right: 1px solid var(--border2);
+}
+.ticker-item span { color: var(--text); font-weight: 700; }
+.ticker-item .up { color: var(--green); }
+.ticker-item .down { color: var(--red); }
+.ticker-label { color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.hero { padding: 80px 0 64px; position: relative; overflow: hidden; }
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::before { content: ''; display: inline-block; width: 32px; height: 2px; background: var(--orange); }
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(72px, 10vw, 140px);
+  line-height: 0.9;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+.hero-title span { color: var(--orange); }
+.hero-window {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-window strong { color: var(--amber); }
+.window-badge {
+  background: rgba(251,191,36,0.1);
+  border: 1px solid rgba(251,191,36,0.25);
+  color: var(--amber);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.hero-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 16px; }
+.hero-stat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--orange);
+  padding: 20px 20px 16px;
+  border-radius: 2px;
+  position: relative;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-stat:nth-child(2) { border-top-color: var(--green); animation-delay: 0.1s; }
+.hero-stat:nth-child(3) { border-top-color: var(--blue); animation-delay: 0.2s; }
+.hero-stat:nth-child(4) { border-top-color: var(--amber); animation-delay: 0.3s; }
+.hero-stat:nth-child(5) { border-top-color: var(--red); animation-delay: 0.4s; }
+.stat-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+.stat-value { font-family: var(--font-display); font-size: 38px; line-height: 1; color: var(--text); margin-bottom: 6px; }
+.stat-delta { font-family: var(--font-mono); font-size: 11px; font-weight: 700; }
+.stat-delta.up { color: var(--green); }
+.stat-delta.down { color: var(--red); }
+.stat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--orange); display: inline-block; }
+.section-title { font-family: var(--font-display); font-size: clamp(32px, 4vw, 52px); line-height: 1; color: var(--text); margin-bottom: 40px; letter-spacing: 0.03em; }
+.section-title span { color: var(--orange); }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--orange);
+  padding: 24px 20px 20px;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.6s ease both;
+}
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; right: -20px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(249,115,22,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.kpi-card.green { border-top-color: var(--green); }
+.kpi-card.green::after { background: radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 70%); }
+.kpi-card.blue { border-top-color: var(--blue); }
+.kpi-card.blue::after { background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%); }
+.kpi-card.amber { border-top-color: var(--amber); }
+.kpi-card.amber::after { background: radial-gradient(circle, rgba(251,191,36,0.15) 0%, transparent 70%); }
+.kpi-card.red { border-top-color: var(--red); }
+.kpi-card.red::after { background: radial-gradient(circle, rgba(239,68,68,0.15) 0%, transparent 70%); }
+.kpi-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
+.kpi-value { font-family: var(--font-display); font-size: 48px; line-height: 1; color: var(--text); margin-bottom: 8px; }
+.kpi-delta { font-family: var(--font-mono); font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.kpi-delta.up { color: var(--green); }
+.kpi-delta.down { color: var(--red); }
+.kpi-sub { font-size: 12px; color: var(--muted); }
+.chart-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 28px;
+  margin-bottom: 16px;
+  animation: fadeUp 0.6s ease both;
+}
+.chart-card-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chart-card-title strong { color: var(--text); font-size: 13px; }
+canvas { max-height: 280px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.grid-3-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
+.alert-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.alert-card {
+  background: linear-gradient(135deg, rgba(239,68,68,0.08) 0%, rgba(249,115,22,0.05) 100%);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-left: 3px solid var(--red);
+  border-radius: 2px;
+  padding: 20px;
+  animation: fadeUp 0.6s ease both;
+}
+.alert-card.orange { border-left-color: var(--orange); background: linear-gradient(135deg, rgba(249,115,22,0.08) 0%, rgba(251,191,36,0.05) 100%); border-color: rgba(249,115,22,0.2); border-left-color: var(--orange); }
+.alert-card.amber { border-left-color: var(--amber); background: linear-gradient(135deg, rgba(251,191,36,0.08) 0%, rgba(249,115,22,0.05) 100%); border-color: rgba(251,191,36,0.2); border-left-color: var(--amber); }
+.alert-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+.alert-value { font-family: var(--font-display); font-size: 36px; line-height: 1; color: var(--red); margin-bottom: 4px; }
+.alert-card.orange .alert-value { color: var(--orange); }
+.alert-card.amber .alert-value { color: var(--amber); }
+.alert-sub { font-size: 12px; color: var(--muted); }
+.rank-list { display: flex; flex-direction: column; gap: 10px; }
+.rank-item { display: grid; grid-template-columns: 28px 1fr 80px; align-items: center; gap: 12px; }
+.rank-num { font-family: var(--font-display); font-size: 22px; color: var(--muted2); text-align: right; line-height: 1; }
+.rank-name { font-size: 13px; color: var(--text); margin-bottom: 4px; font-weight: 500; }
+.rank-bar { height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden; }
+.rank-bar-fill { height: 100%; border-radius: 3px; background: var(--orange); }
+.rank-val { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--text); text-align: right; }
+.insights-card { background: var(--card); border: 1px solid var(--border); border-radius: 2px; padding: 28px; animation: fadeUp 0.6s ease both; }
+.insight-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border2); }
+.insight-item:last-child { border-bottom: none; }
+.insight-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); margin-top: 6px; flex-shrink: 0; }
+.insight-dot.green { background: var(--green); }
+.insight-dot.red { background: var(--red); }
+.insight-dot.amber { background: var(--amber); }
+.insight-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.insight-text strong { color: var(--text); }
+.cohort-table { width: 100%; border-collapse: collapse; }
+.cohort-table th { font-family: var(--font-mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; padding: 8px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+.cohort-table td { padding: 12px 16px; border-bottom: 1px solid var(--border2); }
+.cohort-year { font-family: var(--font-display); font-size: 24px; color: var(--muted); }
+.cohort-bar-wrap { display: flex; align-items: center; gap: 12px; }
+.cohort-bar { flex: 1; height: 10px; background: var(--border2); border-radius: 5px; overflow: hidden; }
+.cohort-bar-fill { height: 100%; border-radius: 5px; }
+.cohort-pct { font-family: var(--font-display); font-size: 28px; min-width: 80px; text-align: right; }
+.cohort-note { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+.proj-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.proj-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 28px 24px;
+  text-align: center;
+  animation: fadeUp 0.6s ease both;
+  position: relative;
+  overflow: hidden;
+}
+.proj-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--orange), var(--amber)); }
+.proj-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+.proj-highlight {
+  font-family: var(--font-display);
+  font-size: 52px;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--orange), var(--amber));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+.proj-sub { font-size: 12px; color: var(--muted); }
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
+.footer { background: #080810; border-top: 1px solid var(--border); padding: 40px 0; }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+.footer-brand { font-family: var(--font-display); font-size: 32px; color: var(--orange); letter-spacing: 0.05em; }
+.footer-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+.footer-stat { text-align: center; }
+.footer-stat-val { font-family: var(--font-display); font-size: 28px; color: var(--text); }
+.footer-stat-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.footer-note { font-size: 11px; color: var(--muted2); font-family: var(--font-mono); }
+.mt-16 { margin-top: 16px; }
+.scenarios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+.scenario-card { background: var(--card2); border: 1px solid var(--border2); border-radius: 2px; padding: 16px; text-align: center; }
+.scenario-rate { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; }
+.scenario-val { font-family: var(--font-display); font-size: 30px; }
+.scenario-val.low { color: var(--amber); }
+.scenario-val.mid { color: var(--orange); }
+.scenario-val.high { color: var(--green); }
+.scenario-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.ltv-compare { display: flex; gap: 24px; margin-top: 20px; }
+.ltv-item { flex: 1; background: var(--card2); border: 1px solid var(--border2); border-radius: 2px; padding: 16px; text-align: center; }
+.ltv-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.ltv-val { font-family: var(--font-display); font-size: 36px; }
+.ltv-val.active { color: var(--green); }
+.ltv-val.churned { color: var(--red); }
+.ltv-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.concentration-alert {
+  background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(249,115,22,0.06) 100%);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 2px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 16px;
+}
+.concentration-text h4 { font-family: var(--font-display); font-size: 22px; color: var(--red); margin-bottom: 4px; }
+.concentration-text p { font-size: 13px; color: var(--muted); }
+@media (max-width: 1200px) {
+  .hero-stats { grid-template-columns: repeat(3, 1fr); }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .alert-grid { grid-template-columns: repeat(2, 1fr); }
+  .proj-grid { grid-template-columns: repeat(2, 1fr); }
+  .grid-3-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 16px; }
+  .hero-stats { grid-template-columns: 1fr 1fr; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .footer-inner { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner" id="tickerInner"></div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">CYBER Telecom &middot; Dashboard BI &middot; Dados Reais &middot; BASE_DADOS_BI.xlsx</div>
+    <div class="hero-title">CYBER EM<br><span>NÚMEROS</span></div>
+    <div class="hero-window">
+      <span class="window-badge">Janela de análise</span>
+      <strong>Mar/2025 &mdash; Fev/2026</strong>
+      <span style="color:var(--muted);font-size:11px;">Últimos 12 meses &middot; 10.426 clientes cadastrados</span>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="stat-label">Clientes Ativos</div>
+        <div class="stat-value">7.084</div>
+        <div class="stat-delta up">&#9650; +225 vs Jan/26</div>
+        <div class="stat-sub">Fev/2026</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-label">Receita Mensal</div>
+        <div class="stat-value">R$747K</div>
+        <div class="stat-delta up">&#9650; +3,2% vs Jan/26</div>
+        <div class="stat-sub">Fev/2026 estimada</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-label">Ticket Médio</div>
+        <div class="stat-value">R$106</div>
+        <div class="stat-delta up">&#9650; Crescente</div>
+        <div class="stat-sub">Por contrato ativo</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-label">Chats Registrados</div>
+        <div class="stat-value">97.2K</div>
+        <div class="stat-delta up">&#9650; Base histórica</div>
+        <div class="stat-sub">Total de atendimentos</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-label">Receita em Risco</div>
+        <div class="stat-value">R$92K</div>
+        <div class="stat-delta down">&#9660; 906 suspensos</div>
+        <div class="stat-sub">Mensal em risco</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SEÇÃO 1: CRESCIMENTO -->
+<section id="crescimento">
+  <div class="container">
+    <div class="section-eyebrow">Seção 01 &middot; Crescimento</div>
+    <div class="section-title">A Curva de <span>Crescimento</span></div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Instalações (12m)</div>
+        <div class="kpi-value">2.618</div>
+        <div class="kpi-delta up">&#9650; Pico Dez/25: 280</div>
+        <div class="kpi-sub">Mar/25 &rarr; Fev/26</div>
+      </div>
+      <div class="kpi-card red" style="animation-delay:.1s">
+        <div class="kpi-label">Cancelamentos (12m)</div>
+        <div class="kpi-value" style="color:var(--red)">715</div>
+        <div class="kpi-delta up">&#9650; Tendência queda</div>
+        <div class="kpi-sub">Mínimo Fev/26: 34</div>
+      </div>
+      <div class="kpi-card blue" style="animation-delay:.2s">
+        <div class="kpi-label">Saldo Líquido (12m)</div>
+        <div class="kpi-value">+1.903</div>
+        <div class="kpi-delta up">&#9650; +158 média/mês</div>
+        <div class="kpi-sub">Crescimento acelerado</div>
+      </div>
+      <div class="kpi-card amber" style="animation-delay:.3s">
+        <div class="kpi-label">Crescimento Receita</div>
+        <div class="kpi-value">+34%</div>
+        <div class="kpi-delta up">&#9650; R$557K &rarr; R$747K</div>
+        <div class="kpi-sub">Mar/25 &rarr; Fev/26</div>
+      </div>
+    </div>
+    <div class="grid-3-2">
+      <div>
+        <div class="chart-card" style="animation-delay:.1s">
+          <div class="chart-card-title"><strong>Base de Clientes Ativos</strong> <span>Mar/25 &rarr; Fev/26</span></div>
+          <canvas id="chartClientes"></canvas>
+        </div>
+        <div class="chart-card" style="animation-delay:.2s">
+          <div class="chart-card-title"><strong>Receita Mensal Estimada</strong> <span>R$ mil</span></div>
+          <canvas id="chartReceita"></canvas>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="chart-card" style="animation-delay:.15s">
+          <div class="chart-card-title"><strong>Instalações vs Cancelamentos</strong></div>
+          <canvas id="chartSaldo" style="max-height:200px;"></canvas>
+        </div>
+        <div class="chart-card" style="animation-delay:.18s">
+          <div class="chart-card-title"><strong>Saldo Líquido Mensal</strong></div>
+          <canvas id="chartSaldoLine" style="max-height:150px;"></canvas>
+        </div>
+        <div class="insights-card" style="animation-delay:.25s">
+          <div class="chart-card-title" style="margin-bottom:12px;"><strong>Destaques do Período</strong></div>
+          <div class="insight-item">
+            <div class="insight-dot green"></div>
+            <div class="insight-text"><strong>Dez/25 recorde:</strong> 280 instalações, saldo +225. Maior mês da série histórica.</div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-dot"></div>
+            <div class="insight-text"><strong>Aceleração consistente:</strong> Crescimento acima de +180/mês desde Out/25.</div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-dot amber"></div>
+            <div class="insight-text"><strong>Receita cresce +R$190K</strong> em 12 meses — taxa de 2,8% ao mês.</div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-dot red"></div>
+            <div class="insight-text"><strong>Abr/25 menor cancelamento:</strong> apenas 28 saídas. Benchmarcar o que funcionou.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SEÇÃO 2: RISCO -->
+<section id="risco">
+  <div class="container">
+    <div class="section-eyebrow">Seção 02 &middot; Risco Financeiro</div>
+    <div class="section-title">Risco &amp; <span>Receita Perdida</span></div>
+    <div class="alert-grid">
+      <div class="alert-card">
+        <div class="alert-label">Receita em Risco/Mês</div>
+        <div class="alert-value">R$92K</div>
+        <div class="alert-sub">906 contratos suspensos</div>
+      </div>
+      <div class="alert-card orange">
+        <div class="alert-label">Receita Perdida Histórica</div>
+        <div class="alert-value" style="color:var(--orange)">R$1,36M</div>
+        <div class="alert-sub">Inadimplência acumulada</div>
+      </div>
+      <div class="alert-card amber">
+        <div class="alert-label">Cancelamentos por Inadimp.</div>
+        <div class="alert-value" style="color:var(--amber)">835</div>
+        <div class="alert-sub">68,1% dos cancelamentos</div>
+      </div>
+      <div class="alert-card" style="border-left-color:var(--purple);background:linear-gradient(135deg,rgba(168,85,247,0.08) 0%,rgba(59,130,246,0.05) 100%);border-color:rgba(168,85,247,0.2);">
+        <div class="alert-label">Taxa Inad. Plano R$74,90</div>
+        <div class="alert-value" style="color:var(--purple)">17,8%</div>
+        <div class="alert-sub">Maior risco por segmento</div>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Motivos de Cancelamento</strong></div>
+        <canvas id="chartCancelMotivo" style="max-height:220px;"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Inadimplência por Plano</strong></div>
+        <canvas id="chartInad"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Bairros Alto Risco — JF</strong> <span>% suspensos</span></div>
+        <div class="rank-list" style="margin-top:8px;">
+          <div class="rank-item">
+            <div class="rank-num">1</div>
+            <div>
+              <div class="rank-name">Humaitá</div>
+              <div class="rank-bar"><div class="rank-bar-fill" style="width:100%;background:var(--red)"></div></div>
+            </div>
+            <div class="rank-val" style="color:var(--red)">52,3%</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">2</div>
+            <div>
+              <div class="rank-name">Nova Era</div>
+              <div class="rank-bar"><div class="rank-bar-fill" style="width:92.9%;background:var(--red)"></div></div>
+            </div>
+            <div class="rank-val" style="color:var(--red)">48,6%</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">3</div>
+            <div>
+              <div class="rank-name">Valadares</div>
+              <div class="rank-bar"><div class="rank-bar-fill" style="width:87%;background:var(--orange)"></div></div>
+            </div>
+            <div class="rank-val" style="color:var(--orange)">45,5%</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">4</div>
+            <div>
+              <div class="rank-name">Igrejinha</div>
+              <div class="rank-bar"><div class="rank-bar-fill" style="width:86.8%;background:var(--orange)"></div></div>
+            </div>
+            <div class="rank-val" style="color:var(--orange)">45,4%</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">5</div>
+            <div>
+              <div class="rank-name">Torrões</div>
+              <div class="rank-bar"><div class="rank-bar-fill" style="width:81.6%;background:var(--amber)"></div></div>
+            </div>
+            <div class="rank-val" style="color:var(--amber)">42,7%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Oportunidade de Recuperação</strong> <span>906 contratos &middot; R$92.147/mês</span></div>
+        <div class="scenarios-grid">
+          <div class="scenario-card">
+            <div class="scenario-rate">Recuperação 20%</div>
+            <div class="scenario-val low">R$18,4K</div>
+            <div class="scenario-sub">181 clientes/mês</div>
+          </div>
+          <div class="scenario-card">
+            <div class="scenario-rate">Recuperação 40%</div>
+            <div class="scenario-val mid">R$36,9K</div>
+            <div class="scenario-sub">362 clientes/mês</div>
+          </div>
+          <div class="scenario-card">
+            <div class="scenario-rate">Recuperação 60%</div>
+            <div class="scenario-val high">R$55,3K</div>
+            <div class="scenario-sub">544 clientes/mês</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:12px;background:var(--card2);border:1px solid var(--border2);border-radius:2px;">
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Potencial anual — cenário 40%</div>
+          <div style="font-family:var(--font-display);font-size:32px;color:var(--green)">R$442.800</div>
+          <div style="font-size:12px;color:var(--muted)">Se mantida taxa de recuperação por 12 meses</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>LTV Comparativo</strong> <span>Ativo vs Cancelado</span></div>
+        <div class="ltv-compare">
+          <div class="ltv-item">
+            <div class="ltv-label">Cliente Ativo</div>
+            <div class="ltv-val active">R$2.720</div>
+            <div class="ltv-sub">25,7 meses médios</div>
+          </div>
+          <div class="ltv-item">
+            <div class="ltv-label">Cliente Cancelado</div>
+            <div class="ltv-val churned">R$1.628</div>
+            <div class="ltv-sub">16,2 meses médios</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <canvas id="chartLTV" style="max-height:170px;"></canvas>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:24px;flex-wrap:wrap;">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;">Diferença por cliente</div>
+            <div style="font-family:var(--font-display);font-size:28px;color:var(--orange)">+R$1.092</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;">Impacto 835 churns</div>
+            <div style="font-family:var(--font-display);font-size:28px;color:var(--red)">-R$911K</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SEÇÃO 3: RETENÇÃO -->
+<section id="retencao">
+  <div class="container">
+    <div class="section-eyebrow">Seção 03 &middot; Retenção</div>
+    <div class="section-title">Análise de <span>Retenção</span></div>
+    <div class="grid-2">
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Cohort de Retenção por Ano de Entrada</strong></div>
+        <table class="cohort-table">
+          <thead>
+            <tr><th>Coorte</th><th>Barra de Retenção</th><th style="text-align:right">%</th><th>Nível</th></tr>
+          </thead>
+          <tbody id="cohortBody"></tbody>
+        </table>
+      </div>
+      <div>
+        <div class="chart-card">
+          <div class="chart-card-title"><strong>Evolução da Retenção</strong> <span>2021 &rarr; 2025</span></div>
+          <canvas id="chartCohort" style="max-height:220px;"></canvas>
+        </div>
+        <div class="chart-card mt-16" style="margin-top:16px;">
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Melhora total 2021&rarr;2025</div>
+          <div style="font-family:var(--font-display);font-size:60px;color:var(--green);line-height:1">+26,7pp</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;">De 46,8% para 73,5% — Cada coorte supera o anterior. Sinal de maturação operacional.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SEÇÃO 4: ATENDIMENTO -->
+<section id="atendimento">
+  <div class="container">
+    <div class="section-eyebrow">Seção 04 &middot; Atendimento</div>
+    <div class="section-title">Atendimento — <span>80 Mil</span> Interações</div>
+    <div class="kpi-grid">
+      <div class="kpi-card blue">
+        <div class="kpi-label">Total Chats (Base)</div>
+        <div class="kpi-value">97.2K</div>
+        <div class="kpi-delta up">&#9650; Histórico completo</div>
+        <div class="kpi-sub">Todos os registros</div>
+      </div>
+      <div class="kpi-card" style="animation-delay:.1s">
+        <div class="kpi-label">Humano (66,2%)</div>
+        <div class="kpi-value">64.4K</div>
+        <div class="kpi-delta" style="color:var(--blue)">&#9679; Atendentes reais</div>
+        <div class="kpi-sub">Conversas humanas</div>
+      </div>
+      <div class="kpi-card green" style="animation-delay:.2s">
+        <div class="kpi-label">Automação (33,8%)</div>
+        <div class="kpi-value">32.9K</div>
+        <div class="kpi-delta up">&#9650; Bot / automatizado</div>
+        <div class="kpi-sub">Sem intervenção humana</div>
+      </div>
+      <div class="kpi-card amber" style="animation-delay:.3s">
+        <div class="kpi-label">Reincidência Alta</div>
+        <div class="kpi-value">22,1%</div>
+        <div class="kpi-delta down">&#9660; 11+ contatos/ano</div>
+        <div class="kpi-sub">Clientes recorrentes 2025</div>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div class="chart-card" style="grid-column:span 2;">
+        <div class="chart-card-title"><strong>Volume de Chats Mensais</strong> <span>Humano vs Automação</span></div>
+        <canvas id="chartChat"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Top Atendentes</strong></div>
+        <div class="rank-list" style="margin-top:8px;">
+          <div class="rank-item"><div class="rank-num">1</div><div><div class="rank-name">Tiago</div><div class="rank-bar"><div class="rank-bar-fill" style="width:100%"></div></div></div><div class="rank-val">12.438</div></div>
+          <div class="rank-item"><div class="rank-num">2</div><div><div class="rank-name">Luana</div><div class="rank-bar"><div class="rank-bar-fill" style="width:75.7%"></div></div></div><div class="rank-val">9.414</div></div>
+          <div class="rank-item"><div class="rank-num">3</div><div><div class="rank-name">Joyce</div><div class="rank-bar"><div class="rank-bar-fill" style="width:65.3%"></div></div></div><div class="rank-val">8.118</div></div>
+          <div class="rank-item"><div class="rank-num">4</div><div><div class="rank-name">Rafaela</div><div class="rank-bar"><div class="rank-bar-fill" style="width:59.6%"></div></div></div><div class="rank-val">7.418</div></div>
+          <div class="rank-item"><div class="rank-num">5</div><div><div class="rank-name">Francielle</div><div class="rank-bar"><div class="rank-bar-fill" style="width:51%"></div></div></div><div class="rank-val">6.345</div></div>
+          <div class="rank-item"><div class="rank-num">6</div><div><div class="rank-name">Jhonatan</div><div class="rank-bar"><div class="rank-bar-fill" style="width:42.9%"></div></div></div><div class="rank-val">5.333</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Automação vs Humano</strong></div>
+        <canvas id="chartChatDist" style="max-height:200px;"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Análise de Reincidência</strong></div>
+        <div style="display:flex;align-items:center;gap:24px;margin-top:12px;">
+          <div style="font-family:var(--font-display);font-size:80px;color:var(--amber);line-height:1;">22,1%</div>
+          <div>
+            <div style="font-size:14px;color:var(--text);font-weight:600;margin-bottom:6px;">Clientes com 11+ contatos em 2025</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6;">Indica problemas não resolvidos na primeira interação — oportunidade de melhoria de FCR.</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:14px;background:linear-gradient(135deg,rgba(251,191,36,0.08),rgba(249,115,22,0.05));border:1px solid rgba(251,191,36,0.18);border-radius:2px;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--amber);">&#9888; Reduzir reincidência em 50% libera capacidade para ~10.700 novos atendimentos/ano sem contratar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SEÇÃO 5: OPERAÇÕES -->
+<section id="operacoes">
+  <div class="container">
+    <div class="section-eyebrow">Seção 05 &middot; Operações</div>
+    <div class="section-title">Operações <span>Técnicas</span></div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total OS (Base)</div>
+        <div class="kpi-value">5.281</div>
+        <div class="kpi-delta up">&#9650; Histórico completo</div>
+        <div class="kpi-sub">Todas as ordens</div>
+      </div>
+      <div class="kpi-card red" style="animation-delay:.1s">
+        <div class="kpi-label">Pico Dez/25</div>
+        <div class="kpi-value">674</div>
+        <div class="kpi-delta down">&#9660; Alerta de volume</div>
+        <div class="kpi-sub">Maior mês da série</div>
+      </div>
+      <div class="kpi-card blue" style="animation-delay:.2s">
+        <div class="kpi-label">Técnico Tiago S.</div>
+        <div class="kpi-value">87%</div>
+        <div class="kpi-delta down">&#9660; Concentração crítica</div>
+        <div class="kpi-sub">Das OS abertas</div>
+      </div>
+      <div class="kpi-card amber" style="animation-delay:.3s">
+        <div class="kpi-label">Sem Acesso (tipo)</div>
+        <div class="kpi-value">37,8%</div>
+        <div class="kpi-delta" style="color:var(--amber)">&#9679; Tipo mais frequente</div>
+        <div class="kpi-sub">Principal causa OS</div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-bottom:0;">
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>OS por Mês</strong> <span>Mar/25 &rarr; Fev/26</span></div>
+        <canvas id="chartOS"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Tipos de OS</strong> <span>Por frequência</span></div>
+        <div class="rank-list" style="margin-top:8px;">
+          <div class="rank-item"><div class="rank-num">1</div><div><div class="rank-name">Sem Acesso</div><div class="rank-bar"><div class="rank-bar-fill" style="width:100%;background:var(--red)"></div></div></div><div class="rank-val" style="color:var(--red)">37,8%</div></div>
+          <div class="rank-item"><div class="rank-num">2</div><div><div class="rank-name">Suporte</div><div class="rank-bar"><div class="rank-bar-fill" style="width:56.3%"></div></div></div><div class="rank-val">21,3%</div></div>
+          <div class="rank-item"><div class="rank-num">3</div><div><div class="rank-name">Roteador</div><div class="rank-bar"><div class="rank-bar-fill" style="width:37.3%;background:var(--blue)"></div></div></div><div class="rank-val" style="color:var(--blue)">14,1%</div></div>
+          <div class="rank-item"><div class="rank-num">4</div><div><div class="rank-name">Lentidão</div><div class="rank-bar"><div class="rank-bar-fill" style="width:28.3%;background:var(--amber)"></div></div></div><div class="rank-val" style="color:var(--amber)">10,7%</div></div>
+          <div class="rank-item"><div class="rank-num">5</div><div><div class="rank-name">Oscilação</div><div class="rank-bar"><div class="rank-bar-fill" style="width:14%;background:var(--green)"></div></div></div><div class="rank-val" style="color:var(--green)">5,3%</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="concentration-alert">
+      <div style="font-size:32px;">&#9888;&#65039;</div>
+      <div class="concentration-text">
+        <h4>ALERTA DE CONCENTRAÇÃO TÉCNICA</h4>
+        <p>Tiago Siqueira responde por <strong style="color:var(--red)">87%</strong> das ordens de serviço. Risco operacional crítico — ausência ou saída comprometeria toda a operação técnica. Recomenda-se treinamento imediato de ao menos 2 técnicos adicionais.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SEÇÃO 6: PROJEÇÃO -->
+<section id="projecao">
+  <div class="container">
+    <div class="section-eyebrow">Seção 06 &middot; Futuro</div>
+    <div class="section-title">Projeção <span>2026</span></div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="proj-label">Receita Anual 2026</div>
+        <div class="proj-highlight">R$9,6M</div>
+        <div class="proj-sub">Projeção conservadora</div>
+      </div>
+      <div class="proj-card" style="animation-delay:.1s">
+        <div class="proj-label">Clientes Dez/26</div>
+        <div class="proj-highlight">~9.300</div>
+        <div class="proj-sub">Se mantida taxa atual (+150/mês)</div>
+      </div>
+      <div class="proj-card" style="animation-delay:.2s">
+        <div class="proj-label">Receita Dez/26</div>
+        <div class="proj-highlight">R$986K</div>
+        <div class="proj-sub">Projeção mensal final do ano</div>
+      </div>
+      <div class="proj-card" style="animation-delay:.3s">
+        <div class="proj-label">Crescimento vs 2025</div>
+        <div class="proj-highlight">+37%</div>
+        <div class="proj-sub">Base anual estimada</div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title"><strong>Histórico + Projeção de Receita</strong> <span>Mar/25 &rarr; Dez/26 &middot; linha tracejada = projeção</span></div>
+      <canvas id="chartProjecao" style="max-height:300px;"></canvas>
+    </div>
+    <div class="grid-2 mt-16" style="margin-top:16px;">
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Projeção Clientes Ativos 2026</strong></div>
+        <canvas id="chartProjecaoClientes" style="max-height:220px;"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title"><strong>Premissas da Projeção</strong></div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
+          <div class="insight-item"><div class="insight-dot green"></div><div class="insight-text"><strong>Crescimento líquido:</strong> +150 clientes/mês (média conservadora dos últimos 6 meses)</div></div>
+          <div class="insight-item"><div class="insight-dot"></div><div class="insight-text"><strong>Ticket médio:</strong> R$106 estável (sem reajuste projetado)</div></div>
+          <div class="insight-item"><div class="insight-dot amber"></div><div class="insight-text"><strong>Churn:</strong> Mantido em ~35 cancelamentos/mês com tendência de redução</div></div>
+          <div class="insight-item"><div class="insight-dot red"></div><div class="insight-text"><strong>Risco:</strong> Sazonalidade Ago–Set pode reduzir crescimento temporariamente</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">CYBER</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:4px;">Telecom &middot; Dashboard BI &middot; Mar/2026</div>
+      </div>
+      <div class="footer-stats">
+        <div class="footer-stat"><div class="footer-stat-val">10.426</div><div class="footer-stat-label">Clientes cadastros</div></div>
+        <div class="footer-stat"><div class="footer-stat-val">97.242</div><div class="footer-stat-label">Registros de chat</div></div>
+        <div class="footer-stat"><div class="footer-stat-val">5.281</div><div class="footer-stat-label">Ordens de serviço</div></div>
+        <div class="footer-stat"><div class="footer-stat-val">7.084</div><div class="footer-stat-label">Ativos Fev/26</div></div>
+      </div>
+      <div class="footer-note">BASE_DADOS_BI.xlsx<br>Janela: Mar/2025 — Fev/2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const MONTHS = ['Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26'];
+const MONTHS_SHORT = ['Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez','Jan','Fev'];
+const installs = [170,179,228,212,201,160,177,253,225,280,274,259];
+const churns   = [82,28,87,64,54,86,74,69,44,55,38,34];
+const saldo    = installs.map((v,i) => v - churns[i]);
+const receita  = [557091,572440,587665,603481,619944,629891,640635,658721,676785,699468,723940,747268];
+const chatTotal  = [6415,6404,7466,5898,6284,6249,6038,7739,7239,8265,6800,6200];
+const chatHumano = chatTotal.map(v => Math.round(v*0.662));
+const chatAuto   = chatTotal.map(v => Math.round(v*0.338));
+const osData   = [286,247,312,303,351,358,307,431,443,674,420,380];
+const cohortData = [{year:2021,pct:46.8},{year:2022,pct:56.1},{year:2023,pct:55.5},{year:2024,pct:63.7},{year:2025,pct:73.5}];
+const projMonths   = ['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26','Ago/26','Set/26','Out/26','Nov/26','Dez/26'];
+const projReceita  = [723940,747268,770488,793708,816928,840148,863368,880000,897000,920000,950000,986000];
+const projClientes = [6859,7084,7234,7384,7534,7684,7834,7984,8134,8284,8434,8584];
+
+// Compute active base
+const baseAtivos = [];
+let cumSaldo = 0;
+const startBase = 7084 - saldo.reduce((a,b) => a+b, 0);
+let cur = startBase;
+saldo.forEach(s => { cur += s; baseAtivos.push(cur); });
+
+// Chart.js defaults
+Chart.defaults.color = '#6b6b80';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.04)';
+Chart.defaults.font.family = "'JetBrains Mono', monospace";
+Chart.defaults.font.size = 11;
+const TT = { backgroundColor:'#111118', borderColor:'#2a2a38', borderWidth:1, titleColor:'#e8e8f0', bodyColor:'#6b6b80', padding:12, cornerRadius:2 };
+
+// TICKER
+const tickerItems = [
+  {label:'CLIENTES ATIVOS',value:'7.084',cls:'up'},{label:'RECEITA FEV/26',value:'R$ 747.268',cls:'up'},
+  {label:'TICKET MÉDIO',value:'R$ 106,03',cls:''},{label:'SALDO LÍQ. FEV',value:'+225',cls:'up'},
+  {label:'CHURN FEV/26',value:'34',cls:'up'},{label:'RECEITA EM RISCO',value:'R$ 92.147',cls:'down'},
+  {label:'LTV ATIVO',value:'R$ 2.720',cls:'up'},{label:'LTV CANCELADO',value:'R$ 1.628',cls:'down'},
+  {label:'OS DEZ/25',value:'674',cls:'down'},{label:'REINCIDÊNCIA',value:'22,1%',cls:'down'},
+  {label:'AUTOMAÇÃO',value:'33,8%',cls:'up'},{label:'PROJEÇÃO 2026',value:'R$ 9,6M',cls:'up'},
+  {label:'RETENÇÃO 2025',value:'73,5%',cls:'up'},{label:'INADIMP R$74,90',value:'17,8%',cls:'down'},
+];
+document.getElementById('tickerInner').innerHTML = [...tickerItems,...tickerItems].map(i =>
+  `<div class="ticker-item"><span class="ticker-label">${i.label}</span><span class="${i.cls}">${i.value}</span></div>`).join('');
+
+// COHORT TABLE
+function cohortColor(p){return p<50?'#ef4444':p<60?'#f97316':p<70?'#fbbf24':'#22c55e';}
+const tbody = document.getElementById('cohortBody');
+cohortData.forEach(c => {
+  const col = cohortColor(c.pct);
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><span class="cohort-year">${c.year}</span></td>
+    <td><div style="flex:1;height:10px;background:var(--border2);border-radius:5px;overflow:hidden;"><div style="width:${c.pct}%;height:100%;background:${col};border-radius:5px;"></div></div></td>
+    <td><span class="cohort-pct" style="color:${col}">${c.pct}%</span></td>
+    <td><span class="cohort-note">${c.pct>=70?'▲ Excelente':c.pct>=60?'● Bom':c.pct>=55?'● Regular':'▼ Atenção'}</span></td>`;
+  tbody.appendChild(tr);
+});
+
+// CHARTS
+new Chart(document.getElementById('chartClientes'),{type:'line',data:{labels:MONTHS,datasets:[{label:'Clientes Ativos',data:baseAtivos,borderColor:'#f97316',backgroundColor:'rgba(249,115,22,0.08)',borderWidth:2.5,fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#f97316',pointBorderColor:'#0a0a0f',pointBorderWidth:2}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...TT}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>v.toLocaleString('pt-BR')}}}}});
+
+new Chart(document.getElementById('chartReceita'),{type:'line',data:{labels:MONTHS,datasets:[{label:'Receita',data:receita,borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,0.08)',borderWidth:2.5,fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#22c55e',pointBorderColor:'#0a0a0f',pointBorderWidth:2}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:ctx=>`R$ ${ctx.raw.toLocaleString('pt-BR')}`}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>`R$${(v/1000).toFixed(0)}K`}}}}});
+
+new Chart(document.getElementById('chartSaldo'),{type:'bar',data:{labels:MONTHS_SHORT,datasets:[{label:'Instalações',data:installs,backgroundColor:'rgba(34,197,94,0.7)',borderRadius:2,stack:'a'},{label:'Cancelamentos',data:churns.map(v=>-v),backgroundColor:'rgba(239,68,68,0.7)',borderRadius:2,stack:'a'}]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12,font:{size:10}}},tooltip:{...TT}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9}}},y:{stacked:true,grid:{color:'rgba(255,255,255,0.04)'}}}}});
+
+new Chart(document.getElementById('chartSaldoLine'),{type:'line',data:{labels:MONTHS_SHORT,datasets:[{label:'Saldo',data:saldo,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',borderWidth:2,fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:'#3b82f6'}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...TT}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'rgba(255,255,255,0.04)'}}}}});
+
+new Chart(document.getElementById('chartCancelMotivo'),{type:'doughnut',data:{labels:['Inadimplência','Troca Titular','Inviab. Técnica','Mudança Cidade','Outros'],datasets:[{data:[835,170,145,69,31],backgroundColor:['#ef4444','#f97316','#fbbf24','#3b82f6','#6b6b80'],borderColor:'#111118',borderWidth:3}]},options:{responsive:true,cutout:'65%',plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:12,font:{size:10}}},tooltip:{...TT}}}});
+
+new Chart(document.getElementById('chartInad'),{type:'bar',data:{labels:['R$74,90','R$99,90','R$129,90','R$99,00'],datasets:[{label:'% Inadimplência',data:[17.8,11.0,10.5,7.2],backgroundColor:['#ef4444','#f97316','#fbbf24','#22c55e'],borderRadius:3}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:ctx=>`${ctx.raw}%`}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>`${v}%`}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartLTV'),{type:'bar',data:{labels:['Cliente Ativo','Cliente Cancelado'],datasets:[{data:[2720,1628],backgroundColor:['rgba(34,197,94,0.7)','rgba(239,68,68,0.7)'],borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:ctx=>`R$ ${ctx.raw.toLocaleString('pt-BR')}`}}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>`R$${v}`}}}}});
+
+new Chart(document.getElementById('chartCohort'),{type:'line',data:{labels:cohortData.map(c=>c.year),datasets:[{label:'Retenção %',data:cohortData.map(c=>c.pct),borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,0.1)',borderWidth:2.5,fill:true,tension:0.3,pointRadius:6,pointBackgroundColor:cohortData.map(c=>cohortColor(c.pct)),pointBorderColor:'#0a0a0f',pointBorderWidth:2}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:ctx=>`${ctx.raw}%`}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'}},y:{grid:{color:'rgba(255,255,255,0.04)'},min:40,max:80,ticks:{callback:v=>`${v}%`}}}}});
+
+new Chart(document.getElementById('chartChat'),{type:'bar',data:{labels:MONTHS,datasets:[{label:'Humano',data:chatHumano,backgroundColor:'rgba(59,130,246,0.8)',borderRadius:2,stack:'a'},{label:'Automação',data:chatAuto,backgroundColor:'rgba(34,197,94,0.6)',borderRadius:2,stack:'a'}]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12,font:{size:10}}},tooltip:{...TT}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:10}}},y:{stacked:true,grid:{color:'rgba(255,255,255,0.04)'}}}}});
+
+new Chart(document.getElementById('chartChatDist'),{type:'doughnut',data:{labels:['Humano (66,2%)','Automação (33,8%)'],datasets:[{data:[66.2,33.8],backgroundColor:['rgba(59,130,246,0.8)','rgba(34,197,94,0.7)'],borderColor:'#111118',borderWidth:3}]},options:{responsive:true,cutout:'65%',plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}},tooltip:{...TT}}}});
+
+new Chart(document.getElementById('chartOS'),{type:'bar',data:{labels:MONTHS,datasets:[{label:'OS',data:osData,backgroundColor:osData.map(v=>v>=600?'rgba(239,68,68,0.85)':v>=400?'rgba(249,115,22,0.75)':v>=300?'rgba(251,191,36,0.7)':'rgba(59,130,246,0.65)'),borderRadius:3}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{...TT}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'}}}}});
+
+new Chart(document.getElementById('chartProjecao'),{type:'line',data:{labels:projMonths,datasets:[{label:'Histórico',data:[...projReceita.slice(0,2),...Array(10).fill(null)],borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,0.06)',borderWidth:2.5,fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#22c55e'},{label:'Projeção',data:[null,projReceita[1],...projReceita.slice(2)],borderColor:'#f97316',backgroundColor:'rgba(249,115,22,0.05)',borderWidth:2,borderDash:[6,4],fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:'#f97316'}]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12,font:{size:10}}},tooltip:{...TT,callbacks:{label:ctx=>ctx.raw?`R$ ${ctx.raw.toLocaleString('pt-BR')}`:''}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>`R$${(v/1000).toFixed(0)}K`}}}}});
+
+new Chart(document.getElementById('chartProjecaoClientes'),{type:'line',data:{labels:projMonths,datasets:[{label:'Histórico',data:[...projClientes.slice(0,2),...Array(10).fill(null)],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.06)',borderWidth:2.5,fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#3b82f6'},{label:'Projeção',data:[null,projClientes[1],...projClientes.slice(2)],borderColor:'#fbbf24',backgroundColor:'rgba(251,191,36,0.05)',borderWidth:2,borderDash:[6,4],fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:'#fbbf24'}]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12,font:{size:10}}},tooltip:{...TT}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{callback:v=>v.toLocaleString('pt-BR')}}}}});
+</script>
+</body>
+</html>
