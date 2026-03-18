@@ -194,9 +194,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--Fb);font-size:14px
     </div>
     <div class="kc kc-g">
       <div class="kl">Inadimplência Total</div>
-      <div class="kv">R$309K</div>
+      <div class="kv">R$279K</div>
       <div class="kd kd-dn">▼ +1.279% em 10m</div>
-      <div class="ks">2.966 casos · ação urgente</div>
+      <div class="ks">2.669 registros · 1.794 clientes</div>
     </div>
   </div>
 
@@ -468,9 +468,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--Fb);font-size:14px
   <div class="g4">
     <div class="kc kc-f">
       <div class="kl">Inadimplência Total</div>
-      <div class="kv">R$309K</div>
-      <div class="kd kd-dn">▼ +1.279% em 10m</div>
-      <div class="ks">2.966 casos · ref. 15/03/26</div>
+      <div class="kv">R$279K</div>
+      <div class="kd kd-dn">▼ após auditoria e limpeza</div>
+      <div class="ks">2.669 registros · 1.794 clientes únicos</div>
     </div>
     <div class="kc kc-f">
       <div class="kl">Receita em Risco</div>
@@ -480,15 +480,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--Fb);font-size:14px
     </div>
     <div class="kc kc-f">
       <div class="kl">Recuperável Estimado</div>
-      <div class="kv">R$130K</div>
-      <div class="kd kd-up">▲ 42% do total</div>
+      <div class="kv">R$115K</div>
+      <div class="kd kd-up">▲ 41% do total</div>
       <div class="ks">Principalmente 0–60 dias</div>
     </div>
     <div class="kc kc-f">
       <div class="kl">Irrecuperável Projetado</div>
-      <div class="kv">R$179K</div>
-      <div class="kd kd-dn">▼ 58% — provisionar</div>
-      <div class="ks">+180 dias: R$86.778</div>
+      <div class="kv">R$164K</div>
+      <div class="kd kd-dn">▼ 59% — provisionar</div>
+      <div class="ks">+180 dias: R$82.454</div>
     </div>
   </div>
 
@@ -496,7 +496,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--Fb);font-size:14px
     <div style="font-size:26px">💥</div>
     <div>
       <div class="bn-title" style="color:var(--red)">EXPLOSÃO — AÇÃO URGENTE</div>
-      <div class="bn-text">Abr/25: R$9.929 → Fev/26: R$136.908 (+1.279%). O volume elevado de cancelamentos em Mar/26 é reflexo da <strong>negativação acumulada de Jan, Fev e Mar</strong> chegando ao limite de tolerância simultaneamente — não é deterioração nova da carteira, é um ciclo concentrado. Prioridade: acionar inadimplentes <em>antes</em> do corte.</div>
+      <div class="bn-text">Base auditada: <strong>240 registros duplicados por formato de data removidos (R$25.481) + 57 faturas acima da regra de negócio (máx. 3 mens. + 1 instal.) removidos (R$5.324)</strong>. Valor real: R$278.764 · 2.669 registros · 1.794 clientes únicos. O ciclo concentrado Jan+Fev+Mar explica o pico — não é deterioração nova da carteira.</div>
     </div>
   </div>
 
@@ -506,7 +506,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--Fb);font-size:14px
       <canvas id="c3_inadim" style="height:250px;max-height:250px"></canvas>
     </div>
     <div class="cc">
-      <div class="cct"><strong>Aging — Casos por Faixa</strong><span>distribuição 2.966 devedores</span></div>
+      <div class="cct"><strong>Aging — Casos por Faixa</strong><span>distribuição 2.669 registros · 1.794 clientes</span></div>
       <canvas id="c3_aging_casos" style="height:250px;max-height:250px"></canvas>
     </div>
   </div>
@@ -525,14 +525,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--Fb);font-size:14px
   <div class="sh">AGING <span class="sh-b">DETALHADO</span></div>
   <div class="tbl-wrap">
     <table class="tbl">
-      <tr><th>Faixa</th><th>Casos</th><th>Valor</th><th>Taxa Rec.</th><th>Recuperável</th><th>Irrecuperável</th><th>Segmento</th></tr>
-      <tr><td>0–30 dias</td><td>986</td><td>R$102.426</td><td>70%</td><td style="color:var(--green)">R$71.699</td><td style="color:var(--red)">R$30.727</td><td><span class="badge badge-g">EM LIQUIDAÇÃO</span></td></tr>
-      <tr><td>31–60 dias</td><td>596</td><td>R$62.097</td><td>55%</td><td style="color:var(--green)">R$34.153</td><td style="color:var(--red)">R$27.944</td><td><span class="badge badge-g">EM LIQUIDAÇÃO</span></td></tr>
-      <tr><td>61–90 dias</td><td>179</td><td>R$18.070</td><td>40%</td><td style="color:var(--amber)">R$7.228</td><td style="color:var(--red)">R$10.842</td><td><span class="badge badge-y">ZONA DE RISCO</span></td></tr>
-      <tr><td>91–180 dias</td><td>393</td><td>R$40.197</td><td>25%</td><td style="color:var(--amber)">R$10.049</td><td style="color:var(--red)">R$30.148</td><td><span class="badge badge-y">ZONA DE RISCO</span></td></tr>
-      <tr><td>181–365 dias</td><td>572</td><td>R$61.272</td><td>10%</td><td style="color:var(--amber)">R$6.127</td><td style="color:var(--red)">R$55.145</td><td><span class="badge badge-r">INADIM. REAL</span></td></tr>
-      <tr><td>+365 dias</td><td>240</td><td>R$25.506</td><td>3%</td><td style="color:var(--muted)">R$765</td><td style="color:var(--red)">R$24.741</td><td><span class="badge badge-r">INADIM. REAL</span></td></tr>
-      <tr style="background:var(--card2)"><td><strong>TOTAL</strong></td><td><strong>2.966</strong></td><td><strong>R$309.569</strong></td><td><strong>42%</strong></td><td style="color:var(--green)"><strong>R$130.022</strong></td><td style="color:var(--red)"><strong>R$179.547</strong></td><td></td></tr>
+      <tr><th>Faixa</th><th>Registros</th><th>Valor</th><th>Taxa Rec.</th><th>Recuperável</th><th>Irrecuperável</th><th>Segmento</th></tr>
+      <tr><td>0–30 dias</td><td>951</td><td>R$98.593</td><td>70%</td><td style="color:var(--green)">R$69.015</td><td style="color:var(--red)">R$29.578</td><td><span class="badge badge-g">EM LIQUIDAÇÃO</span></td></tr>
+      <tr><td>31–60 dias</td><td>393</td><td>R$40.559</td><td>55%</td><td style="color:var(--green)">R$22.307</td><td style="color:var(--red)">R$18.252</td><td><span class="badge badge-g">EM LIQUIDAÇÃO</span></td></tr>
+      <tr><td>61–90 dias</td><td>178</td><td>R$17.996</td><td>40%</td><td style="color:var(--amber)">R$7.198</td><td style="color:var(--red)">R$10.798</td><td><span class="badge badge-y">ZONA DE RISCO</span></td></tr>
+      <tr><td>91–180 dias</td><td>382</td><td>R$39.162</td><td>25%</td><td style="color:var(--amber)">R$9.790</td><td style="color:var(--red)">R$29.372</td><td><span class="badge badge-y">ZONA DE RISCO</span></td></tr>
+      <tr><td>181–365 dias</td><td>532</td><td>R$57.633</td><td>10%</td><td style="color:var(--amber)">R$5.763</td><td style="color:var(--red)">R$51.870</td><td><span class="badge badge-r">INADIM. REAL</span></td></tr>
+      <tr><td>+365 dias</td><td>233</td><td>R$24.821</td><td>3%</td><td style="color:var(--muted)">R$745</td><td style="color:var(--red)">R$24.076</td><td><span class="badge badge-r">INADIM. REAL</span></td></tr>
+      <tr style="background:var(--card2)"><td><strong>TOTAL</strong></td><td><strong>2.669</strong></td><td><strong>R$278.764</strong></td><td><strong>41%</strong></td><td style="color:var(--green)"><strong>R$114.818</strong></td><td style="color:var(--red)"><strong>R$163.946</strong></td><td></td></tr>
     </table>
   </div>
 
@@ -548,9 +548,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--Fb);font-size:14px
         <canvas id="c3_liquidacao" style="height:155px;max-height:155px"></canvas>
       </div>
       <div class="g3" style="margin:0">
-        <div class="mc"><div class="mc-label">Hoje</div><div class="mc-val" style="color:var(--red)">R$309K</div><div class="mc-sub">2.966 casos</div></div>
-        <div class="mc"><div class="mc-label">+30d Abr</div><div class="mc-val" style="color:var(--amber)">R$237K</div><div class="mc-sub">−R$71.698</div></div>
-        <div class="mc"><div class="mc-label">+90d Jun</div><div class="mc-val" style="color:var(--green)">R$196K</div><div class="mc-sub">residual real</div></div>
+        <div class="mc"><div class="mc-label">Hoje</div><div class="mc-val" style="color:var(--red)">R$279K</div><div class="mc-sub">2.669 registros</div></div>
+        <div class="mc"><div class="mc-label">+30d Abr</div><div class="mc-val" style="color:var(--amber)">R$210K</div><div class="mc-sub">−R$69.015</div></div>
+        <div class="mc"><div class="mc-label">+90d Jun</div><div class="mc-val" style="color:var(--green)">R$187K</div><div class="mc-sub">residual real</div></div>
       </div>
     </div>
   </div>
@@ -592,18 +592,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--Fb);font-size:14px
   </div>
 
   <div class="ic">
-    <div class="ii"><div class="idot idot-r"></div><div class="it"><strong>Dois problemas distintos:</strong> (1) ciclo concentrado Jan+Fev+Mar = R$222.790 que liquida em 90 dias; (2) base estrutural +180d = R$86.778 que <em>já existia antes</em> e não some com a liquidação.</div></div>
-    <div class="ii"><div class="idot idot-a"></div><div class="it"><strong>O piso subiu permanentemente:</strong> de ~R$12K/mês para ~R$87K estrutural. Sem mudança de processo, em 12 meses a inadimplência voltará a crescer mesmo após o ciclo atual ser resolvido.</div></div>
-    <div class="ii"><div class="idot idot-b"></div><div class="it"><strong>Ação estrutural necessária:</strong> suspensão automática em D+30 + contato humano em D+15. Reduzir o fluxo de entrada na faixa +180d é mais importante do que recuperar o que já está lá.</div></div>
-    <div class="ii"><div class="idot idot-g"></div><div class="it"><strong>Meta de saúde:</strong> retornar a 1,6–2,0% do MRR (~R$13K–R$16K). Isso exige reduzir o estoque estrutural em ~R$70K — processo de 6 a 12 meses com régua ativa.</div></div>
+    <div class="ii"><div class="idot idot-r"></div><div class="it"><strong>Dois componentes:</strong> (1) ciclo concentrado Jan+Fev+Mar = R$139.152 (0–60d) que liquida naturalmente; (2) base estrutural +180d = R$82.454 — inadimplência real que já existia e não some com a liquidação do ciclo.</div></div>
+    <div class="ii"><div class="idot idot-a"></div><div class="it"><strong>Piso estrutural:</strong> R$82K em +180d indica que sem mudança de processo a inadimplência voltará a crescer. Suspensão em D+30 + contato humano em D+15 é a ação preventiva crítica.</div></div>
+    <div class="ii"><div class="idot idot-b"></div><div class="it"><strong>Alerta sistema:</strong> 240 registros duplicados por formato de data detectados (R$25.481). Verificar integração entre sistema de cobrança e gestão — mesma fatura gravada duas vezes em formatos distintos.</div></div>
+    <div class="ii"><div class="idot idot-g"></div><div class="it"><strong>Meta de saúde:</strong> retornar a 1,6–2,0% do MRR (~R$13K–R$16K). Exige reduzir o estoque estrutural +180d em ~R$66K — processo de 6 a 12 meses com régua ativa.</div></div>
   </div>
 
   <div class="sh">AÇÕES DE <span class="sh-b">RECUPERAÇÃO</span></div>
   <div class="ic">
-    <div class="ii"><div class="idot idot-r"></div><div class="it"><strong>Ciclo concentrado Jan+Fev+Mar (urgente):</strong> acionar os 1.582 casos (0–60d) <em>antes</em> do corte. Quebrar o ciclo preserva o MRR e evita que mais inadimplência 0-60d vire +180d.</div></div>
-    <div class="ii"><div class="idot idot-a"></div><div class="it"><strong>Régua de cobrança ativa (61–180d):</strong> 572 casos · R$58.267 — negociação parcelada pode recuperar R$17.277.</div></div>
-    <div class="ii"><div class="idot idot-b"></div><div class="it"><strong>Provisionar +180d:</strong> 812 casos · R$86.778 — provisionar como perda, recuperação jurídica para valores acima de R$500.</div></div>
-    <div class="ii"><div class="idot idot-g"></div><div class="it"><strong>Suspensão com contato simultâneo:</strong> D+30 = suspensão automática + ligação humana. Impede que inadimplência nova engorde o estoque estrutural.</div></div>
+    <div class="ii"><div class="idot idot-r"></div><div class="it"><strong>Ciclo concentrado Jan+Fev+Mar (urgente):</strong> acionar os 1.344 casos (0–60d) · R$139.152 <em>antes</em> do corte. Recuperável estimado: R$91.322. Quebrar o ciclo preserva o MRR.</div></div>
+    <div class="ii"><div class="idot idot-a"></div><div class="it"><strong>Régua de cobrança ativa (61–180d):</strong> 560 casos · R$57.158 — negociação parcelada pode recuperar R$16.988.</div></div>
+    <div class="ii"><div class="idot idot-b"></div><div class="it"><strong>Provisionar +180d:</strong> 765 casos · R$82.454 — provisionar como perda, recuperação jurídica para valores acima de R$500.</div></div>
+    <div class="ii"><div class="idot idot-g"></div><div class="it"><strong>Base auditada e corrigida:</strong> R$30.805 removidos (duplicatas de formato de data + faturas além da regra de negócio). Valor real: <strong>R$278.764</strong> · 1.794 clientes únicos.</div></div>
   </div>
 </div>
 
@@ -931,27 +931,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--Fb);font-size:14px
   <div class="g3">
     <div class="kc kc-m">
       <div class="kl">🟢 Em Liquidação 0–60d</div>
-      <div class="kv">R$164K</div>
-      <div class="kd kd-up">▲ 1.582 casos · paga naturalmente</div>
-      <div class="ks">Liquidação projetada em 60 dias</div>
+      <div class="kv">R$139K</div>
+      <div class="kd kd-up">▲ 1.344 casos · paga naturalmente</div>
+      <div class="ks">Recuperável: R$91.322 (66%)</div>
     </div>
     <div class="kc kc-m">
       <div class="kl">🟡 Zona de Risco 61–180d</div>
-      <div class="kv">R$58K</div>
-      <div class="kd kd-nt">→ 572 casos · ação ativa</div>
-      <div class="ks">Recuperável: R$17.277 (30%)</div>
+      <div class="kv">R$57K</div>
+      <div class="kd kd-nt">→ 560 casos · ação ativa</div>
+      <div class="ks">Recuperável: R$16.988 (30%)</div>
     </div>
     <div class="kc kc-m">
       <div class="kl">🔴 Inadimplência Real +180d</div>
-      <div class="kv">R$86K</div>
-      <div class="kd kd-dn">▼ 812 casos · provisionar</div>
-      <div class="ks">Recuperável: R$6.892 (8%)</div>
+      <div class="kv">R$82K</div>
+      <div class="kd kd-dn">▼ 765 casos · provisionar</div>
+      <div class="ks">Recuperável: R$6.508 (8%)</div>
     </div>
   </div>
 
   <div class="g2">
     <div class="cc">
-      <div class="cct"><strong>Aging por Casos</strong><span>2.966 devedores</span></div>
+      <div class="cct"><strong>Aging por Casos</strong><span>2.669 registros · 1.794 clientes únicos</span></div>
       <canvas id="c6_aging" style="height:220px;max-height:220px"></canvas>
     </div>
     <div class="cc">
@@ -1022,14 +1022,14 @@ const TICKS=[
   {label:'Churn Rate',val:'2,8%',cls:'tk-up',sym:'▲'},
   {label:'Ticket Médio',val:'R$105,90',cls:'tk-up',sym:'▲'},
   {label:'Saldo Liq. 12m',val:'+1.995',cls:'tk-up',sym:'▲'},
-  {label:'Inadimplência',val:'R$309K',cls:'tk-dn',sym:'▼'},
+  {label:'Inadimplência',val:'R$279K',cls:'tk-dn',sym:'▼'},
   {label:'Cancel. Mar/26',val:'36 → proj74',cls:'tk-dn',sym:'⛔'},
   {label:'Inst. Mar/26',val:'118 / meta245',cls:'tk-nt',sym:'⟳'},
   {label:'TA Telefone',val:'97,4%',cls:'tk-up',sym:'▲'},
   {label:'Google',val:'4,9★',cls:'tk-up',sym:'▲'},
   {label:'OS Fev/26',val:'340',cls:'tk-nt',sym:'→'},
   {label:'Rec. em Risco',val:'R$84K',cls:'tk-dn',sym:'▼'},
-  {label:'Rec. Recuperável',val:'R$130K',cls:'tk-up',sym:'▲'},
+  {label:'Rec. Recuperável',val:'R$115K',cls:'tk-up',sym:'▲'},
   {label:'Saldo Mar/26',val:'+82 → proj+170',cls:'tk-nt',sym:'⟳'},
   {label:'Suspensos',val:'803',cls:'tk-nt',sym:'→'},
 ];
@@ -1156,18 +1156,18 @@ barChart('c2_canal_ret',['Indicação','Instagram','Panfleto','Vendedor Ext.'],
 // PAINEL FINANCEIRO
 // ══════════════════════════════════════════
 const inadimMeses=['Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26*'];
-const inadimVal=[9929,10500,11200,11800,12100,13540,12636,13464,18070,34081,136908,48390];
+const inadimVal=[9986,10480,11450,9377,10138,9040,7747,8496,13219,12009,13264,17939,23021,122597];
 barChart('c3_inadim',inadimMeses,[{label:'Valor R$',data:inadimVal,backgroundColor:inadimVal.map(v=>v>50000?'rgba(239,68,68,.85)':v>15000?'rgba(251,191,36,.7)':'rgba(59,130,246,.6)'),borderRadius:4}]);
 barChart('c3_aging_casos',['0-30d','31-60d','61-90d','91-180d','181-365d','+365d'],
-  [{label:'Casos',data:[986,596,179,393,572,240],backgroundColor:['#22c55e','#3b82f6','#fbbf24','#f97316','#ef4444','#6b6b80'],borderRadius:4}]);
+  [{label:'Casos',data:[951,393,178,382,532,233],backgroundColor:['#22c55e','#3b82f6','#fbbf24','#f97316','#ef4444','#6b6b80'],borderRadius:4}]);
 barChart('c3_aging_val',['0-30d','31-60d','61-90d','91-180d','181-365d','+365d'],
-  [{label:'Valor R$',data:[102426,62097,18070,40197,61272,25506],backgroundColor:['#22c55e','#3b82f6','#fbbf24','#f97316','#ef4444','#6b6b80'],borderRadius:4}]);
+  [{label:'Valor R$',data:[98593,40559,17996,39162,57633,24821],backgroundColor:['#22c55e','#3b82f6','#fbbf24','#f97316','#ef4444','#6b6b80'],borderRadius:4}]);
 new Chart(document.getElementById('c3_rec_irrec'),{
   type:'bar',
   data:{labels:['0-30d','31-60d','61-90d','91-180d','181-365d','+365d'],
     datasets:[
-      {label:'Recuperável',data:[71699,34153,7228,10049,6127,765],backgroundColor:'rgba(34,197,94,.7)'},
-      {label:'Irrecuperável',data:[30727,27944,10842,30148,55145,24741],backgroundColor:'rgba(239,68,68,.7)'}
+      {label:'Recuperável',data:[69015,22307,7198,9790,5763,745],backgroundColor:'rgba(34,197,94,.7)'},
+      {label:'Irrecuperável',data:[29578,18252,10798,29372,51870,24076],backgroundColor:'rgba(239,68,68,.7)'}
     ]},
   options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10}}},scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}}
 });
@@ -1175,10 +1175,10 @@ new Chart(document.getElementById('c3_rec_irrec'),{
 // Bairros com cidade
 barChart('c3_bairros',
   ['CENTRO · EWB','IGREJINHA · JF','TORREÕES · JF','NOVA ERA · JF','VALADARES · JF','ROSÁRIO MINAS · JF','MONTE VERDE · JF','COL. S.FIRMINO · EWB','HUMAITÁ · JF','PAULA LIMA · JF','CENTRO · LD','CACHOEIRA · JF','NÁUTICO · JF','VILA CRUZEIRO · LD','CENTRO · PT'],
-  [{label:'R$ inadimplente',data:[27783,19119,14876,14129,13906,12014,11214,10475,9891,9774,7511,7481,6969,5366,5096],backgroundColor:'rgba(239,68,68,.7)',borderRadius:4}],
+  [{label:'R$ inadimplente',data:[25293,16290,13849,12559,11817,10940,9823,9759,9539,8848,6856,6839,6464,4683,4806],backgroundColor:'rgba(239,68,68,.7)',borderRadius:4}],
   {indexAxis:'y',scales:{x:{beginAtZero:true},y:{ticks:{font:{size:10}}}}});
 lineChart('c3_liquidacao',['Hoje','Abr/26','Mai/26','Jun/26'],
-  [{label:'Inadimplência R$',data:[309569,237871,203717,196489],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.12)',fill:true,pointRadius:6,pointBackgroundColor:'#ef4444'}]);
+  [{label:'Inadimplência R$',data:[278764,209749,187442,187442],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.12)',fill:true,pointRadius:6,pointBackgroundColor:'#ef4444'}]);
 
 // Composição ciclo vs estrutural
 new Chart(document.getElementById('c3_composto'),{
@@ -1272,18 +1272,18 @@ function initMarcoCharts(){
       scales:{x:{ticks:{maxRotation:0,font:{size:10},callback:(v,i)=>i===0||i%5===4?'D'+(i+1):''}},y:{beginAtZero:true}}}
   });
 
-  doughnut('c6_aging',['0-30d','31-60d','61-90d','91-180d','181-365d','+365d'],[986,596,179,393,572,240],['#22c55e','#3b82f6','#fbbf24','#f97316','#ef4444','#6b6b80']);
+  doughnut('c6_aging',['0-30d','31-60d','61-90d','91-180d','181-365d','+365d'],[951,393,178,382,532,233],['#22c55e','#3b82f6','#fbbf24','#f97316','#ef4444','#6b6b80']);
   new Chart(document.getElementById('c6_rec'),{
     type:'bar',
     data:{labels:['0-30d','31-60d','61-90d','91-180d','181-365d','+365d'],
       datasets:[
-        {label:'Recuperável',data:[71699,34153,7228,10049,6127,765],backgroundColor:'rgba(34,197,94,.7)'},
-        {label:'Irrecuperável',data:[30727,27944,10842,30148,55145,24741],backgroundColor:'rgba(239,68,68,.7)'}
+        {label:'Recuperável',data:[69015,22307,7198,9790,5763,745],backgroundColor:'rgba(34,197,94,.7)'},
+        {label:'Irrecuperável',data:[29578,18252,10798,29372,51870,24076],backgroundColor:'rgba(239,68,68,.7)'}
       ]},
     options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10}}},scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}}
   });
   lineChart('c6_timeline',['Hoje','Abr/26','Mai/26','Jun/26'],
-    [{label:'Inadimplência R$',data:[309569,237871,203717,196489],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.12)',fill:true,pointRadius:6,pointBackgroundColor:'#ef4444'}]);
+    [{label:'Inadimplência R$',data:[278764,209749,187442,187442],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.12)',fill:true,pointRadius:6,pointBackgroundColor:'#ef4444'}]);
 }
 
 // ══════════════════════════════════════════
