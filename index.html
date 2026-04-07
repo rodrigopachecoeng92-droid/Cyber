@@ -2,931 +2,1127 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CYBER Telecom · BI Dashboard 2026</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CYBER Telecom · BI 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
-  --bg:#0a0a0f;--card:#111118;--card2:#16161f;
-  --border:#2a2a38;--border2:#1e1e2a;
-  --orange:#f97316;--green:#22c55e;--red:#ef4444;
-  --blue:#3b82f6;--amber:#fbbf24;--purple:#a855f7;--cyan:#06b6d4;
-  --text:#e8e8f0;--muted:#6b6b80;--muted2:#4a4a5a;
-  --Fd:'Bebas Neue',sans-serif;--Fb:'DM Sans',sans-serif;--Fm:'JetBrains Mono',monospace;
+  --bg:#080b0f;--bg2:#0d1117;--bg3:#131920;--bg4:#1a2230;--bg5:#202c3c;
+  --b1:#1e2d3d;--b2:#243447;--b3:#2d4156;
+  --txt:#c9d4e0;--txt2:#8fa3b8;--muted:#4a6070;--dim:#2a3d50;
+  --g:#10b981;--g2:#059669;--gbg:rgba(16,185,129,.07);
+  --r:#f43f5e;--r2:#e11d48;--rbg:rgba(244,63,94,.07);
+  --a:#f59e0b;--a2:#d97706;--abg:rgba(245,158,11,.07);
+  --b:#3b82f6;--b2c:#2563eb;--bbg:rgba(59,130,246,.07);
+  --cy:#22d3ee;--cybg:rgba(34,211,238,.07);
+  --or:#fb923c;--orbg:rgba(251,146,60,.07);
+  --vi:#a78bfa;--vibg:rgba(167,139,250,.07);
+  --pk:#f472b6;--pkbg:rgba(244,114,182,.07);
+  --Fd:'Bebas Neue',sans-serif;
+  --Fb:'Outfit',sans-serif;
+  --Fm:'DM Mono',monospace;
+  --rad:8px;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--Fb);font-size:14px;line-height:1.5}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--txt);font-family:var(--Fm);font-size:11px;line-height:1.5;overflow-x:hidden;}
 
-/* TICKER */
-.ticker-band{background:#0d0d14;border-bottom:1px solid var(--border2);overflow:hidden;height:34px;display:flex;align-items:center;position:sticky;top:0;z-index:200}
-.ticker-label{background:var(--orange);color:#fff;font-family:var(--Fm);font-size:9px;letter-spacing:2px;padding:0 14px;height:100%;display:flex;align-items:center;white-space:nowrap;flex-shrink:0}
-.ticker-track{flex:1;overflow:hidden}
-.ticker-inner{display:flex;white-space:nowrap;animation:ticker 50s linear infinite}
-.ticker-inner:hover{animation-play-state:paused}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.tk{display:inline-flex;align-items:center;gap:6px;padding:0 24px;font-family:var(--Fm);font-size:11px;border-right:1px solid var(--border2)}
-.tk-label{color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-size:9px}
-.tk-val{font-weight:700;font-size:11px}
-.tk-up{color:var(--green)}.tk-dn{color:var(--red)}.tk-nt{color:var(--amber)}
+/* ── TICKER ── */
+.tkr-wrap{background:var(--bg2);border-bottom:1px solid var(--b1);height:32px;overflow:hidden;display:flex;align-items:center;}
+.tkr{display:flex;animation:tkscroll 80s linear infinite;white-space:nowrap;}
+.tkr:hover{animation-play-state:paused;}
+.tk{display:inline-flex;align-items:center;gap:8px;padding:0 20px;border-right:1px solid var(--b2);}
+.tk-l{color:var(--muted);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;}
+.tk-v{font-size:11px;font-weight:500;}
+.up{color:var(--g)}.dn{color:var(--r)}.nt{color:var(--a)}.cy{color:var(--cy)}
+@keyframes tkscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* NAV */
-.nav{background:#0d0d14;border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:4px;position:sticky;top:34px;z-index:100;flex-wrap:wrap}
-.nav-logo{font-family:var(--Fd);font-size:20px;color:var(--orange);letter-spacing:2px;margin-right:12px;white-space:nowrap;padding:10px 0}
-.nav-logo span{color:var(--muted);font-size:9px;font-family:var(--Fm);display:block;line-height:1}
-.nb{padding:11px 12px;font-family:var(--Fm);font-size:9px;letter-spacing:1px;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:.2s;white-space:nowrap;border-bottom:2px solid transparent;text-transform:uppercase}
-.nb:hover{color:var(--text)}.nb.a{border-bottom-color:currentColor}
-.nb-g.a{color:var(--orange)}.nb-c.a{color:var(--green)}.nb-f.a{color:var(--blue)}
-.nb-a.a{color:var(--purple)}.nb-k.a{color:var(--cyan)}.nb-m.a{color:var(--red)}
+/* ── HEADER / NAV ── */
+.hdr{background:var(--bg2);border-bottom:1px solid var(--b1);display:flex;align-items:stretch;position:sticky;top:0;z-index:200;overflow-x:auto;}
+.brand{display:flex;flex-direction:column;justify-content:center;padding:0 20px;border-right:1px solid var(--b1);flex-shrink:0;}
+.brand-name{font-family:var(--Fd);font-size:22px;letter-spacing:2px;color:var(--or);line-height:1;}
+.brand-sub{font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:1px;}
+.tabs{display:flex;}
+.tab{padding:0 18px;cursor:pointer;border:none;background:none;color:var(--muted);font-family:var(--Fm);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid transparent;transition:.15s;white-space:nowrap;height:100%;}
+.tab:hover{color:var(--txt);}
+.tab.on{color:var(--txt);border-bottom-color:var(--or);}
+.tab.on-g{color:var(--g);border-bottom-color:var(--g);}
+.tab.on-c{color:var(--cy);border-bottom-color:var(--cy);}
+.tab.on-f{color:var(--a);border-bottom-color:var(--a);}
+.tab.on-a{color:var(--vi);border-bottom-color:var(--vi);}
+.tab.on-k{color:var(--b);border-bottom-color:var(--b);}
+.tab.on-l{color:var(--pk);border-bottom-color:var(--pk);}
+.tab.on-m{color:var(--r);border-bottom-color:var(--r);}
 
-/* PANELS */
-.panel{display:none;padding:20px 24px;max-width:1560px;margin:0 auto}
-.panel.a{display:block}
+/* ── PANEL ── */
+.panel{display:none;padding:16px;max-width:1600px;margin:0 auto;}
+.panel.on{display:block;}
 
-/* GRIDS */
-.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:14px}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.g21{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:14px}
-.g32{display:grid;grid-template-columns:3fr 2fr;gap:12px;margin-bottom:14px}
-.mb{margin-bottom:14px}
+/* ── SECTION HEADER ── */
+.sh{display:flex;align-items:center;gap:12px;padding:14px 0 10px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.sh-label{font-family:var(--Fd);font-size:16px;letter-spacing:3px;color:var(--or);}
+.sh::after{content:'';flex:1;height:1px;background:var(--b1);}
+.sh-note{font-size:8px;color:var(--muted);letter-spacing:.5px;font-family:var(--Fm);}
 
-/* KPI CARD */
-.kc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;border-top:3px solid transparent;position:relative;overflow:hidden}
-.kc-g{border-top-color:var(--orange)}.kc-c{border-top-color:var(--green)}.kc-f{border-top-color:var(--blue)}
-.kc-a{border-top-color:var(--purple)}.kc-k{border-top-color:var(--cyan)}.kc-m{border-top-color:var(--red)}
-.kl{font-family:var(--Fm);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
-.kv{font-family:var(--Fd);font-size:32px;color:var(--text);line-height:1;margin-bottom:4px}
-.kd{font-size:11px;font-family:var(--Fm);margin-bottom:2px}
-.kd-up{color:var(--green)}.kd-dn{color:var(--red)}.kd-nt{color:var(--amber)}
-.ks{font-size:11px;color:var(--muted)}
+/* ── GRIDS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.g6{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+.g13{display:grid;grid-template-columns:1fr 3fr;gap:12px;}
+.g31{display:grid;grid-template-columns:3fr 1fr;gap:12px;}
+.g23{display:grid;grid-template-columns:2fr 3fr;gap:12px;}
+.g32{display:grid;grid-template-columns:3fr 2fr;gap:12px;}
+.mt{margin-top:12px;}
+.mt8{margin-top:8px;}
 
-/* CHART CARD */
-.cc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px}
-.cct{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;flex-wrap:wrap;gap:4px}
-.cct strong{font-family:var(--Fm);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.cct span{font-size:11px;color:var(--muted2)}
+/* ── CARD ── */
+.cc{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--rad);padding:14px;}
+.ct{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.ct span{letter-spacing:.3px;text-transform:none;font-size:9px;}
 
-/* SECTION HEADER */
-.sh{font-family:var(--Fd);font-size:24px;letter-spacing:2px;color:var(--muted);margin:28px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--border2)}
-.sh-o{color:var(--orange)}.sh-g{color:var(--green)}.sh-b{color:var(--blue)}
-.sh-p{color:var(--purple)}.sh-c{color:var(--cyan)}.sh-r{color:var(--red)}
+/* ── KPI CARD ── */
+.kc{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--rad);padding:12px 14px;position:relative;overflow:hidden;}
+.kc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kc-g::before{background:var(--g)}.kc-r::before{background:var(--r)}.kc-a::before{background:var(--a)}
+.kc-b::before{background:var(--b)}.kc-c::before{background:var(--cy)}.kc-or::before{background:var(--or)}
+.kc-vi::before{background:var(--vi)}.kc-pk::before{background:var(--pk)}.kc-mu::before{background:var(--muted)}
+.kl{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.kv{font-family:var(--Fd);font-size:26px;letter-spacing:1px;line-height:1;margin-bottom:3px;}
+.kv-sm{font-size:19px;}
+.kd{font-size:9px;margin-bottom:2px;}
+.ks{font-size:8px;color:var(--muted);}
 
-/* INSIGHT BOX */
-.ic{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px}
-.ii{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border2)}
-.ii:last-child{border-bottom:none;padding-bottom:0}
-.idot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.idot-g{background:var(--green)}.idot-r{background:var(--red)}.idot-a{background:var(--amber)}
-.idot-b{background:var(--blue)}.idot-p{background:var(--purple)}
-.it{font-size:12px;line-height:1.55;color:var(--muted)}.it strong{color:var(--text)}
+/* ── MINI CARD ── */
+.mc{background:var(--bg3);border:1px solid var(--b1);border-left:3px solid;border-radius:var(--rad);padding:14px;}
+.mc-lbl{font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.mc-val{font-family:var(--Fd);font-size:34px;letter-spacing:1px;line-height:1;margin-bottom:4px;}
+.mc-sub{font-size:9px;color:var(--muted);margin-bottom:8px;}
+.mc-row{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);padding:2px 0;}
+.prg{background:var(--bg5);border-radius:2px;height:5px;margin-top:8px;overflow:hidden;}
+.prg-f{height:100%;border-radius:2px;}
 
-/* NOTE */
-.note{background:#16161f;border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.55}
-.note strong{color:var(--amber)}
+/* ── TABELA ── */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--b1);text-align:left;font-weight:400;}
+.tbl td{padding:6px 8px;border-bottom:1px solid var(--b2);font-size:10px;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+.num{text-align:right;font-family:var(--Fm);}
 
-/* BANNER */
-.bn{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
-.bn-r{border-left:3px solid var(--red)}.bn-g{border-left:3px solid var(--green)}.bn-a{border-left:3px solid var(--amber)}.bn-b{border-left:3px solid var(--blue)}
-.bn-title{font-family:var(--Fd);font-size:16px;letter-spacing:1px;margin-bottom:3px}
-.bn-text{font-size:12px;color:var(--muted);line-height:1.55}
+/* ── RANKING ── */
+.rl{display:flex;flex-direction:column;gap:6px;}
+.ri{display:flex;align-items:center;gap:8px;}
+.ri-n{width:16px;text-align:right;color:var(--muted);font-size:9px;flex-shrink:0;}
+.ri-name{font-size:10px;color:var(--txt);margin-bottom:2px;}
+.ri-bar{background:var(--bg4);border-radius:2px;height:3px;overflow:hidden;margin-top:2px;}
+.ri-fill{height:100%;border-radius:2px;background:var(--or);}
+.ri-val{margin-left:auto;font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
 
-/* TABLE */
-.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px}
-.tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl th{font-family:var(--Fm);font-size:9px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
-.tbl td{padding:7px 10px;border-bottom:1px solid var(--border2);color:var(--muted)}
-.tbl tr:last-child td{border-bottom:none}
-.tbl td:first-child{color:var(--text)}
-.tbl tr:hover td{background:rgba(255,255,255,.01)}
+/* ── PILL ── */
+.pill{display:inline-block;padding:2px 7px;border-radius:3px;font-size:8px;letter-spacing:.5px;text-transform:uppercase;}
+.pg{background:var(--gbg);color:var(--g);border:1px solid rgba(16,185,129,.2);}
+.pr{background:var(--rbg);color:var(--r);border:1px solid rgba(244,63,94,.2);}
+.pa{background:var(--abg);color:var(--a);border:1px solid rgba(245,158,11,.2);}
+.pb{background:var(--bbg);color:var(--b);border:1px solid rgba(59,130,246,.2);}
+.pc{background:var(--cybg);color:var(--cy);border:1px solid rgba(34,211,238,.2);}
+.pv{background:var(--vibg);color:var(--vi);border:1px solid rgba(167,139,250,.2);}
+.pk{background:var(--pkbg);color:var(--pk);border:1px solid rgba(244,114,182,.2);}
 
-/* BADGE */
-.badge{display:inline-block;padding:2px 7px;border-radius:12px;font-family:var(--Fm);font-size:9px;font-weight:700;letter-spacing:.5px}
-.badge-g{background:#0f2d1a;color:#4ade80;border:1px solid #14532d}
-.badge-r{background:#2d0f0f;color:#f87171;border:1px solid #450a0a}
-.badge-a{background:#2d1a0f;color:#fb923c;border:1px solid #451a03}
-.badge-y{background:#2d200f;color:#fbbf24;border:1px solid #422006}
-.badge-b{background:#0f1a2d;color:#60a5fa;border:1px solid #1e3a5f}
+/* ── BANNER INSIGHT ── */
+.bn{border:1px solid var(--b1);border-left:3px solid;border-radius:var(--rad);padding:12px 14px;display:flex;gap:10px;margin-bottom:12px;background:var(--bg3);}
+.bn-r{border-left-color:var(--r)}.bn-g{border-left-color:var(--g)}.bn-a{border-left-color:var(--a)}.bn-b{border-left-color:var(--b)}.bn-c{border-left-color:var(--cy)}.bn-pk{border-left-color:var(--pk)}
+.bn-icon{font-size:18px;flex-shrink:0;line-height:1.4;}
+.bn-title{font-family:var(--Fb);font-size:11px;font-weight:600;margin-bottom:3px;}
+.bn-txt{font-size:9px;color:var(--muted);line-height:1.6;}
 
-/* PROGRESS */
-.prog{background:var(--border);border-radius:4px;height:7px;overflow:hidden;margin-top:5px}
-.prog-fill{height:100%;border-radius:4px}
-.sb{height:3px;border-radius:2px;background:var(--border);overflow:hidden;margin-top:3px}
-.sb-fill{height:100%;border-radius:2px}
+/* ── INSIGHT DOT LIST ── */
+.il{display:flex;flex-direction:column;gap:7px;}
+.ii{display:flex;gap:8px;font-size:9px;color:var(--muted);line-height:1.5;}
+.dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.dg{background:var(--g)}.dr{background:var(--r)}.da{background:var(--a)}.db{background:var(--b)}.dc{background:var(--cy)}.dv{background:var(--vi)}.dm{background:var(--muted)}
+.ii strong{color:var(--txt);}
 
-/* META CARD */
-.mc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px}
-.mc-label{font-family:var(--Fm);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:5px}
-.mc-val{font-family:var(--Fd);font-size:28px;line-height:1;margin-bottom:3px}
-.mc-sub{font-size:11px;color:var(--muted);margin-bottom:7px}
-.mc-row{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:1px solid var(--border2)}
-.mc-row:last-of-type{border-bottom:none}
-.mc-row span:last-child{font-family:var(--Fm);color:var(--amber)}
+/* ── STAT BOXES ── */
+.sb-row{display:flex;gap:8px;flex-wrap:wrap;}
+.sb{background:var(--bg3);border:1px solid var(--b1);border-radius:6px;padding:9px 12px;flex:1;min-width:70px;}
+.sb-l{font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.sb-v{font-family:var(--Fd);font-size:17px;letter-spacing:1px;}
 
-/* STATUS COLORS */
-.hit{color:var(--green);font-family:var(--Fm);font-size:11px}
-.miss{color:var(--red);font-family:var(--Fm);font-size:11px}
-.near{color:var(--amber);font-family:var(--Fm);font-size:11px}
+/* ── COMISSÃO TABLE ── */
+.ctb{width:100%;border-collapse:collapse;}
+.ctb th{background:var(--bg3);color:var(--muted);font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:8px 10px;border:1px solid var(--b1);}
+.ctb td{padding:7px 10px;border:1px solid var(--b2);font-size:10px;text-align:center;}
+.ctb .dest td{background:rgba(245,158,11,.06);font-weight:600;}
+.ctb .top td{background:rgba(16,185,129,.05);}
 
-/* RANK LIST */
-.rl{display:flex;flex-direction:column;gap:6px}
-.ri{display:grid;grid-template-columns:22px 1fr 64px;align-items:center;gap:8px}
-.rn{font-family:var(--Fd);font-size:16px;color:var(--muted2);text-align:right}
-.rname{font-size:11px;color:var(--text);margin-bottom:2px;font-weight:500}
-.rbar{height:4px;background:var(--border2);border-radius:2px;overflow:hidden}
-.rbf{height:100%;border-radius:2px}
-.rval{font-family:var(--Fm);font-size:10px;font-weight:700;text-align:right}
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px;}
 
-/* COMMISSION TARGET */
-.ctarget{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px}
-.ctarget-title{font-family:var(--Fm);font-size:9px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border2)}
-.ctarget-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border2)}
-.ctarget-row:last-child{border-bottom:none}
-.ctarget-row span:first-child{color:var(--muted)}
-
-/* RESPONSIVE */
-@media(max-width:1100px){.g5,.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr}}
-@media(max-width:768px){.g5,.g4,.g3,.g2,.g21,.g32{grid-template-columns:1fr}.panel{padding:12px}.nb{font-size:8px;padding:9px 8px}}
+@media(max-width:900px){
+  .g4,.g5,.g6{grid-template-columns:repeat(2,1fr);}
+  .g3,.g32,.g23{grid-template-columns:1fr;}
+  .g2{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
-<div class="ticker-band">
-  <div class="ticker-label">⚡ LIVE</div>
-  <div class="ticker-track"><div class="ticker-inner" id="tkr"></div></div>
-</div>
+<!-- TICKER -->
+<div class="tkr-wrap"><div class="tkr" id="tkr"></div></div>
 
-<div class="nav">
-  <div class="nav-logo">CYBER<span>TELECOM · BI 2026</span></div>
-  <button class="nb nb-g a" onclick="sw('geral')">⬡ Saúde Geral</button>
-  <button class="nb nb-c" onclick="sw('comercial')">↗ Comercial</button>
-  <button class="nb nb-f" onclick="sw('financeiro')">$ Financeiro</button>
-  <button class="nb nb-a" onclick="sw('atendimento')">☎ Atendimento</button>
-  <button class="nb nb-k" onclick="sw('comissao')">★ Comissão</button>
-  <button class="nb nb-m" onclick="sw('marco')">⚡ Mar/26</button>
-</div>
+<!-- HEADER -->
+<header class="hdr">
+  <div class="brand"><div class="brand-name">CYBER</div><div class="brand-sub">Telecom · BI 2026</div></div>
+  <div class="tabs">
+    <button class="tab on on-g" onclick="sw('geral',this,'on-g')">◎ Saúde Geral</button>
+    <button class="tab" onclick="sw('comercial',this,'on-c')">↗ Comercial</button>
+    <button class="tab" onclick="sw('financeiro',this,'on-f')">$ Financeiro</button>
+    <button class="tab" onclick="sw('atendimento',this,'on-a')">✦ Atendimento</button>
+    <button class="tab" onclick="sw('ltv',this,'on-l')">◈ LTV &amp; Inad.</button>
+    <button class="tab" onclick="sw('comissao',this,'on-k')">★ Comissão</button>
+    <button class="tab" onclick="sw('marco',this,'on-m')">⚡ Mar/26</button>
+  </div>
+</header>
 
-<!-- ════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      P1 — SAÚDE GERAL
-════════════════════════════════════ -->
-<div id="p-geral" class="panel a">
-  <div class="sh">SAÚDE DA <span class="sh-o">EMPRESA</span> <span style="font-family:var(--Fm);font-size:12px;color:var(--muted);letter-spacing:0">· ref. Mar/2026</span></div>
+══════════════════════════════════════════════════════════ -->
+<div class="panel on" id="p-geral">
+  <div class="sh"><span class="sh-label">SAÚDE GERAL</span><span class="sh-note">Jan/25 → Mar/26 · 15 meses · Processamento.xlsx + BASE_DADOS_BI</span></div>
+
+  <div class="g6">
+    <div class="kc kc-g"><div class="kl">Base Ativa</div><div class="kv">7.083</div><div class="kd up">▲ +2.279 em 15m</div><div class="ks">Mar/26 · Processamento</div></div>
+    <div class="kc kc-c"><div class="kl">MRR Mar/26</div><div class="kv kv-sm">R$687,8K</div><div class="kd up">▲ pico histórico Fev R$714K</div><div class="ks">7.083 × R$97,11</div></div>
+    <div class="kc kc-a"><div class="kl">Ticket Médio</div><div class="kv">R$105,92</div><div class="kd nt">→ base atual · BASE_DADOS_BI</div><div class="ks">Mar/26: R$97,11 (impacto inad.)</div></div>
+    <div class="kc kc-r"><div class="kl">Inad. Mar/26</div><div class="kv kv-sm">R$123,3K</div><div class="kd dn">▼ pico · vs R$9,9K Jan/25</div><div class="ks">155 cancels · 133 inadimplência</div></div>
+    <div class="kc kc-or"><div class="kl">MRR Recuperável</div><div class="kv kv-sm">R$81,3K</div><div class="kd nt">→ 803 suspensos</div><div class="ks">Déb.R$35,7K·Ped.R$18,5K·Par.R$27,1K</div></div>
+    <div class="kc kc-vi"><div class="kl">Saldo Líq. 15m</div><div class="kv">+2.279</div><div class="kd up">▲ Jan/25 4.899 → Mar/26 7.083</div><div class="ks">Processamento.xlsx</div></div>
+  </div>
+
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">Instalações × Cancelamentos × Saldo Líquido<span>Jan/25 → Mar/26 · 15m · Processamento.xlsx</span></div><canvas id="g_instcancel" style="height:210px;max-height:210px"></canvas></div>
+    <div class="cc"><div class="ct">Base Ativa e MRR<span>evolução mensal</span></div><canvas id="g_base_mrr" style="height:210px;max-height:210px"></canvas></div>
+  </div>
+
+  <div class="g3 mt">
+    <div class="cc"><div class="ct">Inadimplência — Saldo em Aberto<span>R$ por mês de vencimento</span></div><canvas id="g_inad" style="height:180px;max-height:180px"></canvas></div>
+    <div class="cc"><div class="ct">Ticket Médio de Instalação<span>R$ por mês · Processamento</span></div><canvas id="g_ticket" style="height:180px;max-height:180px"></canvas></div>
+    <div class="cc"><div class="ct">Distribuição de Status <span>BASE_DADOS_BI · Mar/26</span></div><canvas id="g_status" style="height:180px;max-height:180px"></canvas></div>
+  </div>
+
+  <div class="g2 mt">
+    <div class="cc">
+      <div class="ct">Evolução Anual — Installs × Cancels<span>2018–2026 · BASE_DADOS_BI</span></div>
+      <canvas id="g_anual" style="height:200px;max-height:200px"></canvas>
+    </div>
+    <div class="cc">
+      <div class="ct">Sazonalidade de Instalações<span>média histórica 2020–2025 por mês</span></div>
+      <canvas id="g_sazon" style="height:200px;max-height:200px"></canvas>
+    </div>
+  </div>
+
+  <div class="g3 mt">
+    <div class="cc"><div class="ct">Mix de Planos — Ativos<span>6.361 clientes</span></div><canvas id="g_planos" style="height:180px;max-height:180px"></canvas></div>
+    <div class="cc"><div class="ct">Cohort — Retenção por Ano de Entrada<span>% retidos até Mar/26</span></div><canvas id="g_cohort" style="height:180px;max-height:180px"></canvas></div>
+    <div class="cc">
+      <div class="ct">MRR por Status <span>recuperável</span></div>
+      <table class="tbl">
+        <tr><th>Status</th><th>Clientes</th><th>MRR</th><th>Ticket</th></tr>
+        <tr><td><span class="pill pg">Habilitado</span></td><td class="num">6.361</td><td class="num up">R$673.652</td><td class="num">R$105,92</td></tr>
+        <tr><td><span class="pill pr">Susp. Débito</span></td><td class="num">353</td><td class="num nt">R$35.712</td><td class="num">R$101,17</td></tr>
+        <tr><td><span class="pill pa">Susp. Pedido</span></td><td class="num">180</td><td class="num nt">R$18.513</td><td class="num">R$102,85</td></tr>
+        <tr><td><span class="pill pb">Susp. Parcial</span></td><td class="num">270</td><td class="num nt">R$27.083</td><td class="num">R$100,31</td></tr>
+        <tr><td><span class="pill" style="background:rgba(100,100,100,.15);color:var(--muted);border:1px solid var(--dim)">Cancelado</span></td><td class="num">3.374</td><td class="num">—</td><td class="num">—</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     P2 — COMERCIAL
+══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-comercial">
+  <div class="sh"><span class="sh-label">COMERCIAL</span><span class="sh-note">Abr/25 → Mar/26 · 12 meses · Processamento.xlsx</span></div>
+
+  <div class="g6">
+    <div class="kc kc-g"><div class="kl">Installs Mar/26</div><div class="kv">250</div><div class="kd up">✅ Meta ≥245 superada</div><div class="ks">+2% acima · mês encerrado</div></div>
+    <div class="kc kc-r"><div class="kl">Cancels Mar/26</div><div class="kv">155</div><div class="kd dn">🔴 Meta ≤35 · 4,4×</div><div class="ks">133 inadimplência (85,8%)</div></div>
+    <div class="kc kc-a"><div class="kl">Saldo Mar/26</div><div class="kv">+95</div><div class="kd nt">→ Meta ≥+210</div><div class="ks">250 inst − 155 cancel</div></div>
+    <div class="kc kc-c"><div class="kl">Installs 12m</div><div class="kv">2.692</div><div class="kd up">▲ média 224/mês</div><div class="ks">Meta 220–300/mês</div></div>
+    <div class="kc kc-or"><div class="kl">Churn Prematuro</div><div class="kv">37,4%</div><div class="kd dn">▼ 1.181/3.161 cancels ≤6m</div><div class="ks">Custo: R$613,33/instalação</div></div>
+    <div class="kc kc-vi"><div class="kl">Inviab. Técnica</div><div class="kv">148</div><div class="kd nt">→ LTV médio R$464</div><div class="ks">Cancela rápido · gap de cobertura</div></div>
+  </div>
+
+  <div class="cc mt">
+    <div class="ct">Aderência às Metas por Mês — Jan/25 a Mar/26 <span>Processamento.xlsx · ✓ meta atingida · ✗ não atingida · — abaixo mas sem meta definida</span></div>
+    <div style="overflow-x:auto;"><table class="tbl" id="tbl-metas"></table></div>
+  </div>
+
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">Installs vs Cancels 12m<span>Abr/25 → Mar/26</span></div><canvas id="c_ic12" style="height:220px;max-height:220px"></canvas></div>
+    <div class="cc"><div class="ct">Cancelamentos por Motivo<span>últimos 7 meses · empilhado</span></div><canvas id="c_motivo" style="height:220px;max-height:220px"></canvas></div>
+  </div>
+
+  <div class="g3 mt">
+    <div class="cc"><div class="ct">Churn Rate por Cidade<span>% cancelados do total inscrito</span></div><canvas id="c_churn_cidade" style="height:220px;max-height:220px"></canvas></div>
+    <div class="cc"><div class="ct">Cancelamentos por Cidade — Mar/26<span>155 cancels totais</span></div><canvas id="c_cancel_cidade" style="height:220px;max-height:220px"></canvas></div>
+    <div class="cc">
+      <div class="ct">Canais de Origem <span>com dado registrado</span></div>
+      <table class="tbl">
+        <tr><th>Canal</th><th>Clientes</th><th>Retenção</th><th></th></tr>
+        <tr><td>Panfleto</td><td class="num">54</td><td class="num up">98,1%</td><td><span class="pill pg">Ótimo</span></td></tr>
+        <tr><td>Indicação</td><td class="num">94</td><td class="num up">97,9%</td><td><span class="pill pg">Melhor ROI</span></td></tr>
+        <tr><td>Presencial</td><td class="num">5</td><td class="num up">100%</td><td><span class="pill pc">Excelente</span></td></tr>
+        <tr><td>Instagram</td><td class="num">13</td><td class="num up">100%</td><td><span class="pill pc">Excelente</span></td></tr>
+        <tr><td>Facebook</td><td class="num">1</td><td class="num up">100%</td><td><span class="pill pc">Excelente</span></td></tr>
+        <tr><td>Vend. Externo</td><td class="num">129</td><td class="num up">95,3%</td><td><span class="pill pg">Bom</span></td></tr>
+        <tr><td style="color:var(--muted)"><em>Sem origem</em></td><td class="num" style="color:var(--muted)">5.072</td><td class="num" style="color:var(--muted)">N/A</td><td><span class="pill pr">94,5% sem dado</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="sh mt"><span class="sh-label">VENDEDORES EXTERNOS</span><span class="sh-note">BASE_DADOS_BI · VENDEDORES_EXTERNOS</span></div>
+  <div class="g3">
+    <div class="cc"><div class="ct">Vendas por Mês<span>Out/25 → Fev/26</span></div><canvas id="c_vend" style="height:200px;max-height:200px"></canvas></div>
+    <div class="cc">
+      <div class="ct">Performance Vendedores</div>
+      <table class="tbl">
+        <tr><th>Vendedor</th><th>Vendas</th><th>Faturamento</th><th>Ticket</th><th>Comissão</th></tr>
+        <tr><td>Paola</td><td class="num">228</td><td class="num up">R$21.198</td><td class="num">R$92,98</td><td class="num">R$4.240</td></tr>
+        <tr><td>Wellerson</td><td class="num">62</td><td class="num up">R$6.314</td><td class="num">R$101,84</td><td class="num">R$1.263</td></tr>
+      </table>
+      <div class="il mt8">
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Paola:</strong> 46 vendas/mês (Out–Fev) — já atinge faixa de 25% no modelo progressivo proposto.</div></div>
+        <div class="ii"><div class="dot da"></div><div class="it"><strong>Wellerson:</strong> ticket R$8,86 maior — prioriza planos mais caros. Média de 15/mês.</div></div>
+        <div class="ii"><div class="dot dr"></div><div class="it"><strong>Ticket médio Paola</strong> (R$92,98) abaixo da média da empresa (R$105,92) — avaliar mix de planos oferecidos.</div></div>
+      </div>
+    </div>
+    <div class="cc"><div class="ct">Bairros Ativos — Top 12<span>clientes ativos por bairro · BASE_DADOS_BI</span></div><canvas id="c_bairros_at" style="height:200px;max-height:200px"></canvas></div>
+  </div>
+
+  <div class="bn bn-a mt">
+    <div class="bn-icon">⚠</div>
+    <div><div class="bn-title" style="color:var(--a)">Ação prioritária — campo de origem obrigatório</div>
+    <div class="bn-txt">94,5% dos clientes (5.072/5.368) não têm canal de origem. Os canais identificados mostram retenção ≥95%. Sem esse dado é impossível otimizar budget de marketing. <strong>Tornar obrigatório no próximo ciclo de cadastro.</strong></div></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     P3 — FINANCEIRO
+══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-financeiro">
+  <div class="sh"><span class="sh-label">FINANCEIRO</span><span class="sh-note">BASE_DADOS_BI + Processamento.xlsx + Planejamento Estratégico</span></div>
 
   <div class="g5">
-    <div class="kc kc-g"><div class="kl">Clientes Ativos</div><div class="kv">6.361</div><div class="kd kd-up">▲ +244 vs Jan/26</div><div class="ks">803 suspensos · 3.374 cancel.</div></div>
-    <div class="kc kc-g"><div class="kl">MRR Estimado</div><div class="kv">R$804K</div><div class="kd kd-up">▲ melhor do período</div><div class="ks">Ticket médio R$105,90</div></div>
-    <div class="kc kc-g"><div class="kl">Saldo Líq. 15 meses</div><div class="kv">+2.053</div><div class="kd kd-up">▲ média +137/mês</div><div class="ks">Jan/25 – Mar/26</div></div>
-    <div class="kc kc-g"><div class="kl">Churn Rate</div><div class="kv">2,8%</div><div class="kd kd-up">▲ meta &lt;3,0% ✓</div><div class="ks">Tendência de queda</div></div>
-    <div class="kc kc-m"><div class="kl">Inadimplência Total</div><div class="kv">R$279K</div><div class="kd kd-dn">▼ 2.669 registros auditados</div><div class="ks">1.794 clientes únicos</div></div>
+    <div class="kc kc-g"><div class="kl">MRR Fev/26 (pico)</div><div class="kv kv-sm">R$714,3K</div><div class="kd up">▲ maior histórico</div><div class="ks">6.861 × R$104,11</div></div>
+    <div class="kc kc-a"><div class="kl">MRR Mar/26</div><div class="kv kv-sm">R$687,8K</div><div class="kd nt">→ queda por 155 cancels</div><div class="ks">7.083 × R$97,11</div></div>
+    <div class="kc kc-r"><div class="kl">Inad. Saldo Mar/26</div><div class="kv kv-sm">R$123,3K</div><div class="kd dn">▼ 4,4× vs Fev (R$27,8K)</div><div class="ks">pico absoluto · ação imediata</div></div>
+    <div class="kc kc-or"><div class="kl">MRR Recuperável</div><div class="kv kv-sm">R$81,3K</div><div class="kd nt">→ 803 suspensos</div><div class="ks">déb+ped+parcial</div></div>
+    <div class="kc kc-c"><div class="kl">Proj. MRR Dez/26</div><div class="kv kv-sm">R$966K</div><div class="kd up">▲ cenário 3%/mês</div><div class="ks">R$9,5M anual · Planej. Estrat.</div></div>
   </div>
 
-  <!-- Mar/26 progress strip -->
-  <div class="g3">
-    <div class="mc" style="border-color:var(--amber)">
-      <div class="mc-label" style="color:var(--amber)">⟳ Mar/26 · Instalações</div>
-      <div class="mc-val" style="color:var(--amber)">118 <span style="font-family:var(--Fb);font-size:16px;color:var(--muted)">/ 244 proj.</span></div>
-      <div class="mc-sub">Meta ≥245 · ritmo 7,9/dia · gap mínimo</div>
-      <div class="prog"><div class="prog-fill" style="width:99.6%;background:var(--amber)"></div></div>
-    </div>
-    <div class="mc" style="border-color:var(--red)">
-      <div class="mc-label" style="color:var(--red)">⛔ Mar/26 · Cancelamentos</div>
-      <div class="mc-val" style="color:var(--red)">36 <span style="font-family:var(--Fb);font-size:16px;color:var(--muted)">/ 74 proj.</span></div>
-      <div class="mc-sub">Meta ≤35 · negativação acumulada Jan+Fev+Mar</div>
-      <div class="prog"><div class="prog-fill" style="width:100%;background:var(--red)"></div></div>
-    </div>
-    <div class="mc" style="border-color:var(--amber)">
-      <div class="mc-label" style="color:var(--amber)">⟳ Mar/26 · Saldo Líquido</div>
-      <div class="mc-val" style="color:var(--amber)">+82 <span style="font-family:var(--Fb);font-size:16px;color:var(--muted)">/ +170 proj.</span></div>
-      <div class="mc-sub">Meta ≥+210 · 81% — recuperável</div>
-      <div class="prog"><div class="prog-fill" style="width:81%;background:var(--amber)"></div></div>
-    </div>
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">Evolução e Projeção MRR<span>real Jan/25→Mar/26 + cenários Abr→Dez/26</span></div><canvas id="f_mrr" style="height:220px;max-height:220px"></canvas></div>
+    <div class="cc"><div class="ct">Inadimplência — Saldo em Aberto<span>R$ por mês de vencimento · 15m</span></div><canvas id="f_inad" style="height:220px;max-height:220px"></canvas></div>
   </div>
 
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Instalações vs Cancelamentos + Metas</strong><span>Jan/25 → Mar/26*</span></div><canvas id="g_instcancel" style="height:250px;max-height:250px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>MRR + Projeção 3 Cenários</strong><span>histórico real + crescimento 3–4%</span></div><canvas id="g_mrr" style="height:250px;max-height:250px"></canvas></div>
-  </div>
-
-  <div class="g3">
-    <div class="cc"><div class="cct"><strong>Base de Clientes + Projeção</strong><span>Jan/25 → Dez/26</span></div><canvas id="g_base" style="height:220px;max-height:220px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Status da Carteira</strong><span>distribuição atual</span></div><canvas id="g_status" style="height:220px;max-height:220px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Cohort de Retenção por Ano</strong><span>% ativos do total instalado</span></div><table class="tbl" id="cohortTbl" style="margin-top:4px"></table></div>
-  </div>
-
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Mix de Planos — Base Ativa</strong><span>por valor mensal</span></div><canvas id="g_planos" style="height:200px;max-height:200px"></canvas></div>
-    <div class="ic">
-      <div style="font-family:var(--Fm);font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Insights Gerenciais</div>
-      <div class="ii"><div class="idot idot-g"></div><div class="it"><strong>Crescimento consistente:</strong> Dez/25 recorde com 280 instalações. Saldo positivo em todos os 15 meses analisados.</div></div>
-      <div class="ii"><div class="idot idot-g"></div><div class="it"><strong>Retenção melhorando:</strong> Coorte 2025: 74,4% · Coorte 2026: 90,9%. Cada ano supera o anterior.</div></div>
-      <div class="ii"><div class="idot idot-a"></div><div class="it"><strong>Cancelamentos Mar/26:</strong> pico concentrado é reflexo da inadimplência acumulada Jan+Fev chegando ao limite — não é tendência nova. Normalização esperada em Abr/26.</div></div>
-      <div class="ii"><div class="idot idot-r"></div><div class="it"><strong>Inadimplência estrutural:</strong> após liquidação do ciclo, patamar residual estimado em ~R$123K — 10× a média histórica. Exige política de cobrança permanente.</div></div>
-      <div class="ii"><div class="idot idot-b"></div><div class="it"><strong>Expansão territorial:</strong> JF 63,2% · Lima Duarte 9,9% · Ewbank 9,4% · Bias Fortes 8,1% · Pedro Teixeira 6,1%.</div></div>
-    </div>
-  </div>
-
-  <div class="sh">DISTRIBUIÇÃO <span class="sh-o">TERRITORIAL</span></div>
-  <div class="g2">
-    <div class="tbl-wrap" style="margin-bottom:0">
-      <div style="padding:10px 14px 6px"><strong style="font-family:var(--Fm);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Base Ativa por Cidade</strong></div>
-      <table class="tbl">
-        <tr><th>Cidade</th><th>Ativos</th><th>Share</th><th></th></tr>
-        <tr><td>Juiz de Fora</td><td>4.020</td><td>63,2%</td><td><div class="sb"><div class="sb-fill" style="width:100%;background:var(--green)"></div></div></td></tr>
-        <tr><td>Lima Duarte</td><td>627</td><td>9,9%</td><td><div class="sb"><div class="sb-fill" style="width:15,6%;background:var(--blue)"></div></div></td></tr>
-        <tr><td>Ewbank da Câmara</td><td>597</td><td>9,4%</td><td><div class="sb"><div class="sb-fill" style="width:14.8%;background:var(--blue)"></div></div></td></tr>
-        <tr><td>Bias Fortes</td><td>516</td><td>8,1%</td><td><div class="sb"><div class="sb-fill" style="width:12.8%;background:var(--cyan)"></div></div></td></tr>
-        <tr><td>Pedro Teixeira</td><td>390</td><td>6,1%</td><td><div class="sb"><div class="sb-fill" style="width:9.7%;background:var(--cyan)"></div></div></td></tr>
-        <tr><td>Santos Dumont</td><td>90</td><td>1,4%</td><td><div class="sb"><div class="sb-fill" style="width:2.2%;background:var(--muted)"></div></div></td></tr>
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">Bairros Mais Inadimplentes<span>saldo R$ acumulado · BASE_DADOS_BI</span></div><canvas id="f_inad_bairros" style="height:250px;max-height:250px"></canvas></div>
+    <div class="cc">
+      <div class="ct">Projeção de Receita 2026<span>cenários · Planejamento Estratégico PDF</span></div>
+      <table class="tbl" style="margin-bottom:10px">
+        <tr><th>Cenário</th><th>Crescimento</th><th>MRR Dez/26</th><th>Total Anual</th></tr>
+        <tr><td><span class="pill pa">Conservador</span></td><td class="num">2,5%/mês</td><td class="num nt">R$928K</td><td class="num">R$9,24M</td></tr>
+        <tr><td><span class="pill pg">Moderado</span></td><td class="num">3,0%/mês</td><td class="num up">R$966K</td><td class="num">R$9,50M</td></tr>
+        <tr><td><span class="pill pc">Agressivo</span></td><td class="num">4,0%/mês</td><td class="num cy">R$1,01M</td><td class="num">R$10,06M</td></tr>
       </table>
+      <canvas id="f_proj" style="height:160px;max-height:160px"></canvas>
     </div>
-    <div class="cc" style="margin-bottom:0"><div class="cct"><strong>Faixa Etária — Clientes Ativos</strong></div><canvas id="g_idade" style="height:200px;max-height:200px"></canvas></div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════
-     P2 — COMERCIAL
-════════════════════════════════════ -->
-<div id="p-comercial" class="panel">
-  <div class="sh">ANÁLISE <span class="sh-g">COMERCIAL</span> <span style="font-family:var(--Fm);font-size:12px;color:var(--muted);letter-spacing:0">· Metas & Performance</span></div>
-
-  <div class="g4">
-    <div class="kc kc-c"><div class="kl">Instalações Fev/26</div><div class="kv">254</div><div class="kd kd-up">▲ meta ≥245 ✓ (+3,7%)</div><div class="ks">Mar/26*: 118 (48,4% do mês)</div></div>
-    <div class="kc kc-c"><div class="kl">Cancelamentos Fev/26</div><div class="kv">18</div><div class="kd kd-up">▲ meta ≤35 ✓</div><div class="ks">Mar/26*: 36 → proj 74 ⚠️</div></div>
-    <div class="kc kc-c"><div class="kl">Saldo Líq. Fev/26</div><div class="kv">+236</div><div class="kd kd-up">▲ meta ≥+210 ✓</div><div class="ks">Mar/26*: +82 → proj +170</div></div>
-    <div class="kc kc-c"><div class="kl">Ticket Médio Mar/26</div><div class="kv">R$105,90</div><div class="kd kd-up">▲ meta ≥R$105 ✓</div><div class="ks">+6,7% vs Out/25 (R$99,26)</div></div>
   </div>
 
-  <div class="tbl-wrap">
-    <div style="padding:10px 14px 6px"><strong style="font-family:var(--Fm);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Aderência às Metas por Mês — Jan/25 a Mar/26</strong></div>
-    <table class="tbl">
-      <tr><th>Mês</th><th>Inst.</th><th>M≥245</th><th>Cancel.</th><th>M≤35</th><th>Saldo</th><th>M≥+210</th><th>Ticket</th><th>M≥R$105</th></tr>
-      <tr><td>Jan/25</td><td>206</td><td class="miss">✗</td><td>27</td><td class="hit">✓</td><td>+179</td><td class="miss">✗</td><td>R$104,29</td><td class="miss">✗</td></tr>
-      <tr><td>Fev/25</td><td>153</td><td class="miss">✗</td><td>37</td><td class="miss">✗</td><td>+116</td><td class="miss">✗</td><td>R$102,50</td><td class="miss">✗</td></tr>
-      <tr><td>Mar/25</td><td>170</td><td class="miss">✗</td><td>77</td><td class="miss">✗</td><td>+93</td><td class="miss">✗</td><td>R$100,07</td><td class="miss">✗</td></tr>
-      <tr><td>Abr/25</td><td>178</td><td class="miss">✗</td><td>22</td><td class="hit">✓</td><td>+156</td><td class="miss">✗</td><td>R$101,72</td><td class="miss">✗</td></tr>
-      <tr><td>Mai/25</td><td>227</td><td class="miss">✗</td><td>78</td><td class="miss">✗</td><td>+149</td><td class="miss">✗</td><td>R$106,08</td><td class="hit">✓</td></tr>
-      <tr><td>Jun/25</td><td>211</td><td class="miss">✗</td><td>57</td><td class="miss">✗</td><td>+154</td><td class="miss">✗</td><td>R$106,32</td><td class="hit">✓</td></tr>
-      <tr><td>Jul/25</td><td>201</td><td class="miss">✗</td><td>47</td><td class="miss">✗</td><td>+154</td><td class="miss">✗</td><td>R$110,21</td><td class="hit">✓</td></tr>
-      <tr><td>Ago/25</td><td>160</td><td class="miss">✗</td><td>78</td><td class="miss">✗</td><td>+82</td><td class="miss">✗</td><td>R$116,62</td><td class="hit">✓</td></tr>
-      <tr><td>Set/25</td><td>177</td><td class="miss">✗</td><td>65</td><td class="miss">✗</td><td>+112</td><td class="miss">✗</td><td>R$103,57</td><td class="miss">✗</td></tr>
-      <tr><td>Out/25</td><td>254</td><td class="hit">✓</td><td>57</td><td class="miss">✗</td><td>+197</td><td class="miss">✗</td><td>R$99,26</td><td class="miss">✗</td></tr>
-      <tr><td>Nov/25</td><td>224</td><td class="miss">✗</td><td>29</td><td class="hit">✓</td><td>+195</td><td class="miss">✗</td><td>R$100,77</td><td class="miss">✗</td></tr>
-      <tr><td>Dez/25</td><td>280</td><td class="hit">✓</td><td>46</td><td class="miss">✗</td><td>+234</td><td class="hit">✓</td><td>R$100,46</td><td class="miss">✗</td></tr>
-      <tr><td>Jan/26</td><td>276</td><td class="hit">✓</td><td>32</td><td class="hit">✓</td><td>+244</td><td class="hit">✓</td><td>R$102,82</td><td class="miss">✗</td></tr>
-      <tr><td>Fev/26</td><td>254</td><td class="hit">✓</td><td>18</td><td class="hit">✓</td><td>+236</td><td class="hit">✓</td><td>R$105,20</td><td class="hit">✓</td></tr>
-      <tr style="background:var(--card2)"><td><strong>Mar/26*</strong></td><td>118</td><td class="near">⟳</td><td style="color:var(--red)">36 ⚠️</td><td class="miss">✗</td><td>+82</td><td class="near">⟳</td><td>R$105,90</td><td class="hit">✓</td></tr>
-    </table>
-    <div style="padding:8px 14px 10px;font-size:11px;color:var(--muted);border-top:1px solid var(--border2)"><span style="color:var(--amber)">⚠️ Mar/26:</span> cancelamentos refletem negativação acumulada de Jan+Fev+Mar chegando ao vencimento juntas — não é tendência nova. Normalização esperada em Abr/26.</div>
-  </div>
-
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Instalações vs Meta ≥245</strong></div><canvas id="c2_inst" style="height:220px;max-height:220px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Cancelamentos vs Meta ≤35</strong></div><canvas id="c2_cancel" style="height:220px;max-height:220px"></canvas></div>
-  </div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Saldo Líquido vs Meta ≥+210</strong></div><canvas id="c2_saldo" style="height:200px;max-height:200px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Ticket Médio vs Meta R$105</strong></div><canvas id="c2_ticket" style="height:200px;max-height:200px"></canvas></div>
-  </div>
-
-  <div class="sh">CANCELAMENTOS <span class="sh-g">POR MOTIVO</span></div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Evolução Mensal por Motivo</strong><span>Set/25 – Mar/26*</span></div><canvas id="c2_cancel_evo" style="height:230px;max-height:230px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Distribuição Histórica</strong><span>motivos conhecidos · excl. N/A</span></div><canvas id="c2_cancel_pie" style="height:230px;max-height:230px"></canvas></div>
-  </div>
-  <div class="tbl-wrap">
-    <div style="padding:10px 14px 6px"><strong style="font-family:var(--Fm);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Cancelamentos por Motivo — Últimos 7 Meses</strong></div>
-    <table class="tbl">
-      <tr><th>Motivo</th><th>Set/25</th><th>Out/25</th><th>Nov/25</th><th>Dez/25</th><th>Jan/26</th><th>Fev/26</th><th>Mar/26*</th></tr>
-      <tr><td>Inadimplência</td><td style="color:var(--red)">53</td><td style="color:var(--red)">38</td><td style="color:var(--red)">19</td><td style="color:var(--red)">31</td><td style="color:var(--amber)">15</td><td>2</td><td style="color:var(--red)"><strong>32</strong></td></tr>
-      <tr><td>Inviab. Técnica</td><td>4</td><td>12</td><td>9</td><td>12</td><td>12</td><td style="color:var(--amber)">12</td><td>4</td></tr>
-      <tr><td>Mudança Cidade</td><td>6</td><td>6</td><td>1</td><td>1</td><td>1</td><td>3</td><td>—</td></tr>
-      <tr><td>Mudança Prov.</td><td>1</td><td>1</td><td>—</td><td>1</td><td>2</td><td>1</td><td>—</td></tr>
-      <tr><td>Outros</td><td>1</td><td>—</td><td>—</td><td>1</td><td>2</td><td>—</td><td>—</td></tr>
-      <tr style="background:var(--card2)"><td><strong>TOTAL</strong></td><td><strong>65</strong></td><td><strong>57</strong></td><td><strong>29</strong></td><td><strong>46</strong></td><td><strong>32</strong></td><td><strong>18</strong></td><td><strong>36</strong></td></tr>
-    </table>
-  </div>
-
-  <div class="sh">VENDEDORES <span class="sh-g">EXTERNOS</span></div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Vendas por Vendedor/Mês</strong><span>Out/25 – Fev/26</span></div><canvas id="c2_vend" style="height:210px;max-height:210px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Comissão R$ por Mês</strong><span>20% sobre valor vendido</span></div><canvas id="c2_comissao" style="height:210px;max-height:210px"></canvas></div>
-  </div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tr><th>Vendedor</th><th>Total Vendas</th><th>Ticket Médio</th><th>Comissão Total</th><th>Melhor Mês</th><th>Status</th></tr>
-      <tr><td>Paola Silva</td><td>228</td><td style="color:var(--amber)">R$92,98</td><td>R$4.239,66</td><td>Jan/26 (54)</td><td><span class="badge badge-g">ATIVO</span></td></tr>
-      <tr><td>Wellerson</td><td>44</td><td style="color:var(--green)">R$102,63</td><td>R$903,12</td><td>Dez/25 (21)</td><td><span class="badge badge-r">AUSENTE</span></td></tr>
-    </table>
-  </div>
-  <div class="bn bn-a"><div style="font-size:18px;flex-shrink:0">💡</div><div><div class="bn-title" style="color:var(--amber)">Wellerson: ticket 10,4% maior que Paola</div><div class="bn-text">R$102,63 vs R$92,98. Bônus por ticket ≥R$100 incentivaria upgrade de plano e aumentaria receita recorrente sem aumento de volume.</div></div></div>
-
-  <div class="sh">CANAL DE <span class="sh-g">AQUISIÇÃO</span></div>
-  <div class="note"><strong>Gap crítico:</strong> 95,4% dos clientes sem origem registrada — CAC/ROI incalculável. Tornar campo obrigatório no cadastro é ação de impacto imediato.</div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Retenção por Canal</strong><span>% ativos do total captado</span></div><canvas id="c2_canal_ret" style="height:200px;max-height:200px"></canvas></div>
-    <div class="tbl-wrap" style="margin-bottom:0">
-      <div style="padding:10px 14px 6px"><strong style="font-family:var(--Fm);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Canais com Origem Registrada</strong></div>
+  <div class="g3 mt">
+    <div class="cc">
+      <div class="ct">Custo de Instalação Prematuro<span>Planej. Estratégico · por cliente</span></div>
       <table class="tbl">
-        <tr><th>Canal</th><th>Clientes</th><th>Retenção</th><th>Status</th></tr>
-        <tr><td>Indicação</td><td>87</td><td>98,8% ⭐</td><td><span class="badge badge-g">MELHOR ROI</span></td></tr>
-        <tr><td>Instagram</td><td>15</td><td>100%</td><td><span class="badge badge-g">EXCELENTE</span></td></tr>
-        <tr><td>Panfleto</td><td>38</td><td>96,6%</td><td><span class="badge badge-g">ÓTIMO</span></td></tr>
-        <tr><td>Vend. Externo</td><td>111</td><td>94,3%</td><td><span class="badge badge-a">BOM</span></td></tr>
-        <tr><td><em>Sem origem</em></td><td><em>10.167</em></td><td><em>N/A</em></td><td><span class="badge badge-r">DADO AUSENTE</span></td></tr>
+        <tr><th>Item</th><th>Custo</th></tr>
+        <tr><td>Hora técnico (2h)</td><td class="num">R$46,24</td></tr>
+        <tr><td>Deslocamento (10km)</td><td class="num">R$5,07</td></tr>
+        <tr><td>Conectores (2un)</td><td class="num">R$7,22</td></tr>
+        <tr><td>Fibra (80m)</td><td class="num">R$284,80</td></tr>
+        <tr><td>Roteador (1un)</td><td class="num">R$250,00</td></tr>
+        <tr><td>Comissão</td><td class="num">R$20,00</td></tr>
+        <tr><td><strong>TOTAL</strong></td><td class="num dn"><strong>R$613,33</strong></td></tr>
       </table>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════
-     P3 — FINANCEIRO
-════════════════════════════════════ -->
-<div id="p-financeiro" class="panel">
-  <div class="sh">ANÁLISE <span class="sh-b">FINANCEIRA</span> <span style="font-family:var(--Fm);font-size:12px;color:var(--muted);letter-spacing:0">· Inadimplência Auditada</span></div>
-
-  <div class="g4">
-    <div class="kc kc-f"><div class="kl">Inadimplência Total</div><div class="kv">R$279K</div><div class="kd kd-dn">▼ base auditada e limpa</div><div class="ks">2.669 registros · 1.794 clientes</div></div>
-    <div class="kc kc-f"><div class="kl">Receita em Risco</div><div class="kv">R$84K</div><div class="kd kd-dn">▼ 803 suspensos/mês</div><div class="ks">Susp. por Débito: 353</div></div>
-    <div class="kc kc-f"><div class="kl">Recuperável Estimado</div><div class="kv">R$115K</div><div class="kd kd-up">▲ 41% do total</div><div class="ks">Foco: 0–60 dias</div></div>
-    <div class="kc kc-f"><div class="kl">Irrecuperável Projetado</div><div class="kv">R$164K</div><div class="kd kd-dn">▼ 59% — provisionar</div><div class="ks">+180 dias: R$82.454</div></div>
-  </div>
-
-  <div class="bn bn-r"><div style="font-size:22px;flex-shrink:0">💥</div><div><div class="bn-title" style="color:var(--red)">EXPLOSÃO — AÇÃO URGENTE</div><div class="bn-text">Base auditada: <strong>240 registros duplicados removidos (R$25.481) + 57 faturas acima da regra de negócio removidos (R$5.324)</strong>. Valor real: R$278.764 · 1.794 clientes únicos. O ciclo concentrado Jan+Fev+Mar explica o pico — não é deterioração nova da carteira.</div></div></div>
-
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Inadimplência por Mês de Vencimento</strong><span>saldo real · escala log · Jan/25–Fev/26</span></div><canvas id="c3_inadim" style="height:240px;max-height:240px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Aging — Casos por Faixa</strong><span>2.669 registros</span></div><canvas id="c3_aging_casos" style="height:240px;max-height:240px"></canvas></div>
-  </div>
-
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Aging — Valor em Aberto R$</strong></div><canvas id="c3_aging_val" style="height:210px;max-height:210px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Recuperável × Irrecuperável por Faixa</strong></div><canvas id="c3_rec_irrec" style="height:210px;max-height:210px"></canvas></div>
-  </div>
-
-  <div class="tbl-wrap">
-    <div style="padding:10px 14px 6px"><strong style="font-family:var(--Fm);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Aging Detalhado · Recuperabilidade Estimada</strong></div>
-    <table class="tbl">
-      <tr><th>Faixa</th><th>Registros</th><th>Valor</th><th>Taxa Rec.</th><th>Recuperável</th><th>Irrecuperável</th><th>Segmento</th></tr>
-      <tr><td>0–30 dias</td><td>951</td><td>R$98.593</td><td>70%</td><td style="color:var(--green)">R$69.015</td><td style="color:var(--red)">R$29.578</td><td><span class="badge badge-g">EM LIQUIDAÇÃO</span></td></tr>
-      <tr><td>31–60 dias</td><td>393</td><td>R$40.559</td><td>55%</td><td style="color:var(--green)">R$22.307</td><td style="color:var(--red)">R$18.252</td><td><span class="badge badge-g">EM LIQUIDAÇÃO</span></td></tr>
-      <tr><td>61–90 dias</td><td>178</td><td>R$17.996</td><td>40%</td><td style="color:var(--amber)">R$7.198</td><td style="color:var(--red)">R$10.798</td><td><span class="badge badge-y">ZONA DE RISCO</span></td></tr>
-      <tr><td>91–180 dias</td><td>382</td><td>R$39.162</td><td>25%</td><td style="color:var(--amber)">R$9.790</td><td style="color:var(--red)">R$29.372</td><td><span class="badge badge-y">ZONA DE RISCO</span></td></tr>
-      <tr><td>181–365 dias</td><td>532</td><td>R$57.633</td><td>10%</td><td style="color:var(--amber)">R$5.763</td><td style="color:var(--red)">R$51.870</td><td><span class="badge badge-r">INADIM. REAL</span></td></tr>
-      <tr><td>+365 dias</td><td>233</td><td>R$24.821</td><td>3%</td><td style="color:var(--muted)">R$745</td><td style="color:var(--red)">R$24.076</td><td><span class="badge badge-r">INADIM. REAL</span></td></tr>
-      <tr style="background:var(--card2)"><td><strong>TOTAL</strong></td><td><strong>2.669</strong></td><td><strong>R$278.764</strong></td><td><strong>41%</strong></td><td style="color:var(--green)"><strong>R$114.818</strong></td><td style="color:var(--red)"><strong>R$163.946</strong></td><td></td></tr>
-    </table>
-  </div>
-
-  <div class="sh">CONCENTRAÇÃO <span class="sh-b">TERRITORIAL</span></div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Top 15 Bairros — Valor Inadimplente</strong></div><canvas id="c3_bairros" style="height:350px;max-height:350px"></canvas></div>
-    <div>
-      <div class="cc" style="margin-bottom:12px"><div class="cct"><strong>Curva de Liquidação Projetada</strong><span>hoje → +90 dias</span></div><canvas id="c3_liquidacao" style="height:150px;max-height:150px"></canvas></div>
-      <div class="g3" style="margin:0 0 12px">
-        <div class="mc"><div class="mc-label">Hoje</div><div class="mc-val" style="color:var(--red)">R$279K</div><div class="mc-sub">2.669 registros</div></div>
-        <div class="mc"><div class="mc-label">+30d Abr</div><div class="mc-val" style="color:var(--amber)">R$210K</div><div class="mc-sub">−R$69K ciclo</div></div>
-        <div class="mc"><div class="mc-label">+90d Jun</div><div class="mc-val" style="color:var(--green)">R$187K</div><div class="mc-sub">residual real</div></div>
+      <div class="il mt8">
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Payback:</strong> 6 meses. Cliente que fica além de 6 meses gera lucro.</div></div>
+        <div class="ii"><div class="dot dr"></div><div class="it"><strong>37,4%</strong> dos cancelados saem em ≤6 meses → prejuízo direto.</div></div>
       </div>
-      <div class="ic" style="margin-bottom:0">
-        <div class="ii"><div class="idot idot-r"></div><div class="it"><strong>Ação urgente 0–60d:</strong> acionar 1.344 casos · R$139K antes do corte. Recuperável: R$91.322.</div></div>
-        <div class="ii"><div class="idot idot-a"></div><div class="it"><strong>Régua 61–180d:</strong> negociação parcelada · 560 casos · R$57K · recuperável R$16.988.</div></div>
-        <div class="ii"><div class="idot idot-b"></div><div class="it"><strong>Provisionar +180d:</strong> 765 casos · R$82K · jurídico para valores acima de R$500.</div></div>
+    </div>
+    <div class="cc">
+      <div class="ct">Prejuízo por Safra<span>Planejamento Estratégico</span></div>
+      <table class="tbl">
+        <tr><th>Safra</th><th>Instalados</th><th>Taxa Canc.</th><th>Prejuízo</th><th>Subsídio/Ativo</th></tr>
+        <tr><td>2024</td><td class="num">1.947</td><td class="num dn">21,2%</td><td class="num dn">-R$26.835</td><td class="num dn">R$17,50</td></tr>
+        <tr><td>2025</td><td class="num">2.444</td><td class="num nt">6,3%</td><td class="num nt">-R$18.687</td><td class="num nt">R$8,16</td></tr>
+      </table>
+      <div class="il mt8">
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Melhora de 70%</strong> na taxa de cancelamento prematuro entre 2024 e 2025.</div></div>
+        <div class="ii"><div class="dot da"></div><div class="it">Potencial de recuperação com logística reversa: <strong>R$38.500</strong>.</div></div>
+        <div class="ii"><div class="dot db"></div><div class="it">Consulta de restrição financeira evitaria parte dos inadimplentes prematuros.</div></div>
+      </div>
+    </div>
+    <div class="cc">
+      <div class="ct">Projeção de Inadimplência 2026<span>Planejamento Estratégico</span></div>
+      <table class="tbl">
+        <tr><th>Cenário</th><th>% Base</th><th>Mensal</th><th>Total Anual</th></tr>
+        <tr><td><span class="pill pg">Otimista</span></td><td class="num">1,5%</td><td class="num">R$4.953</td><td class="num up">R$59,4K</td></tr>
+        <tr><td><span class="pill pa">Moderado</span></td><td class="num">2,0%</td><td class="num">R$6.808</td><td class="num nt">R$81,7K</td></tr>
+        <tr><td><span class="pill pr">Pessimista</span></td><td class="num">2,5%</td><td class="num">R$8.773</td><td class="num dn">R$105,3K</td></tr>
+      </table>
+      <div class="bn bn-r mt8" style="margin-bottom:0">
+        <div class="bn-icon" style="font-size:14px">🚨</div>
+        <div><div class="bn-txt">Mar/26 (R$123,3K) <strong>já superou</strong> o cenário pessimista anual inteiro em 1 mês. Normalização em Abr/26 é crítica.</div></div>
       </div>
     </div>
   </div>
-
-  <div class="sh">EVOLUÇÃO <span class="sh-b">2025 vs 2026</span></div>
-  <div class="note"><strong>Metodologia:</strong> Cada barra = saldo ainda em aberto das faturas com vencimento naquele mês. Mesmo após a liquidação natural do ciclo, o patamar residual estimado em Jun/26 (~R$123K) é ~10× a média histórica de 2025 (R$12.582) — o problema tem componente estrutural.</div>
-  <div class="cc"><div class="cct"><strong>Projeção de Estabilização — Ciclo vs Estrutural</strong><span>curva histórica real de decaimento</span></div><canvas id="c3_acum12m" style="height:230px;max-height:230px"></canvas></div>
-  <div class="g2" style="margin-top:0">
-    <div class="cc" style="margin-bottom:0"><div class="cct"><strong>Composição: Ciclo × Estrutural</strong><span>o que liquida vs o que fica</span></div><canvas id="c3_composto" style="height:200px;max-height:200px"></canvas></div>
-    <div class="ic" style="margin-bottom:0">
-      <div class="ii"><div class="idot idot-r"></div><div class="it"><strong>Ciclo concentrado Jan+Fev+Mar:</strong> R$139K (0–60d) — liquida naturalmente em ~90 dias.</div></div>
-      <div class="ii"><div class="idot idot-a"></div><div class="it"><strong>Estrutural +180d:</strong> R$82K já existia antes do ciclo. Sem mudança de processo, a inadimplência voltará a crescer.</div></div>
-      <div class="ii"><div class="idot idot-b"></div><div class="it"><strong>Alerta sistema:</strong> 240 registros duplicados detectados. Verificar integração entre sistema de cobrança e gestão.</div></div>
-      <div class="ii"><div class="idot idot-g"></div><div class="it"><strong>Meta de saúde:</strong> retornar a 1,6–2,0% do MRR (~R$13K–R$16K). Processo de 6–12 meses com régua ativa.</div></div>
-    </div>
-  </div>
 </div>
 
-<!-- ════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      P4 — ATENDIMENTO
-════════════════════════════════════ -->
-<div id="p-atendimento" class="panel">
-  <div class="sh">ATENDIMENTO <span class="sh-p">360°</span> <span style="font-family:var(--Fm);font-size:12px;color:var(--muted);letter-spacing:0">· Chat · Telefone · OS</span></div>
+══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-atendimento">
+  <div class="sh"><span class="sh-label">ATENDIMENTO 360°</span><span class="sh-note">Abr/25 → Mar/26 · 12 meses · BASE_DADOS_BI</span></div>
 
-  <div class="g4">
-    <div class="kc kc-a"><div class="kl">Chats Acumulados</div><div class="kv">100.671</div><div class="kd kd-up">▲ Jan/25 – Mar/26</div><div class="ks">Média 6.711/mês</div></div>
-    <div class="kc kc-a"><div class="kl">TA Telefone Mar/26</div><div class="kv">91,9%</div><div class="kd kd-up">▲ meta ≥90% ✓</div><div class="ks">694/755 · TME espera: 41s</div></div>
-    <div class="kc kc-a"><div class="kl">Automação Chat Mar/26</div><div class="kv">36,0%</div><div class="kd kd-up">▲ 733 bot / 2.038 total</div><div class="ks">64% atendente humano</div></div>
-    <div class="kc kc-a"><div class="kl">Reincidência 11+</div><div class="kv">22,9%</div><div class="kd kd-dn">▼ 2.782 clientes</div><div class="ks">Meta &lt;15% — acima</div></div>
-  </div>
-
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Volume Mensal de Chats</strong><span>Jan/25 → Mar/26*</span></div><canvas id="c4_chats" style="height:230px;max-height:230px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Volume 12m por Atendente</strong><span>Abr/25 → Mar/26 · chat + telefone</span></div><canvas id="c4_vol12" style="height:230px;max-height:230px"></canvas></div>
+  <div class="g6">
+    <div class="kc kc-vi"><div class="kl">Chats 12m</div><div class="kv">79.355</div><div class="kd up">▲ 34,9% automação</div><div class="ks">27.682 bot · 51.673 humano</div></div>
+    <div class="kc kc-b"><div class="kl">Ligações 12m</div><div class="kv">4.763</div><div class="kd nt">→ 3 meses c/ dados</div><div class="ks">Nov/25 · Fev/26 · Mar/26</div></div>
+    <div class="kc kc-c"><div class="kl">TA Ramal (100–109)</div><div class="kv">84,5%</div><div class="kd nt">→ meta ≥90% · abaixo</div><div class="ks">1.387 atend / 1.641 ramais</div></div>
+    <div class="kc kc-r"><div class="kl">URA/Fila (não atend.)</div><div class="kv">65,5%</div><div class="kd dn">▼ 3.122/4.763 sem ramal</div><div class="ks">TA geral real: 29,1%</div></div>
+    <div class="kc kc-a"><div class="kl">OS 12m</div><div class="kv">4.697</div><div class="kd nt">→ média 391/mês</div><div class="ks">Mar/26: 498 OS</div></div>
+    <div class="kc kc-g"><div class="kl">Automação Chat</div><div class="kv">34,9%</div><div class="kd up">▲ 27.682 atend. autom.</div><div class="ks">12m · BASE_DADOS_BI</div></div>
   </div>
 
-  <div class="g3">
-    <div class="cc"><div class="cct"><strong>Chats por Departamento</strong><span>acumulado</span></div><canvas id="c4_depto" style="height:190px;max-height:190px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Reincidência de Clientes</strong><span>nº de contatos</span></div><canvas id="c4_reinc" style="height:190px;max-height:190px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>TA Telefone por Período</strong><span>Nov/25 · Fev/26 · Mar/26</span></div><canvas id="c4_ta" style="height:190px;max-height:190px"></canvas></div>
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">Volume Chat 12m por Atendente<span>Abr/25 → Mar/26 · chat humano</span></div><canvas id="a_vol12" style="height:240px;max-height:240px"></canvas></div>
+    <div class="cc"><div class="ct">Contatos Acumulados 12m<span>chat + telefone por atendente</span></div><canvas id="a_cont12" style="height:240px;max-height:240px"></canvas></div>
   </div>
 
-  <div class="sh">TELEFONE — <span class="sh-p">DETALHAMENTO</span></div>
-  <div class="g4">
-    <div class="kc kc-a"><div class="kl">Total Ligações</div><div class="kv">4.763</div><div class="kd kd-nt">→ Nov/25+Fev/26+Mar/26</div><div class="ks">3 meses de dados</div></div>
-    <div class="kc kc-a"><div class="kl">Atendidas</div><div class="kv">3.933</div><div class="kd kd-up">▲ TA geral 82,6%</div><div class="ks">Mar/26: 91,9%</div></div>
-    <div class="kc kc-a"><div class="kl">Virada Fev/26</div><div class="kv">+35,5pp</div><div class="kd kd-up">▲ Nov/25: 61,9% → Fev/26: 97,4%</div><div class="ks">Transformação em 3 meses</div></div>
-    <div class="kc kc-a"><div class="kl">TME Espera Mar/26</div><div class="kv">41s</div><div class="kd kd-up">▲ meta &lt;45s ✓</div><div class="ks">Melhora vs histórico</div></div>
-  </div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Ligações por Atendente/Ramal</strong><span>acumulado · Total vs Atendidas</span></div><canvas id="c4_tel_op" style="height:220px;max-height:220px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Volume por Hora do Dia</strong><span>acumulado · pico às 14h</span></div><canvas id="c4_tel_hora" style="height:220px;max-height:220px"></canvas></div>
-  </div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Comparativo de Períodos</strong><span>Nov/25 vs Fev/26 vs Mar/26*</span></div><canvas id="c4_tel_comp" style="height:190px;max-height:190px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Distribuição por Fila</strong><span>acumulado</span></div><canvas id="c4_fila" style="height:190px;max-height:190px"></canvas></div>
+  <div class="g3 mt">
+    <div class="cc"><div class="ct">OS por Mês 12m<span>data_termino_executado</span></div><canvas id="a_os_mes" style="height:190px;max-height:190px"></canvas></div>
+    <div class="cc"><div class="ct">Tipos de OS 12m<span>BASE_DADOS_BI</span></div><canvas id="a_os_tipo" style="height:190px;max-height:190px"></canvas></div>
+    <div class="cc"><div class="ct">OS por Dia da Semana<span>12m · distribuição</span></div><canvas id="a_os_dia" style="height:190px;max-height:190px"></canvas></div>
   </div>
 
-  <div class="sh">ORDENS DE <span class="sh-p">SERVIÇO</span></div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>OS por Mês</strong><span>Jan/25 → Mar/26*</span></div><canvas id="c4_os" style="height:220px;max-height:220px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>OS por Tipo</strong><span>top categorias acumulado</span></div><canvas id="c4_os_tipo" style="height:220px;max-height:220px"></canvas></div>
+  <div class="g3 mt">
+    <div class="cc"><div class="ct">TA Telefone por Operador<span>ramais 100–109 · 12m acumulado</span></div><canvas id="a_tel_ta" style="height:200px;max-height:200px"></canvas></div>
+    <div class="cc"><div class="ct">Ratio Resolução Interna<span>(chat+tel) ÷ OS · 12m</span></div><canvas id="a_ratio12" style="height:200px;max-height:200px"></canvas></div>
+    <div class="cc"><div class="ct">Chats por Hora do Dia<span>12m · pico às 10h</span></div><canvas id="a_chat_hora" style="height:200px;max-height:200px"></canvas></div>
   </div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Técnicos — Distribuição</strong></div><canvas id="c4_os_tec" style="height:190px;max-height:190px"></canvas></div>
+
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">Chats por Dia da Semana<span>12m · Sábado relevante</span></div><canvas id="a_chat_dia" style="height:180px;max-height:180px"></canvas></div>
+    <div class="cc"><div class="ct">Departamentos — Chat 12m<span>distribuição de atendimentos</span></div><canvas id="a_chat_depto" style="height:180px;max-height:180px"></canvas></div>
+  </div>
+
+  <div class="bn bn-a mt">
+    <div class="bn-icon">📞</div>
     <div>
-      <div class="bn bn-r" style="margin-bottom:12px"><div style="font-size:20px;flex-shrink:0">⚠️</div><div><div class="bn-title" style="color:var(--red)">DEPENDÊNCIA CRÍTICA — TIAGO SIQUEIRA</div><div class="bn-text">87,3% das OS em 1 técnico. Ausência paralisa o campo. Contratar/treinar 2º técnico é prioridade imediata.</div></div></div>
-      <div class="tbl-wrap" style="margin-bottom:0"><table class="tbl">
-        <tr><th>Técnico</th><th>OS Acum.</th><th>Share</th><th>Fev/26</th></tr>
-        <tr><td>Tiago Siqueira</td><td>4.615</td><td>87,3%</td><td style="color:var(--green)">296</td></tr>
-        <tr><td>Felipe Siqueira</td><td>672</td><td>12,7%</td><td style="color:var(--muted)">43</td></tr>
-      </table></div>
+      <div class="bn-title" style="color:var(--a)">65,5% das ligações não chegam a um operador (12m)</div>
+      <div class="bn-txt">Das 4.763 ligações registradas, 3.122 (65,5%) ficaram na URA/fila sem chegar a nenhum ramal 100–109. A TA real da empresa é 29,1% (não 84,5% — essa é a TA apenas dos que chegam ao ramal). Dados de telefone existem somente para Nov/25, Fev/26 e Mar/26 — <strong>implantar registro contínuo é urgente para gestão de atendimento.</strong></div>
     </div>
   </div>
-
-  <div class="sh">RATIO <span class="sh-p">RESOLUÇÃO INTERNA</span> <span style="font-family:var(--Fm);font-size:11px;color:var(--muted);letter-spacing:0">— (Chat + Tel) ÷ OS Abertas</span></div>
-  <div class="note"><strong>Como interpretar:</strong> Ratio maior = atendente resolve mais pelo canal remoto sem gerar demanda de campo. Inclui dados acumulados e mês corrente (Mar/26 parcial — OS incompletas no sistema).</div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Ratio Acumulado — Todo Período</strong><span>maior = melhor resolução interna</span></div><canvas id="c4_ratio_acc" style="height:230px;max-height:230px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Ratio Mar/26 — Mês Corrente</strong><span>dados parciais · OS ainda em registro</span></div><canvas id="c4_ratio_mar" style="height:230px;max-height:230px"></canvas></div>
-  </div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tr><th>Atendente</th><th>Chat Total</th><th>Tel Total</th><th>Contatos</th><th>OS Abertas</th><th>Ratio Acumulado</th><th>Chat Mar/26</th><th>Tel Mar/26</th><th>Ratio Mar/26</th><th>Status</th></tr>
-      <tr><td>Tiago Rodrigues</td><td>15.258</td><td>260</td><td>15.518</td><td>496</td><td style="color:var(--green)"><strong>31,3×</strong></td><td>268</td><td>14</td><td style="color:var(--green)">91,7×</td><td><span class="badge badge-g">ALTA RESOLUÇÃO</span></td></tr>
-      <tr><td>Joyce Vieira</td><td>10.095</td><td>203</td><td>10.298</td><td>603</td><td style="color:var(--green)"><strong>17,1×</strong></td><td>160</td><td>26</td><td style="color:var(--green)">186×</td><td><span class="badge badge-g">ALTA RESOLUÇÃO</span></td></tr>
-      <tr><td>Fernanda Aguiar</td><td>800</td><td>—</td><td>800</td><td>49</td><td style="color:var(--green)"><strong>16,3×</strong></td><td>117</td><td>—</td><td style="color:var(--amber)">14,6×</td><td><span class="badge badge-g">ALTA RESOLUÇÃO</span></td></tr>
-      <tr><td>Leonardo</td><td>508</td><td>—</td><td>508</td><td>39</td><td style="color:var(--amber)"><strong>13,0×</strong></td><td>—</td><td>—</td><td style="color:var(--muted)">N/A</td><td><span class="badge badge-y">MISTO</span></td></tr>
-      <tr><td>Rafaela Guimarães</td><td>8.825</td><td>289</td><td>9.114</td><td>816</td><td style="color:var(--amber)"><strong>11,2×</strong></td><td>0</td><td>84</td><td style="color:var(--muted)">N/A</td><td><span class="badge badge-y">MISTO</span></td></tr>
-      <tr><td>Jhonatan Monteiro</td><td>6.969</td><td>278</td><td>7.247</td><td>721</td><td style="color:var(--amber)"><strong>10,1×</strong></td><td>133</td><td>31</td><td style="color:var(--green)">54,7×</td><td><span class="badge badge-y">MISTO</span></td></tr>
-      <tr><td>Paola Silva</td><td>4.371</td><td>—</td><td>4.371</td><td>434</td><td style="color:var(--amber)"><strong>10,1×</strong></td><td>17</td><td>—</td><td style="color:var(--muted)">N/A</td><td><span class="badge badge-y">MISTO</span></td></tr>
-      <tr><td>Luana Oliveira</td><td>11.615</td><td>52</td><td>11.667</td><td>1.240</td><td style="color:var(--red)"><strong>9,4×</strong></td><td>192</td><td>13</td><td style="color:var(--amber)">29,3×</td><td><span class="badge badge-r">MAIOR ESCALADA</span></td></tr>
-      <tr><td>Francielle Nogueira</td><td>7.383</td><td>197</td><td>7.580</td><td>978</td><td style="color:var(--red)"><strong>7,8×</strong></td><td>116</td><td>42</td><td style="color:var(--muted)">N/A</td><td><span class="badge badge-r">ESP. OS</span></td></tr>
-    </table>
-  </div>
-  <div class="note"><strong>Nota Mar/26:</strong> OS com apenas 22 registros completos (mês em andamento). Ratios altos como Joyce 186× ou Tiago 91,7× refletem pouquíssimas OS finalizadas — dado parcial. Referência principal: coluna Ratio Acumulado.</div>
 </div>
 
-<!-- ════════════════════════════════════
-     P5 — COMISSÃO
-════════════════════════════════════ -->
-<div id="p-comissao" class="panel">
-  <div class="sh">COMISSIONAMENTO <span class="sh-c">& METAS</span></div>
 
-  <div class="g4">
-    <div class="kc kc-k"><div class="kl">TA Telefone Mar/26</div><div class="kv">91,9%</div><div class="kd kd-up">▲ meta ≥90% ✓</div><div class="ks">Gatilho ATIVO</div></div>
-    <div class="kc kc-k"><div class="kl">Automação Chat</div><div class="kv">36,0%</div><div class="kd kd-up">▲ Mar/26</div><div class="ks">Meta 40% — monitorar</div></div>
-    <div class="kc kc-k"><div class="kl">Google Rating</div><div class="kv">4,9 ★</div><div class="kd kd-up">▲ meta ≥4,5★ ✓</div><div class="ks">892 avaliações registradas</div></div>
-    <div class="kc kc-k"><div class="kl">Reincidência Chat</div><div class="kv">22,9%</div><div class="kd kd-dn">▼ meta &lt;15%</div><div class="ks">2.782 clientes 11+ contatos</div></div>
+<!-- ══════════════════════════════════════════════════════════
+     P5 — LTV & INADIMPLÊNCIA
+══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-ltv">
+  <div class="sh"><span class="sh-label" style="color:var(--pk)">LTV &amp; INADIMPLÊNCIA</span><span class="sh-note">Análise profunda · 10.533 clientes · BASE_DADOS_BI</span></div>
+
+  <div class="g5">
+    <div class="kc kc-pk"><div class="kl">LTV Médio — Ativos</div><div class="kv">R$2.742</div><div class="kd up">▲ 25,9 meses médio</div><div class="ks">mediana R$2.198 · n=5.833</div></div>
+    <div class="kc kc-r"><div class="kl">LTV Médio — Cancelados</div><div class="kv kv-sm">R$1.735</div><div class="kd nt">→ 17,3 meses médio</div><div class="ks">mediana R$1.089 · n=2.468</div></div>
+    <div class="kc kc-a"><div class="kl">LTV Médio — Susp. Débito</div><div class="kv kv-sm">R$1.461</div><div class="kd nt">→ 14,4 meses médio</div><div class="ks">353 clientes · n=327 c/ LTV</div></div>
+    <div class="kc kc-g"><div class="kl">LTV Total — Ativos</div><div class="kv kv-sm">R$16,0M</div><div class="kd up">▲ base consolidada</div><div class="ks">5.833 com LTV calculável</div></div>
+    <div class="kc kc-r"><div class="kl">Inadimp. Recuperável</div><div class="kv kv-sm">R$400K</div><div class="kd dn">▼ 1.736 clientes ativos/susp.</div><div class="ks">LTV médio: R$2.041 · 17,9m</div></div>
   </div>
 
-  <div class="sh">GATILHOS DE <span class="sh-c">COMISSÃO</span></div>
-  <div class="g3">
-    <div class="ctarget">
-      <div class="ctarget-title" style="color:var(--green)">↗ COMERCIAL</div>
-      <div class="ctarget-row"><span>Instalações mensais</span><span class="hit">≥245/mês</span></div>
-      <div class="ctarget-row"><span>Cancelamentos mensais</span><span class="hit">≤35/mês</span></div>
-      <div class="ctarget-row"><span>Saldo líquido</span><span class="hit">≥+210/mês</span></div>
-      <div class="ctarget-row"><span>Ticket médio</span><span class="hit">≥R$105,00</span></div>
-      <div class="ctarget-row"><span>Origem nos cadastros</span><span class="miss">0% — gap crítico</span></div>
-    </div>
-    <div class="ctarget">
-      <div class="ctarget-title" style="color:var(--purple)">☎ ATENDIMENTO</div>
-      <div class="ctarget-row"><span>TA Telefone</span><span class="hit">≥90% ✓ (91,9%)</span></div>
-      <div class="ctarget-row"><span>Avaliações coletadas</span><span class="hit">≥1% do volume</span></div>
-      <div class="ctarget-row"><span>Reincidência OS</span><span class="miss">22,9% — meta &lt;15%</span></div>
-      <div class="ctarget-row"><span>Google Rating</span><span class="hit">4,9★ ✓ meta 4,5★</span></div>
-    </div>
-    <div class="ctarget">
-      <div class="ctarget-title" style="color:var(--blue)">$ FINANCEIRO</div>
-      <div class="ctarget-row"><span>Inadimplência</span><span class="miss">R$279K — reduzir 5%</span></div>
-      <div class="ctarget-row"><span>Acionamento &lt;48h</span><span class="near">⟳ em processo</span></div>
-      <div class="ctarget-row"><span>Cancel. p/ inadimp.</span><span class="miss">32 em Mar — meta ≤30</span></div>
-      <div class="ctarget-row"><span>Rec. 0–60d ≥60%</span><span class="near">⟳ estimado 66%</span></div>
-    </div>
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">LTV por Status do Cliente<span>médio e mediana · R$</span></div><canvas id="l_status" style="height:210px;max-height:210px"></canvas></div>
+    <div class="cc"><div class="ct">LTV Médio × Tempo de Permanência<span>todos os clientes · curva de valor</span></div><canvas id="l_perm" style="height:210px;max-height:210px"></canvas></div>
   </div>
 
-  <div class="sh">RANKING <span class="sh-c">ATENDENTES</span></div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Volume Total de Contatos</strong><span>chat + telefone acumulado</span></div><canvas id="c5_cont" style="height:230px;max-height:230px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Ratio Resolução Interna</strong><span>acumulado · maior = melhor</span></div><canvas id="c5_ratio" style="height:230px;max-height:230px"></canvas></div>
-  </div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tr><th>Rank</th><th>Atendente</th><th>Chat</th><th>Telefone</th><th>Total</th><th>Ratio</th><th>TA Tel.</th><th>Score</th><th>Comissão</th></tr>
-      <tr><td>🥇</td><td>Tiago Rodrigues</td><td>15.258</td><td>260</td><td><strong>15.518</strong></td><td style="color:var(--green)">31,3×</td><td style="color:var(--green)">98,5%</td><td style="color:var(--green)">★★★★★</td><td><span class="badge badge-g">ELEGÍVEL</span></td></tr>
-      <tr><td>🥈</td><td>Joyce Vieira</td><td>10.095</td><td>203</td><td><strong>10.298</strong></td><td style="color:var(--green)">17,1×</td><td style="color:var(--amber)">94,6%</td><td style="color:var(--green)">★★★★</td><td><span class="badge badge-g">ELEGÍVEL</span></td></tr>
-      <tr><td>🥉</td><td>Rafaela Guimarães</td><td>8.825</td><td>289</td><td><strong>9.114</strong></td><td style="color:var(--amber)">11,2×</td><td style="color:var(--green)">89,3%</td><td style="color:var(--amber)">★★★</td><td><span class="badge badge-y">PARCIAL</span></td></tr>
-      <tr><td>4</td><td>Luana Oliveira</td><td>11.615</td><td>52</td><td><strong>11.667</strong></td><td style="color:var(--red)">9,4×</td><td style="color:var(--green)">88,5%</td><td style="color:var(--amber)">★★★</td><td><span class="badge badge-y">PARCIAL</span></td></tr>
-      <tr><td>5</td><td>Jhonatan Monteiro</td><td>6.969</td><td>278</td><td><strong>7.247</strong></td><td style="color:var(--amber)">10,1×</td><td style="color:var(--green)">91,4%</td><td style="color:var(--amber)">★★★</td><td><span class="badge badge-y">PARCIAL</span></td></tr>
-      <tr><td>6</td><td>Francielle Nogueira</td><td>7.383</td><td>197</td><td><strong>7.580</strong></td><td style="color:var(--red)">7,8×</td><td style="color:var(--green)">90,4%</td><td style="color:var(--orange)">★★</td><td><span class="badge badge-a">REVISAR</span></td></tr>
-      <tr><td>7</td><td>Paola Silva</td><td>4.371</td><td>—</td><td><strong>4.371</strong></td><td style="color:var(--amber)">10,1×</td><td style="color:var(--muted)">—</td><td style="color:var(--orange)">★★</td><td><span class="badge badge-a">REVISAR</span></td></tr>
-    </table>
+  <div class="g3 mt">
+    <div class="cc"><div class="ct">Histograma LTV<span>ativos × cancelados por faixa</span></div><canvas id="l_hist" style="height:180px;max-height:180px"></canvas></div>
+    <div class="cc"><div class="ct">LTV Médio × Ano de Habilitação<span>cohort + churn rate</span></div><canvas id="l_cohort" style="height:180px;max-height:180px"></canvas></div>
+    <div class="cc"><div class="ct">LTV por Motivo de Cancelamento<span>R$ médio por causa</span></div><canvas id="l_motivo" style="height:180px;max-height:180px"></canvas></div>
   </div>
 
-  <div class="sh">META DE <span class="sh-c">AVALIAÇÕES</span> <span style="font-family:var(--Fm);font-size:11px;color:var(--muted);letter-spacing:0">· 1% do Volume de Atendimento</span></div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Volume Atendimento vs Meta Avaliações</strong><span>1% do total = meta mensal</span></div><canvas id="c5_aval" style="height:220px;max-height:220px"></canvas></div>
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">LTV por Faixa Etária<span>meses médio vs LTV</span></div><canvas id="l_idade" style="height:180px;max-height:180px"></canvas></div>
+    <div class="cc"><div class="ct">LTV por Faixa de Ticket<span>plano mensal × fidelização</span></div><canvas id="l_ticket" style="height:180px;max-height:180px"></canvas></div>
+  </div>
+
+  <div class="sh mt"><span class="sh-label" style="color:var(--pk)">INADIMPLENTES RECUPERÁVEIS</span><span class="sh-note">1.736 clientes ativos/suspensos com saldo em aberto</span></div>
+
+  <div class="bn bn-pk">
+    <div class="bn-icon">🔍</div>
     <div>
-      <div class="tbl-wrap" style="margin-bottom:12px"><table class="tbl">
-        <tr><th>Mês</th><th>Chat</th><th>Tel.</th><th>Total</th><th>Meta 1%</th></tr>
-        <tr><td>Nov/25</td><td>7.241</td><td>1.874</td><td>9.115</td><td style="color:var(--amber)">91 aval.</td></tr>
-        <tr><td>Dez/25</td><td>8.265</td><td>—</td><td>8.265</td><td style="color:var(--amber)">83 aval.</td></tr>
-        <tr><td>Jan/26</td><td>7.984</td><td>—</td><td>7.984</td><td style="color:var(--amber)">80 aval.</td></tr>
-        <tr><td>Fev/26</td><td>7.748</td><td>2.134</td><td>9.882</td><td style="color:var(--green)">99 aval.</td></tr>
-        <tr><td>Mar/26*</td><td>2.038</td><td>755</td><td>2.793</td><td style="color:var(--cyan)">28 até D15 · ≈56/mês</td></tr>
-      </table></div>
-      <div class="kc kc-k"><div class="kl">Google Rating Atual</div><div class="kv">4,9 ★</div><div class="kd kd-up">▲ meta ≥4,5★ ✓ — 892 avaliações</div><div class="ks">18% negativas (1★+2★) — instabilidade e demora</div></div>
-    </div>
-  </div>
-  <div class="cc"><div class="cct"><strong>Google — Volume por Estrelas</strong><span>892 avaliações totais</span></div><canvas id="c5_google" style="height:180px;max-height:180px"></canvas></div>
-</div>
-
-<!-- ════════════════════════════════════
-     P6 — MAR/26
-════════════════════════════════════ -->
-<div id="p-marco" class="panel">
-  <div class="sh">MARÇO/26 <span class="sh-r">EM TEMPO REAL</span> <span style="font-family:var(--Fm);font-size:12px;color:var(--muted);letter-spacing:0">· 15 de 31 dias · 48,4%</span></div>
-
-  <div class="cc" style="margin-bottom:12px">
-    <div class="cct"><strong>Progresso do Mês</strong><span>15/03/2026 · 16 dias restantes</span></div>
-    <div style="display:flex;align-items:center;gap:14px">
-      <div style="flex:1"><div class="prog" style="height:10px"><div class="prog-fill" style="width:48.4%;background:var(--red)"></div></div></div>
-      <div style="font-family:var(--Fm);font-size:13px;color:var(--red)">48,4%</div>
+      <div class="bn-title" style="color:var(--pk)">O inadimplente típico é um cliente consolidado, não um novato</div>
+      <div class="bn-txt">LTV médio R$2.041 · 17,9 meses como cliente · saldo médio R$279 (≈2–3 mensalidades) · <strong>46,2% já tiveram OS aberta</strong> — o problema técnico pode ter precedido o não pagamento. A maioria ficou inadimplente por evento pontual. Campanha de regularização é mais eficaz que negativação imediata para este perfil.</div>
     </div>
   </div>
 
-  <div class="g3">
-    <div class="mc" style="border-color:var(--amber)">
-      <div class="mc-label" style="color:var(--amber)">⟳ INSTALAÇÕES</div>
-      <div class="mc-val" style="color:var(--amber)">118</div>
-      <div class="mc-sub">proj. mês cheio: <strong>244</strong> · meta ≥245</div>
-      <div class="mc-row"><span>Ritmo atual</span><span>7,9/dia</span></div>
-      <div class="mc-row"><span>Necessário</span><span>8,1/dia · gap mínimo</span></div>
-      <div class="prog"><div class="prog-fill" style="width:99.6%;background:var(--amber)"></div></div>
-    </div>
-    <div class="mc" style="border-color:var(--red)">
-      <div class="mc-label" style="color:var(--red)">⛔ CANCELAMENTOS</div>
-      <div class="mc-val" style="color:var(--red)">36</div>
-      <div class="mc-sub">proj. mês cheio: <strong>74</strong> · meta ≤35</div>
-      <div class="mc-row"><span>Ritmo atual</span><span style="color:var(--red)">2,4/dia</span></div>
-      <div class="mc-row"><span>Máx. permitido</span><span>≤0,9/dia</span></div>
-      <div class="prog"><div class="prog-fill" style="width:100%;background:var(--red)"></div></div>
-    </div>
-    <div class="mc" style="border-color:var(--amber)">
-      <div class="mc-label" style="color:var(--amber)">⟳ SALDO LÍQUIDO</div>
-      <div class="mc-val" style="color:var(--amber)">+82</div>
-      <div class="mc-sub">proj. mês cheio: <strong>+170</strong> · meta ≥+210</div>
-      <div class="mc-row"><span>Saldo diário</span><span>+5,5/dia</span></div>
-      <div class="mc-row"><span>Necessário</span><span>+6,8/dia</span></div>
-      <div class="prog"><div class="prog-fill" style="width:81%;background:var(--amber)"></div></div>
-    </div>
-  </div>
-
-  <div class="cc"><div class="cct"><strong>Acumulado Diário — Real vs Projeção vs Meta</strong><span>instalações e cancelamentos</span></div><canvas id="c6_diario" style="height:270px;max-height:270px"></canvas></div>
-
-  <div class="bn bn-r"><div style="font-size:22px;flex-shrink:0">🚨</div><div><div class="bn-title" style="color:var(--red)">CORREÇÃO DE ROTA — CANCELAMENTOS</div><div class="bn-text">Pico reflete <strong>negativação acumulada Jan+Fev+Mar chegando ao vencimento simultaneamente</strong> — ciclo concentrado, não tendência nova. Ritmo 2,4/dia → projeção 74. Para meta ≤35 nos 16 dias restantes: acionar inadimplentes <em>antes</em> do corte, oferecer parcelamento e registrar acordo.</div></div></div>
-
-  <div class="g3">
-    <div class="ic"><div style="font-family:var(--Fm);font-size:9px;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">⛔ Ação Imediata</div><div class="ii"><div class="idot idot-r"></div><div class="it"><strong>Causa raiz:</strong> ligar para todos os inadimplentes 0–60d <em>antes</em> do corte e registrar acordo de parcelamento.</div></div></div>
-    <div class="ic"><div style="font-family:var(--Fm);font-size:9px;color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">⟳ Prioridade</div><div class="ii"><div class="idot idot-a"></div><div class="it"><strong>Instalações:</strong> faltam +0,2/dia para meta. Priorizar agendamentos da semana.</div></div></div>
-    <div class="ic"><div style="font-family:var(--Fm);font-size:9px;color:var(--green);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">✓ Oportunidade</div><div class="ii"><div class="idot idot-g"></div><div class="it"><strong>803 suspensos:</strong> ligar antes de virar cancelamento = R$84K de MRR recuperável imediato.</div></div></div>
-  </div>
-
-  <div class="sh">ATENDIMENTO <span class="sh-r">MAR/26</span></div>
   <div class="g4">
-    <div class="kc kc-m"><div class="kl">Chats Mar/26</div><div class="kv">2.038</div><div class="kd kd-nt">→ mês em andamento</div><div class="ks">36% bot · 64% humano</div></div>
-    <div class="kc kc-m"><div class="kl">Ligações Mar/26</div><div class="kv">755</div><div class="kd kd-up">▲ TA 91,9%</div><div class="ks">694 atendidas · 61 falhas</div></div>
-    <div class="kc kc-m"><div class="kl">TME Espera</div><div class="kv">41s</div><div class="kd kd-up">▲ meta &lt;45s ✓</div><div class="ks">Melhora significativa</div></div>
-    <div class="kc kc-m"><div class="kl">OS Finalizadas</div><div class="kv">22</div><div class="kd kd-nt">→ dado parcial</div><div class="ks">Mês em andamento</div></div>
-  </div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Chat Mar/26 por Atendente</strong><span>dados parciais D1–D15</span></div><canvas id="c6_chat_mar" style="height:210px;max-height:210px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Ligações Mar/26 por Ramal</strong><span>total vs atendidas</span></div><canvas id="c6_tel_mar" style="height:210px;max-height:210px"></canvas></div>
+    <div class="kc" style="border-top:2px solid var(--r)"><div class="kl">🔴 Alto LTV + Saldo ≥R$300</div><div class="kv dn">65</div><div class="kd dn">LTV médio R$4.381 · 41m</div><div class="ks">Saldo total: R$36.953 · ação pessoal</div></div>
+    <div class="kc" style="border-top:2px solid var(--a)"><div class="kl">🟡 Alto LTV + Saldo &lt;R$300</div><div class="kv nt">611</div><div class="kd nt">LTV médio R$4.192 · 39m</div><div class="ks">Rec. mensal: R$68K · WhatsApp + link</div></div>
+    <div class="kc" style="border-top:2px solid var(--or)"><div class="kl">🟠 LTV Médio + Alto Saldo</div><div class="kv nt">43</div><div class="kd nt">LTV médio R$1.269 · 12m</div><div class="ks">Saldo: R$35.221 · cobrança ativa</div></div>
+    <div class="kc" style="border-top:2px solid var(--muted)"><div class="kl">⚪ LTV Baixo (&lt;6 meses)</div><div class="kv" style="color:var(--muted)">621</div><div class="kd">LTV médio R$238 · 2,4m</div><div class="ks">Saldo: R$211K · negativação</div></div>
   </div>
 
-  <div class="sh">INADIMPLÊNCIA <span class="sh-r">MAR/26</span></div>
-  <div class="g3">
-    <div class="kc kc-m"><div class="kl">Em Liquidação 0–60d</div><div class="kv">R$139K</div><div class="kd kd-up">▲ 1.344 casos · liquida naturalmente</div><div class="ks">Recuperável: R$91.322 (66%)</div></div>
-    <div class="kc kc-m"><div class="kl">Zona de Risco 61–180d</div><div class="kv">R$57K</div><div class="kd kd-nt">→ 560 casos · ação ativa</div><div class="ks">Recuperável: R$16.988 (30%)</div></div>
-    <div class="kc kc-m"><div class="kl">Inadim. Real +180d</div><div class="kv">R$82K</div><div class="kd kd-dn">▼ 765 casos · provisionar</div><div class="ks">Recuperável: R$6.508 (8%)</div></div>
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">Inadimplentes por Tempo como Cliente<span>clientes · saldo · LTV médio</span></div><canvas id="l_inad_tempo" style="height:220px;max-height:220px"></canvas></div>
+    <div class="cc"><div class="ct">Top 10 Bairros — Saldo e LTV<span>inadimplentes recuperáveis</span></div><canvas id="l_inad_bairros" style="height:220px;max-height:220px"></canvas></div>
   </div>
-  <div class="g2">
-    <div class="cc"><div class="cct"><strong>Aging por Casos</strong><span>2.669 registros · 1.794 clientes</span></div><canvas id="c6_aging" style="height:210px;max-height:210px"></canvas></div>
-    <div class="cc"><div class="cct"><strong>Recuperável × Irrecuperável</strong><span>por faixa de aging</span></div><canvas id="c6_rec" style="height:210px;max-height:210px"></canvas></div>
+
+  <div class="g3 mt">
+    <div class="cc">
+      <div class="ct">Plano de Recuperação</div>
+      <table class="tbl">
+        <tr><th>Segmento</th><th>n</th><th>Ação</th><th>Potencial</th></tr>
+        <tr><td><span class="pill pr">Alto LTV + ≥R$300</span></td><td class="num">65</td><td style="font-size:9px">Ligação · gerente · parcelamento</td><td class="num up">R$37K</td></tr>
+        <tr><td><span class="pill pa">Alto LTV + &lt;R$300</span></td><td class="num">611</td><td style="font-size:9px">WhatsApp + link automático</td><td class="num nt">R$96K/mês</td></tr>
+        <tr><td><span class="pill pb">Médio + Alto Saldo</span></td><td class="num">43</td><td style="font-size:9px">Proposta de quitação</td><td class="num">R$35K</td></tr>
+        <tr><td><span class="pill" style="background:rgba(80,80,80,.2);color:var(--muted);border:1px solid var(--dim)">LTV Baixo</span></td><td class="num">621</td><td style="font-size:9px">Negativação</td><td class="num" style="color:var(--muted)">—</td></tr>
+      </table>
+    </div>
+    <div class="cc">
+      <div class="ct">OS nos Inadimplentes<span>tipos mais frequentes</span></div>
+      <canvas id="l_inad_os" style="height:170px;max-height:170px"></canvas>
+      <div class="il mt8">
+        <div class="ii"><div class="dot da"></div><div class="it"><strong>46,2%</strong> dos inadimplentes tiveram OS aberta. LTV médio destes: R$2.143.</div></div>
+        <div class="ii"><div class="dot db"></div><div class="it">OS de <strong>Sem Acesso</strong> domina — possível correlação com insatisfação que leva ao não pagamento.</div></div>
+      </div>
+    </div>
+    <div class="cc">
+      <div class="ct">Insights LTV — Decisões Estratégicas</div>
+      <div class="il">
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Clientes 60+:</strong> LTV médio R$3.040 vs R$1.516 dos 18–29. Fidelizar público maduro é prioridade.</div></div>
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>3–5 anos ativos:</strong> LTV R$4.858 — cliente leal vale 43× mais que de 0–3 meses. Toda ação de retenção tem ROI alto.</div></div>
+        <div class="ii"><div class="dot da"></div><div class="it"><strong>Payback 6 meses:</strong> custo de instalação R$613 recuperado em 6 meses. Retenção pós-payback = lucro puro.</div></div>
+        <div class="ii"><div class="dot da"></div><div class="it"><strong>Inviabilidade técnica:</strong> LTV R$464 — cancela antes do payback. Mapa de cobertura real é urgente.</div></div>
+        <div class="ii"><div class="dot dr"></div><div class="it"><strong>Coorte 2018:</strong> churn histórico 84,6%. Em 2025 caiu para 11% — melhora expressiva de produto/suporte.</div></div>
+        <div class="ii"><div class="dot db"></div><div class="it"><strong>Ticket ≥R$130:</strong> LTV R$3.658 (+27% vs média). Upsell de plano é alavanca direta de valor.</div></div>
+      </div>
+    </div>
   </div>
-  <div class="cc"><div class="cct"><strong>Timeline de Liquidação Projetada</strong><span>hoje → Jun/26</span></div><canvas id="c6_timeline" style="height:160px;max-height:160px"></canvas></div>
 </div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     P6 — COMISSÃO
+══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-comissao">
+  <div class="sh"><span class="sh-label">COMISSÃO</span><span class="sh-note">análise_comissão_comercial.xlsx · Planejamento Estratégico</span></div>
+
+  <div class="g4">
+    <div class="kc kc-g"><div class="kl">Paola — 5 meses</div><div class="kv">228</div><div class="kd up">▲ R$21.198 faturados</div><div class="ks">Ticket R$92,98 · Comissão R$4.240</div></div>
+    <div class="kc kc-b"><div class="kl">Wellerson — 4 meses</div><div class="kv">62</div><div class="kd up">▲ R$6.314 faturados</div><div class="ks">Ticket R$101,84 · Comissão R$1.263</div></div>
+    <div class="kc kc-a"><div class="kl">Comissão Atual</div><div class="kv">20%</div><div class="kd nt">→ fixo do plano por cliente</div><div class="ks">R$15,98 a R$27,98 por venda</div></div>
+    <div class="kc kc-or"><div class="kl">Ponto de Equilíbrio</div><div class="kv">50</div><div class="kd nt">→ vendas/mês p/ ROI positivo</div><div class="ks">custo func. R$40.800/ano (est.)</div></div>
+  </div>
+
+  <div class="g2 mt">
+    <div class="cc">
+      <div class="ct">Modelo Atual — Comissão por Plano<span>análise_comissão_comercial.xlsx</span></div>
+      <table class="tbl">
+        <tr><th>Plano</th><th>Valor</th><th>Comissão (20%)</th><th>Retorno 1 ano</th></tr>
+        <tr><td>350 Mega</td><td class="num">R$79,90</td><td class="num nt">R$15,98</td><td class="num">R$959/cliente</td></tr>
+        <tr><td>500 Mega</td><td class="num">R$99,90</td><td class="num nt">R$19,98</td><td class="num">R$1.199/cliente</td></tr>
+        <tr><td>650 Mega</td><td class="num">R$119,90</td><td class="num nt">R$23,98</td><td class="num">R$1.439/cliente</td></tr>
+        <tr><td>850 Mega</td><td class="num">R$139,90</td><td class="num nt">R$27,98</td><td class="num">R$1.679/cliente</td></tr>
+      </table>
+      <div class="il mt8">
+        <div class="ii"><div class="dot dr"></div><div class="it"><strong>Limitação:</strong> comissão fixa não incentiva performance nem fidelização. 30 vendas/mês = mesma % que 200 vendas.</div></div>
+        <div class="ii"><div class="dot dr"></div><div class="it"><strong>Sem critério de retenção:</strong> comissão paga mesmo se cliente cancela em 30 dias (custo R$613,33 perdido).</div></div>
+        <div class="ii"><div class="dot da"></div><div class="it"><strong>Ticket Paola (R$92,98)</strong> abaixo da média empresa (R$105,92). Incentivo de upsell pode corrigir.</div></div>
+      </div>
+    </div>
+    <div class="cc"><div class="ct">Vendas por Mês<span>Out/25 → Fev/26</span></div><canvas id="k_vend" style="height:200px;max-height:200px"></canvas></div>
+  </div>
+
+  <div class="sh mt"><span class="sh-label">PROPOSTA APRIMORADA</span><span class="sh-note">3 pilares: volume progressivo · retenção · qualidade</span></div>
+
+  <div class="bn bn-g">
+    <div class="bn-icon">💡</div>
+    <div>
+      <div class="bn-title" style="color:var(--g)">Modelo Proposto — Faixas Progressivas + Bônus de Retenção</div>
+      <div class="bn-txt"><strong>Pilar 1 — Progressão por volume:</strong> percentual sobe conforme mais vendas no mês (escalonado sobre todas as vendas). <strong>Pilar 2 — Retenção 90 dias:</strong> +10% sobre comissão se ≥85% dos clientes do mês anterior continuam ativos. <strong>Pilar 3 — Qualidade:</strong> estorno de 50% se cliente cancela em &lt;60 dias. Base de cálculo: 90% das vendas confirmadas.</div>
+    </div>
+  </div>
+
+  <div class="cc mt">
+    <div class="ct">Tabela de Faixas Progressivas — Vendedor Externo<span>base: análise_comissão_comercial.xlsx · ticket médio R$92,98 · custo estimado R$40.800/ano</span></div>
+    <table class="ctb" id="tbl-comissao"></table>
+  </div>
+
+  <div class="g3 mt">
+    <div class="cc"><div class="ct">ROI por Faixa de Vendas<span>retorno anual vs custo</span></div><canvas id="k_roi" style="height:210px;max-height:210px"></canvas></div>
+    <div class="cc">
+      <div class="ct">Simulação — Paola (228 vendas / 5 meses)</div>
+      <div class="sb-row mt8">
+        <div class="sb"><div class="sb-l">Média/mês</div><div class="sb-v cy">~46</div></div>
+        <div class="sb"><div class="sb-l">Faixa</div><div class="sb-v nt">25%</div></div>
+        <div class="sb"><div class="sb-l">Comissão/mês</div><div class="sb-v up">R$1.054</div></div>
+      </div>
+      <div class="il mt8">
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Bônus retenção (+10%):</strong> se 90% dos clientes permanecem 90d → +R$105/mês adicional.</div></div>
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Meta premium (≥60 vendas):</strong> bônus R$500/mês ao superar faixa máxima.</div></div>
+        <div class="ii"><div class="dot dr"></div><div class="it"><strong>Estorno cancelamento &lt;60d:</strong> devolução de 50% da comissão da venda cancelada.</div></div>
+        <div class="ii"><div class="dot da"></div><div class="it"><strong>Incentivo upsell:</strong> planos ≥R$129 recebem +R$5 por venda adicional.</div></div>
+      </div>
+    </div>
+    <div class="cc">
+      <div class="ct">Regras do Modelo Proposto</div>
+      <div class="il">
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Pagamento:</strong> 5° dia útil do mês seguinte à confirmação da instalação.</div></div>
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Base de cálculo:</strong> 90% das vendas (desconta projeção de cancelamento/erro).</div></div>
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Escalonamento:</strong> faixa calculada pelo total do mês. Ex.: 35 vendas = 25% em TODAS.</div></div>
+        <div class="ii"><div class="dot da"></div><div class="it"><strong>Bônus retenção 90d:</strong> +10% se ≥85% dos clientes do mês anterior ativos.</div></div>
+        <div class="ii"><div class="dot da"></div><div class="it"><strong>Bônus meta:</strong> R$500 flat ao superar 60 vendas/mês.</div></div>
+        <div class="ii"><div class="dot dr"></div><div class="it"><strong>Estorno:</strong> cancel. &lt;60d = -50% da comissão, descontado na folha seguinte.</div></div>
+        <div class="ii"><div class="dot db"></div><div class="it"><strong>Obrigatório:</strong> toda venda deve ter origem e canal registrados no sistema.</div></div>
+        <div class="ii"><div class="dot db"></div><div class="it"><strong>Bônus upsell:</strong> vendas de planos ≥R$129 recebem +R$5 adicional por contrato.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     P7 — MAR/26
+══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-marco">
+  <div class="sh"><span class="sh-label" style="color:var(--r)">MARÇO / 26</span><span class="sh-note">MÊS ENCERRADO · 31/31 dias · Processamento.xlsx</span></div>
+
+  <div class="g3">
+    <div class="mc" style="border-left-color:var(--g)">
+      <div class="mc-lbl up">✅ INSTALAÇÕES</div>
+      <div class="mc-val up">250</div>
+      <div class="mc-sub">Meta ≥245 · superada em +5 (+2%)</div>
+      <div class="mc-row"><span>Resultado</span><span class="up">250 instalações</span></div>
+      <div class="mc-row"><span>Meta</span><span>≥245</span></div>
+      <div class="prg"><div class="prg-f" style="width:100%;background:var(--g)"></div></div>
+    </div>
+    <div class="mc" style="border-left-color:var(--r)">
+      <div class="mc-lbl dn">🔴 CANCELAMENTOS</div>
+      <div class="mc-val dn">155</div>
+      <div class="mc-sub">Meta ≤35 · 4,4× acima</div>
+      <div class="mc-row"><span>Inadimplência</span><span class="dn">133 (85,8%)</span></div>
+      <div class="mc-row"><span>Ewbank · Centro</span><span class="dn">39 (25,2%)</span></div>
+      <div class="prg"><div class="prg-f" style="width:100%;background:var(--r)"></div></div>
+    </div>
+    <div class="mc" style="border-left-color:var(--a)">
+      <div class="mc-lbl nt">⟳ SALDO LÍQUIDO</div>
+      <div class="mc-val nt">+95</div>
+      <div class="mc-sub">Meta ≥+210 · 45% da meta</div>
+      <div class="mc-row"><span>Instalações</span><span>250</span></div>
+      <div class="mc-row"><span>Cancelamentos</span><span class="dn">155</span></div>
+      <div class="prg"><div class="prg-f" style="width:45%;background:var(--a)"></div></div>
+    </div>
+  </div>
+
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">Cancelamentos por Motivo — Mar/26<span>155 total · Processamento.xlsx</span></div><canvas id="m_motivo" style="height:200px;max-height:200px"></canvas></div>
+    <div class="cc"><div class="ct">Cancelamentos por Cidade — Mar/26<span>155 total</span></div><canvas id="m_cidade" style="height:200px;max-height:200px"></canvas></div>
+  </div>
+
+  <div class="sh mt"><span class="sh-label" style="color:var(--r)">ATENDIMENTO MAR/26</span></div>
+  <div class="g4">
+    <div class="kc kc-vi"><div class="kl">Chats Mar/26</div><div class="kv">2.038</div><div class="kd nt">→ mês encerrado</div><div class="ks">736 bot · 1.302 humano</div></div>
+    <div class="kc kc-b"><div class="kl">Ligações Mar/26</div><div class="kv">755</div><div class="kd nt">→ TA ramal 84,5%</div><div class="ks">236 com ramal · 519 URA/fila</div></div>
+    <div class="kc kc-c"><div class="kl">TA Ramal Mar/26</div><div class="kv">84,5%</div><div class="kd nt">→ 199/236 atendidas</div><div class="ks">TA geral: 26,4% (199/755)</div></div>
+    <div class="kc kc-a"><div class="kl">OS Mar/26</div><div class="kv">498</div><div class="kd nt">→ mês encerrado</div><div class="ks">data_termino_executado</div></div>
+  </div>
+
+  <div class="g2 mt">
+    <div class="cc"><div class="ct">Chats Mar/26 por Atendente<span>BASE_DADOS_BI</span></div><canvas id="m_chat" style="height:210px;max-height:210px"></canvas></div>
+    <div class="cc"><div class="ct">Telefone Mar/26 — 755 ligações<span>236 ramais + 519 URA/fila</span></div><canvas id="m_tel" style="height:210px;max-height:210px"></canvas></div>
+  </div>
+
+  <div class="g3 mt">
+    <div class="cc"><div class="ct">OS Mar/26 por Abertura<span>498 total</span></div><canvas id="m_os_aber" style="height:190px;max-height:190px"></canvas></div>
+    <div class="cc"><div class="ct">Ratio Mar/26<span>(chat+tel) ÷ OS</span></div><canvas id="m_ratio_mar" style="height:190px;max-height:190px"></canvas></div>
+    <div class="cc">
+      <div class="ct">Análise do Mês</div>
+      <div class="il">
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Instalações:</strong> meta superada em 2% (250 vs 245). Trimestre comercial sólido.</div></div>
+        <div class="ii"><div class="dot dr"></div><div class="it"><strong>Cancelamentos:</strong> pico de inadimplência concentrado. 133/155 = 85,8% por não pagamento — evento cíclico Jan+Fev+Mar.</div></div>
+        <div class="ii"><div class="dot dr"></div><div class="it"><strong>Ewbank · Centro:</strong> 39 cancels = 25,2% do total. Bairro com maior histórico de inadimplência (R$25,7K saldo).</div></div>
+        <div class="ii"><div class="dot da"></div><div class="it"><strong>Saldo +95:</strong> positivo, mas abaixo da meta. Base cresceu de 6.988 para 7.083.</div></div>
+        <div class="ii"><div class="dot db"></div><div class="it"><strong>OS 498:</strong> maior do ano em Dez/25 (674). Mar/26 bem acima da média 12m (391).</div></div>
+        <div class="ii"><div class="dot dg"></div><div class="it"><strong>Chat:</strong> 2.038 em 31 dias = mês parcial de dados no sistema (últimos dias do mês ainda processando).</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bn bn-r mt">
+    <div class="bn-icon">🚨</div>
+    <div>
+      <div class="bn-title" style="color:var(--r)">Análise — Pico de Cancelamentos Mar/26 · Ação Abr/26</div>
+      <div class="bn-txt">Os 155 cancelamentos concentraram-se em <strong>Ewbank · Centro (39 = 25,2%)</strong> e JF (96 = 61,9%). Causa: inadimplência acumulada Jan+Fev chegando ao vencimento em Mar. Evento cíclico concentrado, não tendência estrutural. As 250 instalações superaram a meta mesmo nesse cenário. <strong>Ação prioritária Abr/26:</strong> campanha de regularização nos bairros Ewbank · Centro e JF · Igrejinha antes do próximo ciclo de corte. Acionar os 65 clientes de "Alto LTV + Alto Saldo" pessoalmente.</div>
+    </div>
+  </div>
+</div>
+
 
 <script>
-// ══════════ DATA CENTRAL ══════════
-const M15=['Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26'];
-const installs=[206,153,170,178,227,211,201,160,177,254,224,280,276,254,118];
-const churns=[27,37,77,22,78,57,47,78,65,57,29,46,32,18,36];
-const saldo=installs.map((v,i)=>v-churns[i]);
-const ticket=[104.29,102.50,100.07,101.72,106.08,106.32,110.21,116.62,103.57,99.26,100.77,100.46,102.82,105.20,105.90];
-const recBase=[560454,562827,559145,584584,625097,643016,683484,732488,662394,654027,683761,705251,746273,788105,803544];
-const allClients=[5379,5495,5588,5744,5893,6047,6201,6283,6395,6592,6787,7021,7265,7501,7583];
-const osMes=[385,334,286,247,312,303,351,358,307,431,443,674,433,340,22];
-const chats=[6710,6115,6415,6404,7466,5898,6284,6249,6038,7740,7241,8265,7984,7748,2038];
+// ══ NAV ══
+function sw(id, el, cls) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on','on-g','on-c','on-f','on-a','on-l','on-k','on-m'));
+  document.getElementById('p-'+id).classList.add('on');
+  el.classList.add('on', cls);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-const M_FULL=['Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26','Ago/26','Set/26','Out/26','Nov/26','Dez/26'];
-const MRR_HIST=[...recBase,...Array(9).fill(null)];
-const mrr3=[...Array(15).fill(null),827650,852480,878054,904396,931528,959474,988258,1017905,1048443];
-const mrr35=[...Array(15).fill(null),831668,860776,890904,922085,954358,987761,1022332,1058114,1095148];
-const mrr4=[...Array(15).fill(null),835686,869113,903878,940033,977634,1016740,1057409,1099705,1143694];
-const CLI_HIST=[...allClients,...Array(9).fill(null)];
-const cli35=[...Array(14).fill(null),7583,7816,8038,8250,8455,8646,8855,9082,9315,9565];
+// ══ DADOS VERIFICADOS ══════════════════════════════════════
+// Fonte: Processamento.xlsx (installs/cancels/base/ticket)
+// Fonte: BASE_DADOS_BI.xlsx (status/atendimento/inad/OS)
+const M15 = ['Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26'];
+const m12  = ['Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26'];
+const m12s = ['Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez','Jan','Fev','Mar'];
 
-// Chart defaults
-Chart.defaults.color='#6b6b80';
-Chart.defaults.borderColor='#2a2a38';
-Chart.defaults.font={family:"'JetBrains Mono',monospace",size:10};
-const TT={backgroundColor:'#16161f',borderColor:'#2a2a38',borderWidth:1,titleColor:'#e8e8f0',bodyColor:'#9b9baf',padding:10,cornerRadius:4};
+// Processamento.xlsx
+const inst  = [206,153,170,177,228,211,201,160,179,254,224,281,275,252,250];
+const canc  = [32,46,82,28,87,64,54,86,74,69,44,53,38,30,155];
+const saldo = inst.map((v,i)=>v-canc[i]);
+const tick  = [104.29,102.50,99.42,102.02,106.38,106.45,110.21,116.62,103.39,99.46,101.05,100.39,102.90,104.11,97.11];
+const base  = [4899,5073,5180,5268,5417,5558,5705,5850,5925,6030,6216,6396,6624,6861,7083];
+const mrr   = base.map((b,i)=>Math.round(b*tick[i]));
+const inad  = [9868,10425,11311,10045,9739,8686,7792,8609,12230,12491,13347,17263,18298,27846,123325];
 
-function lineChart(id,labels,datasets,opts={}){
+// m12 slices
+const inst12 = inst.slice(3), canc12 = canc.slice(3), mrr12 = mrr.slice(3);
+
+// OS 12m (data_termino_executado)
+const os12 = [247,312,303,351,358,307,431,443,674,433,340,498];
+
+// Chat 12m
+const chat12 = [6404,7466,5898,6284,6249,6038,7740,7241,8265,7984,7748,2038];
+
+// Projeção MRR Abr→Dez/26
+const MFULL = [...M15,'Abr/26','Mai/26','Jun/26','Jul/26','Ago/26','Set/26','Out/26','Nov/26','Dez/26'];
+const mrrFull = [...mrr,...Array(9).fill(null)];
+const p25 = [...Array(15).fill(null),...[1,2,3,4,5,6,7,8,9].map(i=>Math.round(687830*(1.025**i)))];
+const p30 = [...Array(15).fill(null),...[1,2,3,4,5,6,7,8,9].map(i=>Math.round(687830*(1.030**i)))];
+const p40 = [...Array(15).fill(null),...[1,2,3,4,5,6,7,8,9].map(i=>Math.round(687830*(1.040**i)))];
+
+// Atendimento vol12 (chat humano por atendente, BASE_DADOS_BI)
+const v12 = {
+  'Tiago':     [909,902,890,945,844,1032,1421,1174,1242,1257,1028,267],
+  'Luana':     [837,446,638,884,849,772,1060,1021,1144,1085,621,190],
+  'Joyce':     [574,901,574,682,581,422,942,1038,1102,827,701,153],
+  'Rafaela':   [689,787,599,723,591,563,478,612,580,661,601,0],
+  'Francielle':[536,567,472,449,439,546,561,530,626,233,455,114],
+  'Jhonatan':  [332,828,200,229,373,355,593,404,864,735,639,131],
+  'Paola':     [354,305,389,262,293,138,113,164,60,163,75,17],
+  'Fernanda':  [0,0,0,0,0,0,0,0,0,141,560,119],
+  'Mislaine':  [0,0,0,0,0,0,0,0,0,0,139,194],
+  'Cassiane':  [0,0,0,0,0,0,0,0,0,0,0,117],
+};
+const v12t = { // telefone (ramais 100-109)
+  'Tiago':     [0,0,0,0,0,0,0,214,0,0,53,14],
+  'Luana':     [0,0,0,0,0,0,0,4,0,0,35,7],
+  'Joyce':     [0,0,0,0,0,0,0,161,0,0,63,35],
+  'Rafaela':   [0,0,0,0,0,0,0,106,0,0,133,86],
+  'Francielle':[0,0,0,0,0,0,0,158,0,0,45,61],
+  'Jhonatan':  [0,0,0,0,0,0,0,160,0,0,113,33],
+};
+
+// Tel 12m por operador (ramais 100-109, verificado)
+const tNames=['Rafaela(107)','Jhonatan(105)','Tiago(104)','Francielle(101)','Joyce(100)','Luana(103)','Felipe(102)'];
+const tTot  =[325,306,281,264,259,46,5];
+const tAtend=[256,271,265,210,209,38,3];
+const tTA   =tAtend.map((a,i)=>(a/tTot[i]*100).toFixed(1));
+
+// OS por abertura 12m
+const osAbNomes=['Luana','FRANCIELE','JHONATAN','Rafaela','JOYCE','Tiago','Paola','Mislaine','Fernanda','Cassiane'];
+const osAbVals =[1177,794,646,643,535,436,256,100,92,17];
+const osAbMar  =[106,68,73,1,25,39,2,92,75,17];
+
+// Ratio 12m: (chat+tel)/OS
+const ratioNomes=['Tiago','Joyce','Rafaela','Jhonatan','Paola','Fernanda','Luana','Francielle'];
+const ratioVals =[28.0,16.4,11.2,9.3,9.1,8.9,8.2,7.3];
+
+// Hora/dia chat
+const chatHoras=[169,465,542,586,482,489,477,400,356,381,340,281,222,194]; // 7h-20h
+const chatDias =[15221,14039,13956,11559,13484,8425,2671]; // Seg-Dom
+
+// LTV dados (BASE_DADOS_BI auditado)
+const ltvStatusL=['Habilitado','Cancelado','Susp. Débito','Susp. Pedido','Susp. Parcial'];
+const ltvMedio  =[2742,1735,1461,2618,2109];
+const ltvMediana=[2198,1089,1089,2247,1498];
+const ltvMeses  =[25.9,17.3,14.4,25.3,20.7];
+const permL=['0–3m','3–6m','6–12m','1–2a','2–3a','3–5a','5a+'];
+const permLTV  =[111,404,902,1803,3053,4858,7628];
+const permAtiv =[480,579,805,1209,1193,1105,462];
+const permCanc =[423,337,503,573,302,221,109];
+const cohortA  =[2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+const cohortLTV=[5237,3939,3718,4617,4204,3728,2680,1935,801,148];
+const churnRt  =[78.1,84.6,72.2,54.0,50.6,39.6,37.3,25.7,11.0,3.6];
+const motivosL=['Mud. Provedor','Troca Titular','N/A','Mud. Cidade','Insatisfação','Inadimplência','Inviab. Técn.'];
+const motivosV=[3812,3521,1757,1617,1524,1371,464];
+const idadeL=['18–29','30–44','45–59','60+'];
+const idadeLTV=[1516,1829,1975,3040];
+const idadeM  =[14.8,17.6,18.5,28.7];
+const tickFxL=['<R$80','R$80–99','R$100–114','R$115–149','≥R$150'];
+const tickFxLTV=[1606,2221,3398,2896,3658];
+const tickFxM  =[21.8,22.6,31.2,22.8,23.9];
+const inadTempoL=['0–6m','6–12m','12–24m','24–36m','36–60m','60m+'];
+const inadTempoN=[641,184,321,290,211,89];
+const inadTempoS=[215.8,37.0,70.2,58.2,46.0,16.4];
+const inadTempoLTV=[251,938,1834,3165,4992,7320];
+const inadBrL=['Ewbank·Centro','JF·Igrejinha','JF·Granjeamento','JF·Nova Era','JF·Paula Lima','JF·Náutico','PedroT·Centro','JF·Valadares','Bias F.·Centro','JF·Torreões'];
+const inadBrS=[20808,17908,16161,18977,14774,13433,11483,11027,9651,13154];
+const inadBrLTV=[1558,2248,3293,962,2054,3540,2963,3241,1906,1098];
+
+// ══ CHART DEFAULTS ══
+Chart.defaults.color='#4a6070';
+Chart.defaults.borderColor='rgba(30,45,61,.8)';
+Chart.defaults.font={family:"'DM Mono',monospace",size:10};
+const TT={backgroundColor:'#0d1117',borderColor:'#1e2d3d',borderWidth:1,
+  titleColor:'#c9d4e0',bodyColor:'#8fa3b8',padding:10,cornerRadius:4};
+const BASE={maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9,padding:8,font:{size:9}}},tooltip:{...TT}}};
+const GX={grid:{color:'rgba(30,45,61,.8)'},ticks:{maxRotation:45,font:{size:9}}};
+const GY={grid:{color:'rgba(30,45,61,.8)'}};
+
+function line(id,labels,datasets,opts={}){
   return new Chart(document.getElementById(id),{type:'line',data:{labels,datasets},
-    options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9,padding:10}},tooltip:{...TT}},
-      scales:{x:{grid:{color:'rgba(42,42,56,.5)'},ticks:{maxRotation:45}},y:{grid:{color:'rgba(42,42,56,.5)'},...(opts.y||{})},...(opts.scales||{})}}});
+    options:{...BASE,scales:{x:{...GX,...(opts.x||{})},y:{...GY,...(opts.y||{})},...(opts.sc||{})}}});
 }
-function barChart(id,labels,datasets,opts={}){
+function bar(id,labels,datasets,opts={}){
   return new Chart(document.getElementById(id),{type:'bar',data:{labels,datasets},
-    options:{maintainAspectRatio:false,indexAxis:opts.horiz?'y':'x',
-      plugins:{legend:{display:datasets.length>1,labels:{boxWidth:9,padding:10}},tooltip:{...TT}},
-      scales:{x:{grid:{display:opts.horiz},stacked:opts.stack,ticks:{maxRotation:45,...(opts.xticks||{})}},
-        y:{grid:{color:'rgba(42,42,56,.5)'},stacked:opts.stack,...(opts.y||{})},...(opts.scales||{})}}});
+    options:{...BASE,indexAxis:opts.h?'y':'x',scales:{x:{...GX,grid:{display:!!opts.h},stacked:opts.stk,...(opts.x||{})},
+      y:{...GY,stacked:opts.stk,...(opts.y||{})},...(opts.sc||{})}}});
 }
-function doughnut(id,labels,data,colors){
+function dough(id,labels,data,colors){
   return new Chart(document.getElementById(id),{type:'doughnut',
-    data:{labels,datasets:[{data,backgroundColor:colors,borderColor:'#111118',borderWidth:2}]},
-    options:{maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'right',labels:{boxWidth:9,padding:10}},tooltip:{...TT}}}});
+    data:{labels,datasets:[{data,backgroundColor:colors,borderColor:'#080b0f',borderWidth:2}]},
+    options:{...BASE,cutout:'55%',plugins:{legend:{position:'right',labels:{boxWidth:9,padding:8,font:{size:9}}},tooltip:{...TT}}}});
 }
 
-// ══════════ TICKER ══════════
-const TICKS=[
-  {l:'Clientes Ativos',v:'6.361',c:'tk-up'},{l:'MRR',v:'R$804K',c:'tk-up'},
-  {l:'Churn Rate',v:'2,8%',c:'tk-up'},{l:'Ticket Médio',v:'R$105,90',c:'tk-up'},
-  {l:'Saldo Líq. 15m',v:'+2.053',c:'tk-up'},{l:'Inadimplência',v:'R$279K',c:'tk-dn'},
-  {l:'Cancel. Mar/26',v:'36 → proj 74',c:'tk-dn'},{l:'Inst. Mar/26',v:'118/meta245',c:'tk-nt'},
-  {l:'TA Tel. Mar/26',v:'91,9%',c:'tk-up'},{l:'Google',v:'4,9★',c:'tk-up'},
-  {l:'OS Mar/26',v:'22 parcial',c:'tk-nt'},{l:'Rec. em Risco',v:'R$84K',c:'tk-dn'},
-  {l:'Rec. Recuperável',v:'R$115K',c:'tk-up'},{l:'Suspensos',v:'803',c:'tk-nt'},
+// ══ TICKER ══
+const TKS=[
+  {l:'BASE MAR/26',v:'7.083',c:'up'},{l:'MRR MAR/26',v:'R$687,8K',c:'up'},
+  {l:'TICKET',v:'R$105,92',c:'nt'},{l:'SALDO 15M',v:'+2.279',c:'up'},
+  {l:'INST. MAR',v:'250 ✅',c:'up'},{l:'CANCEL. MAR',v:'155 🔴',c:'dn'},
+  {l:'INAD. MAR',v:'R$123,3K',c:'dn'},{l:'TA RAMAL 12M',v:'84,5%',c:'nt'},
+  {l:'TA GERAL 12M',v:'29,1%',c:'dn'},{l:'URA/FILA',v:'65,5%',c:'dn'},
+  {l:'CHATS 12M',v:'79.355',c:'up'},{l:'OS 12M',v:'4.697',c:'nt'},
+  {l:'AUTO. CHAT',v:'34,9%',c:'cy'},{l:'LTV ATIVO',v:'R$2.742',c:'up'},
+  {l:'LTV CANCELADO',v:'R$1.735',c:'nt'},{l:'INAD. RECUP.',v:'R$400K',c:'dn'},
+  {l:'COHORT 2025',v:'74,4%',c:'up'},{l:'CHURN PREM.',v:'37,4%',c:'dn'},
+  {l:'MRR RECUP.',v:'R$81,3K',c:'up'},{l:'SUSPENSOS',v:'803',c:'nt'},
 ];
+const tkr=document.getElementById('tkr');
+const mkTk=()=>TKS.map(t=>`<div class="tk"><span class="tk-l">${t.l}</span><span class="tk-v ${t.c}">${t.v}</span></div>`).join('');
+tkr.innerHTML=mkTk()+mkTk();
+
+// ══ TABELA METAS ══
 (()=>{
-  const inner=document.getElementById('tkr');
-  const make=()=>TICKS.map(t=>`<div class="tk"><span class="tk-label">${t.l}</span><span class="tk-val ${t.c}">${t.v}</span></div>`).join('');
-  inner.innerHTML=make()+make();
+  const tbl=document.getElementById('tbl-metas');
+  tbl.innerHTML='<thead><tr><th>Mês</th><th>Installs</th><th>vs ≥245</th><th>Cancels</th><th>vs ≤35</th><th>Saldo</th><th>vs ≥+210</th><th>Ticket</th></tr></thead>';
+  const body=document.createElement('tbody');
+  M15.forEach((lb,i)=>{
+    const tr=document.createElement('tr');
+    const oi=inst[i]>=245,oc=canc[i]<=35,os_=saldo[i]>=210;
+    const ci=oi?'color:var(--g)':'color:var(--r)';
+    const cc_=oc?'color:var(--g)':'color:var(--r)';
+    const cs=os_?'color:var(--g)':'color:var(--a)';
+    tr.innerHTML=`<td>${lb}${i===14?' <span class="pill pr" style="font-size:7px">encerrado</span>':''}</td>
+      <td class="num" style="${ci}">${inst[i]}</td><td style="text-align:center">${oi?'✓':'✗'}</td>
+      <td class="num" style="${cc_}">${canc[i]}</td><td style="text-align:center">${oc?'✓':canc[i]<=100?'⚠':'🔴'}</td>
+      <td class="num" style="${cs}">${saldo[i]>=0?'+':''}${saldo[i]}</td><td style="text-align:center">${os_?'✓':'—'}</td>
+      <td class="num" style="color:var(--muted)">R$${tick[i].toFixed(2)}</td>`;
+    body.appendChild(tr);
+  });
+  tbl.appendChild(body);
 })();
 
-// ══════════ COHORT TABLE ══════════
-const cohort=[{y:2020,t:544,a:241,p:44.3},{y:2021,t:859,a:404,p:47.0},{y:2022,t:1174,a:667,p:56.8},{y:2023,t:2165,a:1237,p:57.1},{y:2024,t:1944,a:1244,p:64.0},{y:2025,t:2441,a:1815,p:74.4},{y:2026,t:648,a:589,p:90.9}];
-const cc_=p=>p<50?'#ef4444':p<65?'#f97316':p<75?'#fbbf24':p<85?'#22c55e':'#06b6d4';
-const tb_=document.getElementById('cohortTbl');
-tb_.innerHTML='<thead><tr><th>Coorte</th><th>Retenção</th><th style="text-align:right">%</th></tr></thead>';
-const tbod=document.createElement('tbody');
-cohort.forEach(c=>{
-  const col=cc_(c.p);const tr=document.createElement('tr');
-  tr.innerHTML=`<td style="font-family:var(--Fd);font-size:18px;color:var(--muted)">${c.y}</td>
-    <td><div style="display:flex;align-items:center;gap:6px"><div class="sb" style="flex:1;height:6px"><div class="sb-fill" style="width:${c.p}%;background:${col}"></div></div><span style="font-size:10px;color:var(--muted)">${c.t}</span></div></td>
-    <td style="text-align:right;font-family:var(--Fd);font-size:20px;color:${col}">${c.p}%</td>`;
-  tbod.appendChild(tr);
+// ══ TABELA COMISSÃO ══
+(()=>{
+  const faixas=[
+    {mn:1,mx:29,pct:20,note:''},{mn:30,mx:49,pct:25,note:''},
+    {mn:50,mx:69,pct:30,note:'⭐ Equilíbrio',dest:true},
+    {mn:70,mx:89,pct:35,note:''},{mn:90,mx:119,pct:40,note:''},
+    {mn:120,mx:159,pct:45,note:'🏆',top:true},
+    {mn:160,mx:'∞',pct:50,note:'🏆',top:true},
+  ];
+  const tm=92.98, custo=40800;
+  const tbl=document.getElementById('tbl-comissao');
+  tbl.innerHTML=`<tr><th>Faixa/mês</th><th>% Comissão</th><th>Comissão mín.</th><th>Comissão máx.</th><th>Receita anual gerada</th><th>ROI vs custo</th><th>Retorno mês</th><th>Obs.</th></tr>`;
+  faixas.forEach(f=>{
+    const mid=f.mx==='∞'?180:(f.mn+f.mx)/2;
+    const cu=tm*f.pct/100;
+    const cMin=(f.mn*0.9*cu).toFixed(0);
+    const cMax=(f.mx==='∞'?200*cu:f.mx*cu).toFixed(0);
+    const rec=(mid*tm*12).toFixed(0);
+    const ret=(mid*tm*12-custo);
+    const roi=(ret/custo*100).toFixed(0);
+    const cl=f.top?'top':f.dest?'dest':'';
+    tbl.innerHTML+=`<tr class="${cl}">
+      <td><strong>${f.mn}–${f.mx}</strong></td>
+      <td style="color:var(--a);font-weight:700">${f.pct}%</td>
+      <td>R$${Number(cMin).toLocaleString('pt-BR')}</td>
+      <td>R$${Number(cMax).toLocaleString('pt-BR')}</td>
+      <td>R$${Number(rec).toLocaleString('pt-BR')}</td>
+      <td style="color:${ret>0?'var(--g)':'var(--r)'}">${ret>0?'+':'-'}${Math.abs(roi)}%</td>
+      <td style="color:${ret>0?'var(--g)':'var(--muted)'}">R$${Math.max(0,ret/12).toLocaleString('pt-BR',{maximumFractionDigits:0})}</td>
+      <td style="font-size:9px;color:var(--muted)">${f.note}</td></tr>`;
+  });
+})();
+
+// ══ GRÁFICOS — P1 GERAL ══
+line('g_instcancel',M15,[
+  {label:'Installs',data:inst,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.08)',fill:true,tension:.3,pointRadius:3,pointBackgroundColor:'#10b981'},
+  {label:'Cancels',data:canc,borderColor:'#f43f5e',backgroundColor:'rgba(244,63,94,.08)',fill:true,tension:.3,pointRadius:3,pointBackgroundColor:'#f43f5e'},
+  {label:'Saldo',data:saldo,borderColor:'#3b82f6',borderDash:[4,3],tension:.3,pointRadius:2,yAxisID:'y2'},
+],{sc:{y:{...GY},y2:{position:'right',grid:{display:false},ticks:{font:{size:9}}}}});
+
+new Chart(document.getElementById('g_base_mrr'),{type:'bar',
+  data:{labels:M15,datasets:[
+    {type:'bar',label:'Base Ativa',data:base,backgroundColor:'rgba(34,211,238,.35)',borderRadius:3,yAxisID:'y1'},
+    {type:'line',label:'MRR (R$)',data:mrr,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.06)',fill:true,tension:.4,pointRadius:2,yAxisID:'y2'},
+  ]},
+  options:{...BASE,scales:{x:{...GX},y1:{...GY,ticks:{callback:v=>v.toLocaleString('pt-BR')}},y2:{position:'right',grid:{display:false},ticks:{callback:v=>'R$'+(v/1000).toFixed(0)+'K'}}}}
 });
-tb_.appendChild(tbod);
 
-// ══════════ P1 — GERAL ══════════
-new Chart(document.getElementById('g_instcancel'),{type:'bar',
-  data:{labels:M15,datasets:[
-    {label:'Instalações',data:installs,backgroundColor:installs.map(v=>v>=245?'rgba(34,197,94,.8)':'rgba(34,197,94,.4)'),order:1},
-    {label:'Cancelamentos',data:churns,backgroundColor:churns.map(v=>v<=35?'rgba(239,68,68,.45)':'rgba(239,68,68,.8)'),order:1},
-    {label:'Meta Inst ≥245',data:Array(15).fill(245),type:'line',borderColor:'rgba(34,197,94,.35)',borderDash:[4,3],pointRadius:0,order:0},
-    {label:'Meta Cancel ≤35',data:Array(15).fill(35),type:'line',borderColor:'rgba(239,68,68,.35)',borderDash:[4,3],pointRadius:0,order:0},
-    {label:'Saldo',data:saldo,type:'line',borderColor:'#fbbf24',pointRadius:3,pointBackgroundColor:'#fbbf24',order:0,yAxisID:'y2'}
-  ]},
-  options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9,padding:10}},tooltip:{...TT}},
-    scales:{x:{ticks:{maxRotation:45,font:{size:9}}},y:{grid:{color:'rgba(42,42,56,.5)'},beginAtZero:true},y2:{position:'right',grid:{display:false},beginAtZero:false}}}
-});
-new Chart(document.getElementById('g_mrr'),{type:'line',
-  data:{labels:M_FULL,datasets:[
-    {label:'Real',data:MRR_HIST,borderColor:'#e8e8f0',backgroundColor:'rgba(232,232,240,.06)',fill:true,pointRadius:2,spanGaps:false,borderWidth:2},
-    {label:'3,0%',data:mrr3,borderColor:'#fbbf24',borderDash:[5,3],pointRadius:0,spanGaps:false,borderWidth:1.5},
-    {label:'3,5%',data:mrr35,borderColor:'#22c55e',borderDash:[5,3],pointRadius:0,spanGaps:false,borderWidth:1.5},
-    {label:'4,0%',data:mrr4,borderColor:'#3b82f6',borderDash:[5,3],pointRadius:0,spanGaps:false,borderWidth:1.5}
-  ]},
-  options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9,padding:10}},tooltip:{...TT,callbacks:{label:ctx=>ctx.raw?`R$${Math.round(ctx.raw/1000)}K`:''}}},
-    scales:{x:{ticks:{maxRotation:45,font:{size:9},callback:(v,i)=>i%3===0?M_FULL[i]:''}},y:{ticks:{callback:v=>`R$${Math.round(v/1000)}K`}}}}
-});
-new Chart(document.getElementById('g_base'),{type:'line',
-  data:{labels:M_FULL,datasets:[
-    {label:'Real',data:CLI_HIST,borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,.07)',fill:true,pointRadius:2,spanGaps:false,borderWidth:2},
-    {label:'3,5% cresc.',data:cli35,borderColor:'#3b82f6',borderDash:[5,3],pointRadius:0,spanGaps:false,borderWidth:1.5}
-  ]},
-  options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9,padding:10}},tooltip:{...TT}},
-    scales:{x:{ticks:{maxRotation:45,font:{size:9},callback:(v,i)=>i%3===0?M_FULL[i]:''}},y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}}}
-});
-doughnut('g_status',['Habilitado','Susp. Débito','Susp. Parcial','Susp. Pedido','Cancelado'],[6361,353,270,180,3374],['#22c55e','#ef4444','#f97316','#fbbf24','#6b6b80']);
-doughnut('g_planos',['R$99,90','R$99','R$79,90','R$149','R$74,90','R$129','Outros'],[2124,1234,854,468,389,307,985],['#22c55e','#3b82f6','#06b6d4','#f97316','#fbbf24','#a855f7','#6b6b80']);
-barChart('g_idade',['18–24','25–34','35–44','45–54','55–64','65+'],[{label:'Clientes',data:[291,837,1002,954,833,1457],backgroundColor:['#3b82f6','#06b6d4','#22c55e','#fbbf24','#f97316','#a855f7'],borderRadius:4}]);
+bar('g_inad',M15,[{label:'Saldo Inadimplência',data:inad,backgroundColor:inad.map(v=>v>50000?'rgba(244,63,94,.85)':v>15000?'rgba(245,158,11,.75)':'rgba(59,130,246,.6)'),borderRadius:3}],
+  {y:{ticks:{callback:v=>'R$'+(v/1000).toFixed(0)+'K'}}});
 
-// ══════════ P2 — COMERCIAL ══════════
-new Chart(document.getElementById('c2_inst'),{type:'bar',
-  data:{labels:M15,datasets:[
-    {label:'Instalações',data:installs,backgroundColor:installs.map(v=>v>=245?'rgba(34,197,94,.8)':'rgba(34,197,94,.4)'),order:1},
-    {label:'Meta ≥245',data:Array(15).fill(245),type:'line',borderColor:'#22c55e',borderDash:[5,3],pointRadius:0,order:0,borderWidth:1.5}
-  ]},options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{x:{ticks:{maxRotation:45,font:{size:9}}},y:{beginAtZero:true}}}});
-new Chart(document.getElementById('c2_cancel'),{type:'bar',
-  data:{labels:M15,datasets:[
-    {label:'Cancelamentos',data:churns,backgroundColor:churns.map(v=>v<=35?'rgba(34,197,94,.55)':'rgba(239,68,68,.8)'),order:1},
-    {label:'Meta ≤35',data:Array(15).fill(35),type:'line',borderColor:'#ef4444',borderDash:[5,3],pointRadius:0,order:0,borderWidth:1.5}
-  ]},options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{x:{ticks:{maxRotation:45,font:{size:9}}},y:{beginAtZero:true}}}});
-new Chart(document.getElementById('c2_saldo'),{type:'bar',
-  data:{labels:M15,datasets:[
-    {label:'Saldo Líq.',data:saldo,backgroundColor:saldo.map(v=>v>=210?'rgba(34,197,94,.8)':v>=0?'rgba(251,191,36,.7)':'rgba(239,68,68,.7)'),order:1},
-    {label:'Meta ≥+210',data:Array(15).fill(210),type:'line',borderColor:'rgba(34,197,94,.45)',borderDash:[5,3],pointRadius:0,order:0,borderWidth:1.5}
-  ]},options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{x:{ticks:{maxRotation:45,font:{size:9}}},y:{beginAtZero:false}}}});
-new Chart(document.getElementById('c2_ticket'),{type:'line',
-  data:{labels:M15,datasets:[
-    {label:'Ticket R$',data:ticket,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,.08)',fill:true,pointRadius:4,pointBackgroundColor:ticket.map(v=>v>=105?'#22c55e':'#ef4444'),borderWidth:2},
-    {label:'Meta R$105',data:Array(15).fill(105),borderColor:'rgba(6,182,212,.3)',borderDash:[5,3],pointRadius:0,borderWidth:1.5}
-  ]},options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{x:{ticks:{maxRotation:45,font:{size:9}}},y:{min:95}}}});
-new Chart(document.getElementById('c2_cancel_evo'),{type:'bar',
-  data:{labels:['Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26*'],datasets:[
-    {label:'Inadimplência',data:[53,38,19,31,15,2,32],backgroundColor:'rgba(239,68,68,.8)',stack:'a'},
-    {label:'Inviab. Técnica',data:[4,12,9,12,12,12,4],backgroundColor:'rgba(251,191,36,.75)',stack:'a'},
-    {label:'Mudança Cidade',data:[6,6,1,1,1,3,0],backgroundColor:'rgba(59,130,246,.7)',stack:'a'},
-    {label:'Outros',data:[2,1,0,2,4,1,0],backgroundColor:'rgba(107,107,128,.55)',stack:'a'}
-  ]},options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9,padding:8}}},scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,beginAtZero:true}}}});
-doughnut('c2_cancel_pie',['Inadimplência','Inviab. Técnica','Mudança Cidade','Mudança Prov.','Insatisfação','Outros'],[866,148,68,41,10,24],['#ef4444','#fbbf24','#3b82f6','#a855f7','#06b6d4','#6b6b80']);
-barChart('c2_vend',['Out/25','Nov/25','Dez/25','Jan/26','Fev/26'],[{label:'Paola',data:[44,40,44,54,46],backgroundColor:'rgba(34,197,94,.7)',borderRadius:4},{label:'Wellerson',data:[0,10,21,13,0],backgroundColor:'rgba(59,130,246,.7)',borderRadius:4}]);
-barChart('c2_comissao',['Out/25','Nov/25','Dez/25','Jan/26','Fev/26'],[{label:'Paola R$',data:[910.94,779.08,863.14,1094.92,919.08],backgroundColor:'rgba(34,197,94,.7)',borderRadius:4},{label:'Wellerson R$',data:[0,199.80,645.38,263.74,0],backgroundColor:'rgba(59,130,246,.7)',borderRadius:4}]);
-barChart('c2_canal_ret',['Indicação','Instagram','Panfleto','Vend. Externo'],[{label:'Retenção %',data:[98.8,100,96.6,94.3],backgroundColor:['#22c55e','#06b6d4','#3b82f6','#fbbf24'],borderRadius:4}],{y:{min:90,max:102}});
+line('g_ticket',M15,[
+  {label:'Ticket Instalação',data:tick,borderColor:'#fb923c',backgroundColor:'rgba(251,146,60,.08)',fill:true,tension:.3,pointRadius:3,pointBackgroundColor:'#fb923c'},
+  {label:'Média (R$103,89)',data:Array(15).fill(103.89),borderColor:'rgba(255,255,255,.15)',borderDash:[4,4],pointRadius:0},
+],{y:{min:90,ticks:{callback:v=>'R$'+v.toFixed(0)}}});
 
-// ══════════ P3 — FINANCEIRO ══════════
-const inadimMeses=['Jan/25','Fev/25','Mar/25','Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26'];
-const inadimVal=[9986,10480,11450,9377,10138,9040,7747,8496,13219,12009,13264,17939,23021,122597];
-new Chart(document.getElementById('c3_inadim'),{type:'bar',
-  data:{labels:inadimMeses,datasets:[
-    {label:'Saldo em aberto',data:inadimVal,backgroundColor:inadimVal.map(v=>v>50000?'rgba(239,68,68,.85)':v>15000?'rgba(251,191,36,.75)':'rgba(59,130,246,.65)'),borderRadius:4,order:1},
-    {label:'Média 2025 (R$11.095)',data:Array(14).fill(11095),type:'line',borderColor:'rgba(34,197,94,.6)',borderDash:[5,3],pointRadius:0,borderWidth:1.5,order:0}
-  ]},
-  options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}},tooltip:{...TT,callbacks:{label:ctx=>`R$${Math.round(ctx.parsed.y).toLocaleString('pt-BR')}`}}},
-    scales:{x:{ticks:{maxRotation:45,font:{size:9}}},y:{type:'logarithmic',min:5000,ticks:{callback:v=>[5000,10000,20000,50000,100000].includes(v)?`R$${v>=1000?v/1000+'K':v}`:null}}}}});
-barChart('c3_aging_casos',['0–30d','31–60d','61–90d','91–180d','181–365d','+365d'],[{label:'Casos',data:[951,393,178,382,532,233],backgroundColor:['#22c55e','#3b82f6','#fbbf24','#f97316','#ef4444','#6b6b80'],borderRadius:4}]);
-barChart('c3_aging_val',['0–30d','31–60d','61–90d','91–180d','181–365d','+365d'],[{label:'Valor R$',data:[98593,40559,17996,39162,57633,24821],backgroundColor:['#22c55e','#3b82f6','#fbbf24','#f97316','#ef4444','#6b6b80'],borderRadius:4}],{y:{ticks:{callback:v=>`R$${Math.round(v/1000)}K`}}});
-new Chart(document.getElementById('c3_rec_irrec'),{type:'bar',data:{labels:['0–30d','31–60d','61–90d','91–180d','181–365d','+365d'],datasets:[{label:'Recuperável',data:[69015,22307,7198,9790,5763,745],backgroundColor:'rgba(34,197,94,.7)',borderRadius:4},{label:'Irrecuperável',data:[29578,18252,10798,29372,51870,24076],backgroundColor:'rgba(239,68,68,.7)',borderRadius:4}]},options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{x:{stacked:false},y:{beginAtZero:true,ticks:{callback:v=>`R$${Math.round(v/1000)}K`}}}}});
-barChart('c3_bairros',['CENTRO · EWB','IGREJINHA · JF','TORREÕES · JF','NOVA ERA · JF','VALADARES · JF','ROSÁRIO MINAS · JF','MONTE VERDE · JF','COL. S.FIRMINO · EWB','HUMAITÁ · JF','PAULA LIMA · JF','CENTRO · LD','CACHOEIRA · JF','NÁUTICO · JF','VILA CRUZEIRO · LD','CENTRO · PT'],
-  [{label:'R$ inadimplente',data:[25293,16290,13849,12559,11817,10940,9823,9759,9539,8848,6856,6839,6464,4683,4806],backgroundColor:'rgba(239,68,68,.7)',borderRadius:3}],
-  {horiz:true,y:{ticks:{font:{size:9}}},x:{ticks:{callback:v=>`R$${Math.round(v/1000)}K`}}});
-lineChart('c3_liquidacao',['Hoje','Abr/26','Mai/26','Jun/26'],[{label:'Inadimplência R$',data:[278764,209749,187442,187442],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.1)',fill:true,pointRadius:6,pointBackgroundColor:'#ef4444',borderWidth:2}],{y:{ticks:{callback:v=>`R$${Math.round(v/1000)}K`}}});
-new Chart(document.getElementById('c3_acum12m'),{type:'bar',
-  data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],datasets:[
-    {label:'2025',data:[9986,10480,11450,9377,10138,9040,7747,8496,13219,12009,13264,17939],backgroundColor:'rgba(59,130,246,.5)',borderRadius:3,yAxisID:'y'},
-    {label:'2026',data:[23021,122597,null,null,null,null,null,null,null,null,null,null],backgroundColor:'rgba(239,68,68,.75)',borderRadius:3,yAxisID:'y'},
-    {label:'Proj. estabilização',data:[null,122597,null,80914,50628,34518,null,33455,null,null,35523,null],type:'line',borderColor:'#fbbf24',borderDash:[5,3],pointRadius:[0,4,0,4,4,4,0,4,0,0,4,0],pointBackgroundColor:'#fbbf24',tension:.4,yAxisID:'y'},
-    {label:'Média 2025 (R$11K)',data:Array(12).fill(11095),type:'line',borderColor:'rgba(34,197,94,.45)',borderDash:[3,4],pointRadius:0,borderWidth:1.5,yAxisID:'y'}
-  ]},
-  options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},
-    scales:{x:{ticks:{font:{size:10}}},y:{type:'logarithmic',min:5000,ticks:{callback:v=>[5000,10000,20000,50000,100000].includes(v)?`R$${v>=1000?v/1000+'K':v}`:null}}}}});
-new Chart(document.getElementById('c3_composto'),{type:'bar',
-  data:{labels:['Hoje (Mar/26)','Abr/26 (+30d)','Mai/26 (+60d)','Jun/26 (+90d)','Histórico'],datasets:[
-    {label:'Estrutural +180d',data:[86778,86778,86778,86778,null],backgroundColor:'rgba(239,68,68,.75)',stack:'a'},
-    {label:'Ciclo Jan–Mar (0–180d)',data:[191986,122971,100664,99661,null],backgroundColor:'rgba(251,191,36,.65)',stack:'a'},
-    {label:'Novos entrantes',data:[null,null,null,36000,null],backgroundColor:'rgba(59,130,246,.5)',stack:'a'},
-    {label:'Média histórica',data:[null,null,null,null,12582],backgroundColor:'rgba(34,197,94,.7)',stack:'a'}
-  ]},
-  options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,beginAtZero:true,ticks:{callback:v=>`R$${Math.round(v/1000)}K`}}}}});
+dough('g_status',['Habilitado','Susp. Débito','Susp. Parcial','Susp. Pedido','Cancelado'],
+  [6361,353,270,180,3374],['#10b981','#f43f5e','#f59e0b','#3b82f6','#4a6070']);
 
-// ══════════ P4 — ATENDIMENTO ══════════
-barChart('c4_chats',M15,[{label:'Chats',data:chats,backgroundColor:chats.map(v=>v>7000?'rgba(168,85,247,.8)':'rgba(168,85,247,.5)'),borderRadius:4}]);
-// Vol12 Abr/25→Mar/26
-const m12=['Abr/25','Mai/25','Jun/25','Jul/25','Ago/25','Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26'];
-const vol12_chat={'Tiago':[928,920,902,959,858,1044,1466,1194,1253,1274,1040,268],'Luana':[850,452,646,895,861,789,1121,1053,1161,1116,651,192],'Joyce':[575,908,596,690,604,434,975,1097,1126,850,748,160],'Rafaela':[705,805,621,751,608,595,516,673,642,696,355,0],'Francielle':[545,581,483,461,445,554,583,561,649,238,466,116],'Jhonatan':[338,840,203,231,381,360,612,411,873,753,645,133],'Paola':[361,319,398,280,330,144,119,182,61,175,76,21]};
-const vol12_tel={'Tiago':[0,0,0,0,0,0,0,214,0,0,53,14],'Luana':[0,0,0,0,0,0,0,4,0,0,35,13],'Joyce':[0,0,0,0,0,0,0,161,0,0,63,26],'Rafaela':[0,0,0,0,0,0,0,106,0,0,133,84],'Francielle':[0,0,0,0,0,0,0,158,0,0,45,42],'Jhonatan':[0,0,0,0,0,0,0,160,0,0,113,31],'Paola':[0,0,0,0,0,0,0,0,0,0,0,0]};
-const v12cols=['#f97316','#a855f7','#3b82f6','#22c55e','#fbbf24','#06b6d4','#ef4444'];
-const v12names=['Tiago','Luana','Joyce','Rafaela','Francielle','Jhonatan','Paola'];
-new Chart(document.getElementById('c4_vol12'),{type:'line',
-  data:{labels:m12,datasets:v12names.map((n,i)=>({label:n,data:m12.map((_,j)=>vol12_chat[n][j]+vol12_tel[n][j]),borderColor:v12cols[i],backgroundColor:v12cols[i]+'18',borderWidth:2,fill:false,tension:.35,pointRadius:2,pointBackgroundColor:v12cols[i]}))},
-  options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{boxWidth:9,padding:9}}},scales:{x:{grid:{color:'rgba(42,42,56,.5)'},ticks:{font:{size:9}}},y:{grid:{color:'rgba(42,42,56,.5)'}}}}});
-doughnut('c4_depto',['Atendimento','Financeiro','Suporte Técnico','Comercial'],[38274,10258,452,251],['#a855f7','#ef4444','#3b82f6','#22c55e']);
-doughnut('c4_reinc',['1 contato','2–4','5–10','11++'],[3405,3347,2596,2782],['#22c55e','#3b82f6','#fbbf24','#ef4444']);
-new Chart(document.getElementById('c4_ta'),{type:'bar',
-  data:{labels:['Nov/25','Fev/26','Mar/26*'],datasets:[{label:'TA %',data:[61.9,97.4,91.9],backgroundColor:['rgba(239,68,68,.7)','rgba(34,197,94,.8)','rgba(251,191,36,.8)'],borderRadius:6}]},
-  options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:105,ticks:{callback:v=>v+'%'}}}}});
-const tel_names_=['Rafaela(107)','Jhonatan(105)','Tiago(104)','Joyce(100)','Franciele(101)','Luana(103)','Felipe(102)'];
-const tel_total_=[289,278,260,203,197,52,5];
-const tel_atend_=[258,254,256,192,178,46,3];
-new Chart(document.getElementById('c4_tel_op'),{type:'bar',
-  data:{labels:tel_names_,datasets:[{label:'Total',data:tel_total_,backgroundColor:'rgba(59,130,246,.5)',borderRadius:3},{label:'Atendidas',data:tel_atend_,backgroundColor:'rgba(34,197,94,.75)',borderRadius:3}]},
-  options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{x:{ticks:{font:{size:9}}},y:{beginAtZero:true}}}});
+bar('g_anual',[2018,2019,2020,2021,2022,2023,2024,2025,2026],[
+  {label:'Instalações',data:[130,259,544,859,1174,2165,1944,2441,648],backgroundColor:'rgba(16,185,129,.65)',borderRadius:3,stack:'a'},
+  {label:'Cancelamentos',data:[82,164,208,176,332,913,583,620,86],backgroundColor:'rgba(244,63,94,.6)',borderRadius:3,stack:'a'},
+],{stk:true,y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}});
 
-new Chart(document.getElementById('c4_tel_comp'),{type:'bar',
-  data:{labels:['Total','Atendidas','Não Atend.'],datasets:[
-    {label:'Nov/25',data:[1874,1160,714],backgroundColor:'rgba(249,115,22,.7)',borderRadius:3},
-    {label:'Fev/26',data:[2134,2079,55],backgroundColor:'rgba(59,130,246,.7)',borderRadius:3},
-    {label:'Mar/26*',data:[755,694,61],backgroundColor:'rgba(34,197,94,.7)',borderRadius:3}
-  ]},options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{x:{},y:{beginAtZero:true}}}});
-new Chart(document.getElementById('c4_tel_hora'),{type:'bar',data:{labels:['7h','8h','9h','10h','11h','12h','13h','14h','15h','16h','17h','18h','19h','20h'],datasets:[{label:'Ligações',data:[39,460,478,423,462,427,469,773,490,319,257,75,41,25],backgroundColor:[39,460,478,423,462,427,469,773,490,319,257,75,41,25].map(v=>v>=600?'rgba(239,68,68,.8)':v>=350?'rgba(249,115,22,.7)':'rgba(59,130,246,.6)'),borderRadius:3}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9}}},y:{beginAtZero:true}}}});
-doughnut('c4_fila',['Fila Padrão','URA/Sem Fila','Suporte Téc.','Financeiro','Comercial'],[1888,1461,642,302,219],['#3b82f6','#6b6b80','#f97316','#ef4444','#22c55e']);
-barChart('c4_os',M15,[{label:'OS',data:osMes,backgroundColor:osMes.map(v=>v>500?'rgba(239,68,68,.75)':v>350?'rgba(251,191,36,.7)':'rgba(168,85,247,.6)'),borderRadius:4}]);
-barChart('c4_os_tipo',['Sem Acesso','Suporte','Roteador','Lentidão','Trans. End.','Oscilação','Cabeamento'],[{label:'OS',data:[2118,1093,742,574,396,265,128],backgroundColor:'rgba(168,85,247,.7)',borderRadius:4}],{horiz:true,y:{ticks:{font:{size:9}}}});
-doughnut('c4_os_tec',['Tiago Siqueira','Felipe Siqueira'],[4615,672],['#a855f7','#3b82f6']);
-// Ratio acumulado
-const ratioAcc_n=['Tiago','Joyce','Fernanda','Leonardo','Rafaela','Jhonatan','Paola','Luana','Francielle'];
-const ratioAcc_v=[31.3,17.1,16.3,13.0,11.2,10.1,10.1,9.4,7.8];
-barChart('c4_ratio_acc',ratioAcc_n,[{label:'Ratio acumulado',data:ratioAcc_v,backgroundColor:ratioAcc_v.map(v=>v>=20?'rgba(34,197,94,.8)':v>=12?'rgba(251,191,36,.75)':v>=9?'rgba(249,115,22,.7)':'rgba(239,68,68,.7)'),borderRadius:4}],{y:{ticks:{callback:v=>v+'×'}}});
-// Ratio Mar/26
-const ratioMar_n=['Tiago','Jhonatan','Luana','Fernanda','Joyce','Francielle','Paola'];
-const ratioMar_v=[91.7,52.7,29.3,14.6,null,null,null];
-barChart('c4_ratio_mar',ratioMar_n,[{label:'Ratio Mar/26',data:[91.7,52.7,29.3,14.6,null,null,null],backgroundColor:['rgba(34,197,94,.8)','rgba(34,197,94,.75)','rgba(251,191,36,.75)','rgba(251,191,36,.7)','rgba(107,107,128,.4)','rgba(107,107,128,.4)','rgba(107,107,128,.4)'],borderRadius:4}],{y:{ticks:{callback:v=>v+'×'}}});
+bar('g_sazon',['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],[
+  {label:'Média histórica (2020–2025)',data:[108,96,120,115,140,129,160,131,118,130,126,148],backgroundColor:'rgba(251,146,60,.65)',borderRadius:4},
+],{y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}});
 
-// ══════════ P5 — COMISSÃO ══════════
-new Chart(document.getElementById('c5_cont'),{type:'bar',
-  data:{labels:['Tiago','Luana','Joyce','Rafaela','Jhonatan','Francielle','Paola'],
-    datasets:[{label:'Chat',data:[15258,11615,10095,8825,6969,7383,4371],backgroundColor:'rgba(168,85,247,.7)',borderRadius:3,stack:'a'},{label:'Telefone',data:[260,52,203,289,278,197,0],backgroundColor:'rgba(59,130,246,.65)',borderRadius:3,stack:'a'}]},
-  options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,ticks:{callback:v=>v.toLocaleString('pt-BR')}}}}});
-barChart('c5_ratio',['Tiago','Joyce','Fernanda','Leonardo','Rafaela','Jhonatan','Paola','Luana','Francielle'],[{label:'Ratio',data:[31.3,17.1,16.3,13.0,11.2,10.1,10.1,9.4,7.8],backgroundColor:[31.3,17.1,16.3,13.0,11.2,10.1,10.1,9.4,7.8].map(v=>v>=20?'rgba(34,197,94,.8)':v>=12?'rgba(251,191,36,.75)':v>=9?'rgba(249,115,22,.7)':'rgba(239,68,68,.7)'),borderRadius:4}],{y:{ticks:{callback:v=>v+'×'}}});
-const mAv=['Nov/25','Dez/25','Jan/26','Fev/26','Mar/26*'];
-const vChat_=[7241,8265,7984,7748,2038];const vTel_=[1874,0,0,2134,755];
-const vTot_=vChat_.map((v,i)=>v+vTel_[i]);
-new Chart(document.getElementById('c5_aval'),{type:'bar',
-  data:{labels:mAv,datasets:[
-    {label:'Chat',data:vChat_,backgroundColor:'rgba(168,85,247,.6)',stack:'a'},
-    {label:'Telefone',data:vTel_,backgroundColor:'rgba(59,130,246,.6)',stack:'a'},
-    {label:'Meta 1%',data:vTot_.map(v=>Math.round(v*.01)),type:'line',borderColor:'#fbbf24',pointRadius:5,pointBackgroundColor:'#fbbf24',yAxisID:'y2',order:0}
-  ]},
-  options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},
-    scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true},y2:{position:'right',beginAtZero:true,grid:{display:false},ticks:{callback:v=>v+' av.'}}}}});
-new Chart(document.getElementById('c5_google'),{type:'bar',
-  data:{labels:['5★','4★','3★','2★','1★'],datasets:[{label:'Avaliações',data:[464,196,71,62,98],backgroundColor:['#22c55e','#3b82f6','#fbbf24','#f97316','#ef4444'],borderRadius:5}]},
-  options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+dough('g_planos',['R$99,90','R$99','R$79,90','R$149','R$74,90','R$129','R$129,90','Outros'],
+  [2124,1234,854,468,389,307,286,216],
+  ['#fb923c','#3b82f6','#10b981','#a78bfa','#f43f5e','#f59e0b','#22d3ee','#4a6070']);
 
-// ══════════ P6 — MARCO/26 (lazy) ══════════
-let _mi=false;
-function initMarco(){
-  if(_mi)return;_mi=true;
-  const dias=Array.from({length:31},(_,i)=>i+1);
-  const instReal=dias.map(d=>d<=15?Math.round(d*7.87):null);
-  const instProj=dias.map(d=>d>15?Math.round(118+(d-15)*7.87):null);
-  const cancelReal=dias.map(d=>d<=15?Math.round(d*2.4):null);
-  const cancelProj=dias.map(d=>d>15?Math.round(36+(d-15)*2.4):null);
-  new Chart(document.getElementById('c6_diario'),{type:'line',
-    data:{labels:dias.map(d=>'D'+d),datasets:[
-      {label:'Inst. Real',data:instReal,borderColor:'#22c55e',pointRadius:2,spanGaps:false,borderWidth:2},
-      {label:'Inst. Proj.',data:[...Array(14).fill(null),118,...instProj.slice(15)],borderColor:'#22c55e',borderDash:[5,3],pointRadius:0,spanGaps:false},
-      {label:'Meta Inst. ≥245',data:dias.map(d=>Math.round(d*245/31)),borderColor:'rgba(34,197,94,.25)',borderDash:[2,4],pointRadius:0,borderWidth:1},
-      {label:'Cancel. Real',data:cancelReal,borderColor:'#ef4444',pointRadius:2,spanGaps:false,borderWidth:2},
-      {label:'Cancel. Proj.',data:[...Array(14).fill(null),36,...cancelProj.slice(15)],borderColor:'#ef4444',borderDash:[5,3],pointRadius:0,spanGaps:false},
-      {label:'Meta Cancel. ≤35',data:dias.map(d=>Math.round(d*35/31)),borderColor:'rgba(239,68,68,.25)',borderDash:[2,4],pointRadius:0,borderWidth:1}
-    ]},
-    options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9,padding:8}}},
-      scales:{x:{ticks:{maxRotation:0,font:{size:9},callback:(v,i)=>i===0||i%4===4?'D'+(i+1):''}},y:{beginAtZero:true}}}});
-  barChart('c6_chat_mar',['Tiago','Mislaine','Luana','Cassiane','Joyce','Fernanda','Jhonatan','Francielle','Paola'],[{label:'Chats',data:[261,193,189,117,147,117,127,111,17],backgroundColor:'rgba(168,85,247,.7)',borderRadius:4}]);
-  new Chart(document.getElementById('c6_tel_mar'),{type:'bar',
-    data:{labels:['Rafaela(107)','Joyce(100)','Franciele(101)','Jhonatan(105)','Tiago(104)','Luana(103)'],
-      datasets:[{label:'Total',data:[84,26,42,31,14,13],backgroundColor:'rgba(59,130,246,.5)',borderRadius:3},{label:'Atendidas',data:[77,21,39,28,10,13],backgroundColor:'rgba(34,197,94,.75)',borderRadius:3}]},
-    options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{x:{ticks:{font:{size:9}}},y:{beginAtZero:true}}}});
-  doughnut('c6_aging',['0–30d','31–60d','61–90d','91–180d','181–365d','+365d'],[951,393,178,382,532,233],['#22c55e','#3b82f6','#fbbf24','#f97316','#ef4444','#6b6b80']);
-  new Chart(document.getElementById('c6_rec'),{type:'bar',
-    data:{labels:['0–30d','31–60d','61–90d','91–180d','181–365d','+365d'],
-      datasets:[{label:'Recuperável',data:[69015,22307,7198,9790,5763,745],backgroundColor:'rgba(34,197,94,.7)',borderRadius:3},{label:'Irrecuperável',data:[29578,18252,10798,29372,51870,24076],backgroundColor:'rgba(239,68,68,.7)',borderRadius:3}]},
-    options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:9}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>`R$${Math.round(v/1000)}K`}}}}});
-  lineChart('c6_timeline',['Hoje','Abr/26','Mai/26','Jun/26'],[{label:'Inadimplência R$',data:[278764,209749,187442,187442],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.1)',fill:true,pointRadius:6,pointBackgroundColor:'#ef4444',borderWidth:2}],{y:{ticks:{callback:v=>`R$${Math.round(v/1000)}K`}}});
-}
+bar('g_cohort',[2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],[
+  {label:'Retenção %',data:[21.9,15.4,26.3,44.3,47.0,56.8,57.1,64.0,74.4,90.9],backgroundColor:[21.9,15.4,26.3,44.3,47.0,56.8,57.1,64.0,74.4,90.9].map(v=>v>=75?'rgba(34,211,238,.75)':v>=60?'rgba(16,185,129,.7)':v>=40?'rgba(245,158,11,.7)':'rgba(244,63,94,.7)'),borderRadius:4},
+],{y:{max:100,ticks:{callback:v=>v+'%'}}});
 
-// ══════════ NAVIGATION ══════════
-const NB={'geral':'g','comercial':'c','financeiro':'f','atendimento':'a','comissao':'k','marco':'m'};
-function sw(p){
-  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('a'));
-  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('a'));
-  document.getElementById('p-'+p).classList.add('a');
-  document.querySelector('.nb-'+NB[p]).classList.add('a');
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(p==='marco')setTimeout(initMarco,60);
-}
+// ══ P2 COMERCIAL ══
+bar('c_ic12',m12s,[
+  {label:'Instalações',data:inst12,backgroundColor:'rgba(16,185,129,.7)',borderRadius:3,stack:'a'},
+  {label:'Cancelamentos',data:canc12.map(v=>-v),backgroundColor:'rgba(244,63,94,.65)',borderRadius:3,stack:'a'},
+],{stk:true,y:{ticks:{callback:v=>Math.abs(v)}}});
+
+bar('c_motivo',['Set/25','Out/25','Nov/25','Dez/25','Jan/26','Fev/26','Mar/26'],[
+  {label:'Inadimplência',data:[53,38,19,31,15,2,133],backgroundColor:'rgba(244,63,94,.8)',stack:'a'},
+  {label:'Inviab. Técnica',data:[4,12,9,12,11,12,7],backgroundColor:'rgba(245,158,11,.75)',stack:'a'},
+  {label:'Troca Titular',data:[5,5,7,5,7,12,12],backgroundColor:'rgba(59,130,246,.7)',stack:'a'},
+  {label:'Outros',data:[3,2,8,1,5,4,3],backgroundColor:'rgba(107,107,128,.5)',stack:'a'},
+],{stk:true});
+
+bar('c_churn_cidade',['JF (38,3%)','Ewbank (34,2%)','Pedro T. (31,2%)','Lima D. (30,7%)','Bias F. (13,3%)','S.Dumont (23,1%)'],[
+  {label:'% Cancelados',data:[38.3,34.2,31.2,30.7,13.3,23.1],backgroundColor:['rgba(244,63,94,.75)','rgba(244,63,94,.7)','rgba(245,158,11,.7)','rgba(245,158,11,.65)','rgba(16,185,129,.7)','rgba(245,158,11,.6)'],borderRadius:4},
+  {label:'Inad./Canc. %',data:[20.7,43.2,24.9,42.8,48.1,25.9],backgroundColor:'rgba(167,139,250,.4)',borderRadius:4,yAxisID:'y2'},
+],{sc:{y:{...GY,ticks:{callback:v=>v+'%'}},y2:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%'}}}});
+
+bar('c_cancel_cidade',['JF','Ewbank','Lima D.','Bias F.','Pedro T.','Outros'],[
+  {label:'Cancels Mar/26',data:[96,39,13,4,2,1],backgroundColor:['#f43f5e','#fb923c','#f59e0b','#10b981','#3b82f6','#4a6070'],borderRadius:4},
+],{y:{ticks:{callback:v=>v+' cancels'}}});
+
+bar('c_vend',['Out/25','Nov/25','Dez/25','Jan/26','Fev/26'],[
+  {label:'Paola',data:[39,25,44,54,46],backgroundColor:'rgba(16,185,129,.75)',borderRadius:3,stack:'a'},
+  {label:'Wellerson',data:[0,10,21,13,18],backgroundColor:'rgba(59,130,246,.75)',borderRadius:3,stack:'a'},
+],{stk:true});
+
+bar('c_bairros_at',['Ewbank·Centro','JF·Náutico','PedroT·Centro','JF·Igrejinha','JF·Monte Verde','JF·Paula Lima','JF·Valadares','JF·Torreões','JF·Nova Era','JF·Cachoeira','JF·Humaitá','Bias F.·Centro'],[
+  {label:'Clientes',data:[343,277,256,216,216,210,206,200,187,155,138,136],backgroundColor:'rgba(251,146,60,.65)',borderRadius:3},
+],{h:true,y:{ticks:{font:{size:9}}}});
+
+// ══ P3 FINANCEIRO ══
+line('f_mrr',MFULL,[
+  {label:'MRR Real',data:mrrFull,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.07)',fill:true,tension:.4,pointRadius:2,pointBackgroundColor:'#10b981'},
+  {label:'Proj. 2,5%',data:p25,borderColor:'#f59e0b',borderDash:[4,3],tension:.3,pointRadius:0},
+  {label:'Proj. 3,0%',data:p30,borderColor:'#10b981',borderDash:[4,3],tension:.3,pointRadius:0},
+  {label:'Proj. 4,0%',data:p40,borderColor:'#22d3ee',borderDash:[4,3],tension:.3,pointRadius:0},
+],{y:{ticks:{callback:v=>'R$'+(v/1000).toFixed(0)+'K'}}});
+
+bar('f_inad',M15,[{label:'Saldo Aberto',data:inad,backgroundColor:inad.map(v=>v>50000?'rgba(244,63,94,.85)':v>15000?'rgba(245,158,11,.75)':'rgba(59,130,246,.6)'),borderRadius:3}],
+  {y:{ticks:{callback:v=>'R$'+(v/1000).toFixed(0)+'K'}}});
+
+bar('f_inad_bairros',['Ewbank·Centro','JF·Igrejinha','JF·Nova Era','JF·Monte Verde','JF·Valadares','JF·Paula Lima','JF·Náutico','Lima D.·Centro','JF·Cachoeira','Ewbank·Col.SF','JF·Rosário','JF·Torreões'],[
+  {label:'Saldo R$',data:[25690,17879,13564,11823,11582,9192,8326,7163,6560,7236,7988,7182],backgroundColor:'rgba(244,63,94,.65)',borderRadius:3},
+],{h:true,y:{ticks:{font:{size:9}}},x:{ticks:{callback:v=>'R$'+(v/1000).toFixed(0)+'K'}}});
+
+line('f_proj',['Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],[
+  {label:'2,5%',data:[1,2,3,4,5,6,7,8,9].map(i=>Math.round(687830*(1.025**i))),borderColor:'#f59e0b',tension:.3,pointRadius:3,pointBackgroundColor:'#f59e0b'},
+  {label:'3,0%',data:[1,2,3,4,5,6,7,8,9].map(i=>Math.round(687830*(1.030**i))),borderColor:'#10b981',tension:.3,pointRadius:3,pointBackgroundColor:'#10b981'},
+  {label:'4,0%',data:[1,2,3,4,5,6,7,8,9].map(i=>Math.round(687830*(1.040**i))),borderColor:'#22d3ee',tension:.3,pointRadius:3,pointBackgroundColor:'#22d3ee'},
+],{y:{ticks:{callback:v=>'R$'+(v/1000).toFixed(0)+'K'}}});
+
+// ══ P4 ATENDIMENTO ══
+const COLS=['#fb923c','#a78bfa','#3b82f6','#10b981','#f59e0b','#22d3ee','#f43f5e','#f472b6','#38bdf8','#4ade80'];
+const v12names=Object.keys(v12);
+new Chart(document.getElementById('a_vol12'),{type:'line',
+  data:{labels:m12,datasets:v12names.map((n,i)=>({label:n,data:v12[n],borderColor:COLS[i],backgroundColor:'transparent',tension:.3,pointRadius:2,borderWidth:1.5}))},
+  options:{...BASE,scales:{x:{...GX},y:{...GY}}}});
+
+bar('a_cont12',['Tiago','Luana','Joyce','Rafaela','Jhonatan','Francielle','Paola','Fernanda','Mislaine'],[
+  {label:'Chat',data:[11911,9547,8497,6884,5683,5528,2333,820,333],backgroundColor:'rgba(167,139,250,.7)',borderRadius:3,stack:'a'},
+  {label:'Telefone',data:[281,46,259,325,306,264,0,0,0],backgroundColor:'rgba(59,130,246,.7)',borderRadius:3,stack:'a'},
+],{stk:true,y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}});
+
+bar('a_os_mes',m12s,[{label:'OS',data:os12,backgroundColor:os12.map(v=>v>500?'rgba(244,63,94,.75)':v>350?'rgba(245,158,11,.7)':'rgba(167,139,250,.6)'),borderRadius:4}],
+  {y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}});
+
+bar('a_os_tipo',['Sem Acesso','Suporte','Roteador','Lentidão','Trans. End.','Oscilação','Cabeamento'],[
+  {label:'OS',data:[1813,977,624,542,354,230,100],backgroundColor:'rgba(167,139,250,.7)',borderRadius:4},
+],{h:true,y:{ticks:{font:{size:9}}}});
+
+bar('a_os_dia',['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],[
+  {label:'OS por dia',data:[776,829,926,804,802,541,19],backgroundColor:['rgba(167,139,250,.7)','rgba(167,139,250,.7)','rgba(244,63,94,.75)','rgba(167,139,250,.65)','rgba(167,139,250,.65)','rgba(245,158,11,.65)','rgba(59,130,246,.5)'],borderRadius:4},
+],{y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}});
+
+new Chart(document.getElementById('a_tel_ta'),{type:'bar',
+  data:{labels:tNames,datasets:[
+    {label:'Total',data:tTot,backgroundColor:'rgba(59,130,246,.3)',borderRadius:3},
+    {label:'Atendidas',data:tAtend,backgroundColor:'rgba(59,130,246,.8)',borderRadius:3},
+  ]},options:{...BASE,scales:{x:{...GX},y:{...GY}}}});
+
+bar('a_ratio12',ratioNomes,[
+  {label:'Ratio 12m',data:ratioVals,backgroundColor:ratioVals.map(v=>v>=20?'rgba(16,185,129,.8)':v>=12?'rgba(245,158,11,.75)':v>=9?'rgba(251,146,60,.7)':'rgba(244,63,94,.7)'),borderRadius:4},
+],{y:{ticks:{callback:v=>v+'×'}}});
+
+bar('a_chat_hora',['7h','8h','9h','10h','11h','12h','13h','14h','15h','16h','17h','18h','19h','20h'],[
+  {label:'Chats',data:chatHoras,backgroundColor:chatHoras.map(v=>v>=550?'rgba(244,63,94,.8)':v>=450?'rgba(245,158,11,.75)':'rgba(34,211,238,.55)'),borderRadius:4},
+],{y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}});
+
+bar('a_chat_dia',['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],[
+  {label:'Chats',data:chatDias,backgroundColor:['rgba(167,139,250,.75)','rgba(167,139,250,.7)','rgba(167,139,250,.7)','rgba(59,130,246,.65)','rgba(167,139,250,.7)','rgba(245,158,11,.65)','rgba(107,107,128,.5)'],borderRadius:4},
+],{y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}});
+
+dough('a_chat_depto',['Atendimento','Financeiro','Sup. Técnico','Comercial'],
+  [31786,8282,372,251],['#a78bfa','#f59e0b','#3b82f6','#10b981']);
+
+// ══ P5 LTV ══
+bar('l_status',ltvStatusL,[
+  {label:'LTV Médio',data:ltvMedio,backgroundColor:['rgba(16,185,129,.7)','rgba(244,63,94,.65)','rgba(244,63,94,.5)','rgba(59,130,246,.65)','rgba(245,158,11,.65)'],borderRadius:4},
+  {label:'LTV Mediana',data:ltvMediana,backgroundColor:['rgba(16,185,129,.3)','rgba(244,63,94,.3)','rgba(244,63,94,.2)','rgba(59,130,246,.3)','rgba(245,158,11,.3)'],borderRadius:4},
+],{y:{ticks:{callback:v=>'R$'+(v/1000).toFixed(1)+'K'}}});
+
+new Chart(document.getElementById('l_perm'),{type:'bar',data:{labels:permL,datasets:[
+  {type:'bar',label:'Ativos',data:permAtiv,backgroundColor:'rgba(16,185,129,.55)',borderRadius:3,yAxisID:'y2',stack:'a'},
+  {type:'bar',label:'Cancelados',data:permCanc,backgroundColor:'rgba(244,63,94,.5)',borderRadius:3,yAxisID:'y2',stack:'a'},
+  {type:'line',label:'LTV Médio',data:permLTV,borderColor:'#f472b6',backgroundColor:'rgba(244,114,182,.08)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#f472b6',yAxisID:'y1',order:0},
+]},options:{...BASE,scales:{x:{...GX},y1:{position:'left',...GY,ticks:{callback:v=>'R$'+(v/1000).toFixed(1)+'K'}},y2:{position:'right',grid:{display:false},stacked:true,ticks:{callback:v=>v.toLocaleString('pt-BR')}}}}});
+
+bar('l_hist',['<R$500','R$500–1K','R$1K–2K','R$2K–5K','R$5K–10K','R$10K+'],[
+  {label:'Ativos',data:[1035,651,1040,2265,767,75],backgroundColor:'rgba(16,185,129,.65)',borderRadius:3,stack:'a'},
+  {label:'Cancelados',data:[739,435,554,576,143,21],backgroundColor:'rgba(244,63,94,.6)',borderRadius:3,stack:'a'},
+],{stk:true,y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}});
+
+new Chart(document.getElementById('l_cohort'),{type:'bar',data:{labels:cohortA,datasets:[
+  {type:'bar',label:'LTV Médio',data:cohortLTV,backgroundColor:'rgba(244,114,182,.6)',borderRadius:4,yAxisID:'y1'},
+  {type:'line',label:'Churn %',data:churnRt,borderColor:'#f43f5e',tension:.3,pointRadius:3,pointBackgroundColor:'#f43f5e',yAxisID:'y2'},
+]},options:{...BASE,scales:{x:{...GX},y1:{position:'left',...GY,ticks:{callback:v=>'R$'+(v/1000).toFixed(0)+'K'}},y2:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%'}}}}});
+
+bar('l_motivo',motivosL,[
+  {label:'LTV Médio',data:motivosV,backgroundColor:motivosV.map(v=>v>=3000?'rgba(16,185,129,.75)':v>=2000?'rgba(245,158,11,.7)':v>=1000?'rgba(251,146,60,.7)':'rgba(244,63,94,.75)'),borderRadius:4},
+],{h:true,y:{ticks:{font:{size:9}}},x:{ticks:{callback:v=>'R$'+(v/1000).toFixed(1)+'K'}}});
+
+new Chart(document.getElementById('l_idade'),{type:'bar',data:{labels:idadeL,datasets:[
+  {type:'bar',label:'LTV Médio',data:idadeLTV,backgroundColor:['rgba(59,130,246,.65)','rgba(16,185,129,.65)','rgba(245,158,11,.7)','rgba(244,114,182,.75)'],borderRadius:4,yAxisID:'y1'},
+  {type:'line',label:'Meses Médio',data:idadeM,borderColor:'#22d3ee',tension:.3,pointRadius:4,pointBackgroundColor:'#22d3ee',yAxisID:'y2'},
+]},options:{...BASE,scales:{x:{...GX},y1:{position:'left',...GY,ticks:{callback:v=>'R$'+(v/1000).toFixed(1)+'K'}},y2:{position:'right',grid:{display:false},ticks:{callback:v=>v+'m'}}}}});
+
+new Chart(document.getElementById('l_ticket'),{type:'bar',data:{labels:tickFxL,datasets:[
+  {type:'bar',label:'LTV Médio',data:tickFxLTV,backgroundColor:['rgba(244,63,94,.65)','rgba(251,146,60,.65)','rgba(245,158,11,.7)','rgba(16,185,129,.65)','rgba(34,211,238,.7)'],borderRadius:4,yAxisID:'y1'},
+  {type:'line',label:'Meses Médio',data:tickFxM,borderColor:'#f472b6',tension:.3,pointRadius:4,pointBackgroundColor:'#f472b6',yAxisID:'y2'},
+]},options:{...BASE,scales:{x:{...GX},y1:{position:'left',...GY,ticks:{callback:v=>'R$'+(v/1000).toFixed(1)+'K'}},y2:{position:'right',grid:{display:false},ticks:{callback:v=>v+'m'}}}}});
+
+new Chart(document.getElementById('l_inad_tempo'),{type:'bar',data:{labels:inadTempoL,datasets:[
+  {type:'bar',label:'Clientes',data:inadTempoN,backgroundColor:'rgba(244,63,94,.55)',borderRadius:3,yAxisID:'y2'},
+  {type:'bar',label:'Saldo R$K',data:inadTempoS,backgroundColor:'rgba(245,158,11,.55)',borderRadius:3,yAxisID:'y1'},
+  {type:'line',label:'LTV Médio',data:inadTempoLTV,borderColor:'#f472b6',backgroundColor:'rgba(244,114,182,.08)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'#f472b6',yAxisID:'y3'},
+]},options:{...BASE,scales:{x:{...GX},y1:{position:'left',...GY,ticks:{callback:v=>'R$'+v+'K'}},y2:{position:'right',grid:{display:false}},y3:{display:false}}}});
+
+new Chart(document.getElementById('l_inad_bairros'),{type:'bar',data:{labels:inadBrL,datasets:[
+  {type:'bar',label:'Saldo R$',data:inadBrS,backgroundColor:'rgba(244,63,94,.6)',borderRadius:3,yAxisID:'y1'},
+  {type:'line',label:'LTV Médio',data:inadBrLTV,borderColor:'#f472b6',tension:.3,pointRadius:3,pointBackgroundColor:'#f472b6',yAxisID:'y2'},
+]},options:{...BASE,indexAxis:'y',scales:{x:{...GX,ticks:{callback:v=>'R$'+(v/1000).toFixed(0)+'K'}},y:{...GY,ticks:{font:{size:9}}},y2:{display:false}}}});
+
+bar('l_inad_os',['Sem Acesso','Suporte','Trans. End.','Roteador','Lentidão','Oscilação'],[
+  {label:'OS dos inadimplentes',data:[578,243,195,189,143,57],backgroundColor:'rgba(245,158,11,.7)',borderRadius:4},
+],{h:true,y:{ticks:{font:{size:9}}}});
+
+// ══ P6 COMISSÃO ══
+bar('k_vend',['Out/25','Nov/25','Dez/25','Jan/26','Fev/26'],[
+  {label:'Paola',data:[39,25,44,54,46],backgroundColor:'rgba(16,185,129,.75)',borderRadius:3,stack:'a'},
+  {label:'Wellerson',data:[0,10,21,13,18],backgroundColor:'rgba(59,130,246,.75)',borderRadius:3,stack:'a'},
+],{stk:true});
+
+const roiQ=[30,50,70,90,120,160,200];
+const roiV=roiQ.map((q,i)=>Math.round(q*92.98*12-40800));
+bar('k_roi',roiQ.map(q=>q+' vendas')+'',[
+  {label:'Retorno Anual',data:roiV,backgroundColor:roiV.map(v=>v>0?'rgba(16,185,129,.75)':'rgba(244,63,94,.7)'),borderRadius:4},
+],{y:{ticks:{callback:v=>'R$'+(v/1000).toFixed(0)+'K'}}});
+
+// ══ P7 MAR/26 ══
+dough('m_motivo',['Inadimplência','Troca Titular','Inviab. Técnica','Outros'],
+  [133,12,7,3],['#f43f5e','#fb923c','#f59e0b','#4a6070']);
+
+dough('m_cidade',['JF','Ewbank','Lima D.','Bias F.','Outros'],
+  [96,39,13,4,3],['#f43f5e','#fb923c','#f59e0b','#10b981','#4a6070']);
+
+bar('m_chat',['Tiago','Mislaine','Luana','Joyce','Jhonatan','Fernanda','Cassiane','Francielle','Paola'],[
+  {label:'Chats Mar/26',data:[267,194,190,153,131,119,117,114,17],backgroundColor:'rgba(167,139,250,.75)',borderRadius:4},
+],{y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}});
+
+bar('m_tel',['Rafaela(107)','Francielle(101)','Joyce(100)','Jhonatan(105)','Tiago(104)','Luana(103)','URA/Fila'],[
+  {label:'Total',data:[86,61,35,33,14,7,519],backgroundColor:['rgba(59,130,246,.5)','rgba(59,130,246,.5)','rgba(59,130,246,.5)','rgba(59,130,246,.5)','rgba(59,130,246,.5)','rgba(59,130,246,.5)','rgba(244,63,94,.4)'],borderRadius:3},
+  {label:'Atendidas',data:[76,52,18,28,14,7,0],backgroundColor:['rgba(16,185,129,.8)','rgba(16,185,129,.75)','rgba(16,185,129,.65)','rgba(16,185,129,.75)','rgba(16,185,129,.9)','rgba(16,185,129,.85)','rgba(0,0,0,0)'],borderRadius:3},
+],{});
+
+bar('m_os_aber',['Luana','Mislaine','JHONATAN','JOYCE','Tiago','Fernanda','Cassiane','Rafaela','Paola'],[
+  {label:'OS Abertura Mar/26',data:[106,92,73,25,39,75,17,1,2],backgroundColor:'rgba(167,139,250,.7)',borderRadius:4},
+],{y:{ticks:{callback:v=>v.toLocaleString('pt-BR')}}});
+
+bar('m_ratio_mar',['Joyce','Rafaela','Tiago','Paola','Cassiane','Luana','Jhonatan','Fernanda','Mislaine'],[
+  {label:'Ratio Mar/26',data:[7.5,87,7.2,8.5,6.9,1.9,2.2,1.6,2.1],backgroundColor:['rgba(16,185,129,.8)','rgba(16,185,129,.75)','rgba(245,158,11,.75)','rgba(245,158,11,.7)','rgba(245,158,11,.65)','rgba(251,146,60,.7)','rgba(251,146,60,.65)','rgba(251,146,60,.6)','rgba(107,107,128,.5)'],borderRadius:4},
+],{y:{ticks:{callback:v=>v+'×'}}});
+
+// ══ ROI COMISSÃO fix ══
+document.getElementById('k_roi').getContext;
+new Chart(document.getElementById('k_roi'),{type:'bar',
+  data:{labels:roiQ.map(q=>q+' vend.'),datasets:[{label:'Retorno Anual',data:roiV,backgroundColor:roiV.map(v=>v>0?'rgba(16,185,129,.75)':'rgba(244,63,94,.7)'),borderRadius:4}]},
+  options:{...BASE,scales:{x:{...GX},y:{...GY,ticks:{callback:v=>'R$'+(v/1000).toFixed(0)+'K'}}}}});
+
 </script>
 </body>
 </html>
